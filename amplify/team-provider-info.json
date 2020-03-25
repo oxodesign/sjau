@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-distribuert-dugnad-dev-205039-authRole",
+            "UnauthRoleArn": "arn:aws:iam::384788808608:role/amplify-distribuert-dugnad-dev-205039-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::384788808608:role/amplify-distribuert-dugnad-dev-205039-authRole",
+            "Region": "eu-west-1",
+            "DeploymentBucketName": "amplify-distribuert-dugnad-dev-205039-deployment",
+            "UnauthRoleName": "amplify-distribuert-dugnad-dev-205039-unauthRole",
+            "StackName": "amplify-distribuert-dugnad-dev-205039",
+            "StackId": "arn:aws:cloudformation:eu-west-1:384788808608:stack/amplify-distribuert-dugnad-dev-205039/e90a7ba0-6ed1-11ea-bbf3-0a07909a05bc",
+            "AmplifyAppId": "d30ug0609cyw4j"
+        }
+    }
+}
