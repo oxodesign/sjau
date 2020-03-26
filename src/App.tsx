@@ -1,23 +1,25 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
-import { LandingPage } from "./pages/LandingPage";
-import { DugnadPage } from "./pages/DugnadPage";
-import { NewDugnadPage } from "./pages/NewDugnadPage";
+import awsconfig from "./aws-exports";
+import Amplify from "aws-amplify";
+import { AuthenticatedApp } from "./pages/AuthenticatedApp";
+import { Authenticator } from "aws-amplify-react";
+
+Amplify.configure(awsconfig);
+const signUpConfig = {
+  header: "Bli med du også!",
+  defaultCountryCode: "47"
+};
 
 function App() {
   return (
     <div className="App">
-      <Switch>
-        <Route path="/ny">
-          <NewDugnadPage />
-        </Route>
-        <Route path="/dugnad/:id">
-          <DugnadPage />
-        </Route>
-        <Route path="/" exact>
-          <LandingPage />
-        </Route>
-      </Switch>
+      <Authenticator
+        authState="signUp"
+        usernameAttributes={"phone_number" as any}
+        signUpConfig={signUpConfig}
+      >
+        <AuthenticatedApp />
+      </Authenticator>
     </div>
   );
 }
