@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "distribuertdugnad",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authdistribuertdugnad1829821e",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
