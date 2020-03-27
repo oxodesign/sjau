@@ -18,14 +18,23 @@ export const AddTask: React.FC<AddTaskProps> = ({ dugnadID }) => {
   });
   const updateField = (name: keyof typeof formState) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => setFormState({ ...formState, [name]: e.target.value });
+  ) =>
+    setFormState({
+      ...formState,
+      [name]: e.target.value
+    });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await API.graphql(
         graphqlOperation(createTask, {
-          input: { ...formState, status: "idle", dugnadID }
+          input: {
+            title: formState.title,
+            description: formState.description || null,
+            status: "idle",
+            dugnadID
+          }
         })
       );
       setFormState(initialState);

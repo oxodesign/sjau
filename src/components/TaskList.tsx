@@ -1,6 +1,6 @@
 import React from "react";
 import { API, graphqlOperation } from "aws-amplify";
-import { updateTask } from "../graphql/mutations";
+import { deleteTask, updateTask } from "../graphql/mutations";
 
 export type TaskType = {
   id: string;
@@ -32,8 +32,11 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
   if (!tasks.length) {
     return <p>Ingen oppgaver er lagt til enda!</p>;
   }
-  const updateStatus = async (id: string, status: Status) => {
-    await API.graphql(graphqlOperation(updateTask, { input: { id, status } }));
+  const updateStatus = (id: string, status: Status) => {
+    API.graphql(graphqlOperation(updateTask, { input: { id, status } }));
+  };
+  const onDeleteClick = (id: string) => {
+    API.graphql(graphqlOperation(deleteTask, { input: { id } }));
   };
   return (
     <ul>
@@ -49,7 +52,11 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
             {task.description && <p>{task.description}</p>}
             <span>{task.status}</span>
           </button>
-          {/* TODO: Delete */}
+          <button type="button" onClick={() => onDeleteClick(task.id)}>
+            <span role="img" aria-label="Slett">
+              ❌
+            </span>
+          </button>
         </li>
       ))}
     </ul>
