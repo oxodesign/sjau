@@ -1,25 +1,38 @@
 import React from "react";
 import awsconfig from "./aws-exports";
-import Amplify from "aws-amplify";
+import Amplify, { Auth } from "aws-amplify";
 import { AuthenticatedApp } from "./pages/AuthenticatedApp";
-import { Authenticator } from "aws-amplify-react";
+import { OpenApp } from "./pages/OpenApp";
 
 Amplify.configure(awsconfig);
-const signUpConfig = {
-  header: "Bli med du også!",
-  defaultCountryCode: "47"
+
+const useUser = () => {
+  const [currentUser, setCurrentUser] = React.useState(null);
+  const [isLoading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await Auth.currentAuthenticatedUser();
+        setCurrentUser(user);
+      } catch (e) {
+        setCurrentUser(null); // not logged in
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, []);
+  return [isLoading, currentUser];
 };
 
 function App() {
+  const [isLoadingAuthState, user] = useUser();
+  if (isLoadingAuthState) {
+    return <p>Laster...</p>;
+  }
   return (
     <div className="App">
-      <Authenticator
-        authState="signUp"
-        usernameAttributes={"phone_number" as any}
-        signUpConfig={signUpConfig}
-      >
-        <AuthenticatedApp />
-      </Authenticator>
+      {user ? <AuthenticatedApp user={user} /> : <OpenApp />}
     </div>
   );
 }
