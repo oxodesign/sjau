@@ -4,9 +4,9 @@ import * as firebase from "firebase";
 import { VerificationCodeForm } from "../components/VerificationCodeForm";
 import { PhoneNumberForm } from "../components/PhoneNumberForm";
 
-type RegisterPageProps = {};
+type LoginPageProps = {};
 
-export const RegisterPage: React.FC<RegisterPageProps> = () => {
+export const LoginPage: React.FC<LoginPageProps> = () => {
   const [
     isWaitingForVerificationCode,
     setWaitingForVerificationCode

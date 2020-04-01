@@ -6,7 +6,7 @@ export const LandingPage = () => {
     <div>
       <h1>Distribuert dugnad</h1>
       <p>La oss ha dugnad allikevel på tross av Korona!</p>
-      <Link to="/login">Registrer deg</Link>
+      <Link to="/login">Bli med på moroa</Link>
     </div>
   );
 };

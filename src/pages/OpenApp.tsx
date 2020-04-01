@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import { LandingPage } from "./LandingPage";
-import { RegisterPage } from "./RegisterPage";
+import { LoginPage } from "./LoginPage";
 
 export const OpenApp: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ export const OpenApp: React.FC = () => {
         <LandingPage />
       </Route>
       <Route path="/login">
-        <RegisterPage />
+        <LoginPage />
       </Route>
     </Switch>
   );

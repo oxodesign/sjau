@@ -2,6 +2,7 @@ import React, { FormEvent } from "react";
 import { useAuth } from "reactfire";
 import { useUser } from "../hooks/useUser";
 import { FillOutUserDetails } from "../components/FillOutUserDetails";
+import { Link } from "react-router-dom";
 
 export const OverviewPage: React.FC = () => {
   const auth = useAuth();
@@ -12,10 +13,17 @@ export const OverviewPage: React.FC = () => {
   };
   return (
     <div>
-      <h1>Du er logget inn!</h1>
       {!user && <FillOutUserDetails />}
-      {user && <h2>{user.name}</h2>}
-      <button onClick={handleLogoutClick}>Logg ut</button>
+      {user && (
+        <>
+          <h2>{user.name}</h2>
+          <p>Her kan du gjøre hva du vil</p>
+          <Link to="/ny">Lag ny dugnad</Link>
+        </>
+      )}
+      <div>
+        <button onClick={handleLogoutClick}>Logg ut</button>
+      </div>
     </div>
   );
 };
