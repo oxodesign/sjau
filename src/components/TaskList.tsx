@@ -1,18 +1,8 @@
 import React from "react";
-import { API, graphqlOperation } from "aws-amplify";
-import { deleteTask, updateTask } from "../graphql/mutations";
-
-export type TaskType = {
-  id: string;
-  title: string;
-  description?: string;
-  status: Status;
-  __typename: "Task";
-};
 
 type TaskListProps = {
-  dugnadID: string;
-  tasks: TaskType[];
+  dugnadId: string;
+  tasks: any[];
 };
 
 type Status = "idle" | "in progress" | "done";
@@ -33,10 +23,10 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
     return <p>Ingen oppgaver er lagt til enda!</p>;
   }
   const updateStatus = (id: string, status: Status) => {
-    API.graphql(graphqlOperation(updateTask, { input: { id, status } }));
+    // TODO: Update status
   };
   const onDeleteClick = (id: string) => {
-    API.graphql(graphqlOperation(deleteTask, { input: { id } }));
+    // TODO: Delete
   };
   return (
     <ul>

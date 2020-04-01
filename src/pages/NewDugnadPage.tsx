@@ -1,6 +1,4 @@
 import React from "react";
-import { API, graphqlOperation } from "aws-amplify";
-import { createDugnad } from "../graphql/mutations";
 import { useHistory } from "react-router-dom";
 
 const A_WEEK = 1000 * 60 * 60 * 24 * 7;
@@ -22,10 +20,8 @@ export const NewDugnadPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { data } = await API.graphql(
-        graphqlOperation(createDugnad, { input: formState })
-      );
-      push(`/dugnad/${data.createDugnad.id}`);
+      // TODO: Create new dugnad
+      push(`/dugnad/${""}`);
     } catch (e) {
       console.error("Kunne ikke opprette ting", e);
     }

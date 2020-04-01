@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import { LandingPage } from "./LandingPage";
-import { Authenticator } from "aws-amplify-react";
+import { RegisterPage } from "./RegisterPage";
 
 export const OpenApp: React.FC = () => {
   return (
@@ -9,8 +9,8 @@ export const OpenApp: React.FC = () => {
       <Route path="/" exact>
         <LandingPage />
       </Route>
-      <Route path="/ny">
-        <Authenticator />
+      <Route path="/login">
+        <RegisterPage />
       </Route>
     </Switch>
   );

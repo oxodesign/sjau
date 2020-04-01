@@ -1,9 +1,7 @@
 import React from "react";
-import { API, graphqlOperation } from "aws-amplify";
-import { createTask } from "../graphql/mutations";
 
 type AddTaskProps = {
-  dugnadID: string;
+  dugnadId: string;
 };
 
 const initialState = {
@@ -11,7 +9,7 @@ const initialState = {
   description: ""
 };
 
-export const AddTask: React.FC<AddTaskProps> = ({ dugnadID }) => {
+export const AddTask: React.FC<AddTaskProps> = ({ dugnadId }) => {
   const [formState, setFormState] = React.useState({
     title: "",
     description: ""
@@ -26,21 +24,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ dugnadID }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await API.graphql(
-        graphqlOperation(createTask, {
-          input: {
-            title: formState.title,
-            description: formState.description || null,
-            status: "idle",
-            dugnadID
-          }
-        })
-      );
-      setFormState(initialState);
-    } catch (e) {
-      console.error("Kunne ikke legge til oppgave", e);
-    }
+    // TODO Add task to dugnad
   };
   return (
     <form onSubmit={handleSubmit}>
