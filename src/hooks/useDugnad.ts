@@ -5,6 +5,7 @@ import {
 } from "reactfire";
 
 export type DugnadType = {
+  id: string;
   name: string;
   description?: string;
   startsAt: string;
@@ -39,4 +40,12 @@ export const useTask = (dugnadId?: string, taskId?: string) =>
     useDugnadRef(dugnadId)
       .collection("tasks")
       .doc(taskId)
+  );
+
+export const useUserDugnads = (userId: string) =>
+  useFirestoreCollectionData<DugnadType>(
+    useFirestore()
+      .collection("dugnads")
+      .where("author", "==", userId),
+    { idField: "id" }
   );
