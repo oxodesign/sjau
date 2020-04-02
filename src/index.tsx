@@ -13,7 +13,9 @@ const firebaseConfig = {
   messagingSenderId: "194120926162",
   appId: "1:194120926162:web:3288095c3a2ea5e9967e0b"
 };
+
 const rootEl = document.getElementById("root") as HTMLElement;
+
 ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>

@@ -1,27 +1,32 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { useFormFields } from "../hooks/useFormFields";
+import { useFirestore } from "reactfire";
+import { useUser } from "../hooks/useUser";
 
 const A_WEEK = 1000 * 60 * 60 * 24 * 7;
 
 export const NewDugnadPage = () => {
-  const [formState, setFormState] = React.useState({
+  const [formState, createChangeHandler] = useFormFields({
     name: "",
     description: "",
     startsAt: new Date().toLocaleDateString("fr-CA"),
     endsAt: new Date(Date.now() + A_WEEK).toLocaleDateString("fr-CA")
   });
+  const dugnadsRef = useFirestore().collection("dugnads");
+  const user = useUser();
 
   const { push } = useHistory();
-
-  const updateField = (name: keyof typeof formState) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => setFormState({ ...formState, [name]: e.target.value });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // TODO: Create new dugnad
-      push(`/dugnad/${""}`);
+      const result = await dugnadsRef.add({
+        ...formState,
+        tasks: [],
+        author: user!.uid
+      });
+      push(`/dugnad/${result.id}`);
     } catch (e) {
       console.error("Kunne ikke opprette ting", e);
     }
@@ -36,7 +41,7 @@ export const NewDugnadPage = () => {
             Hva vil du kalle dugnaden din?
             <input
               value={formState.name}
-              onChange={updateField("name")}
+              onChange={createChangeHandler("name")}
               required
             />
           </label>
@@ -46,7 +51,7 @@ export const NewDugnadPage = () => {
             Skriv en velkomsthilsen til folk!
             <textarea
               value={formState.description}
-              onChange={updateField("description")}
+              onChange={createChangeHandler("description")}
             />
           </label>
         </div>
@@ -56,7 +61,7 @@ export const NewDugnadPage = () => {
             <input
               type="date"
               value={formState.startsAt}
-              onChange={updateField("startsAt")}
+              onChange={createChangeHandler("startsAt")}
               min={new Date().toLocaleDateString("fr-CA")}
               aria-describedby="starter-beskrivelse"
             />
@@ -72,7 +77,7 @@ export const NewDugnadPage = () => {
             <input
               type="date"
               value={formState.endsAt}
-              onChange={updateField("endsAt")}
+              onChange={createChangeHandler("endsAt")}
               min={formState.startsAt}
             />
           </label>

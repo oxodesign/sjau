@@ -3,19 +3,21 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { NewDugnadPage } from "./NewDugnadPage";
 import { DugnadPage } from "./DugnadPage";
 import { OverviewPage } from "./OverviewPage";
+import { TaskPage } from "./TaskPage";
 
-type AuthenticatedAppProps = {};
-
-export const AuthenticatedApp: React.FC<AuthenticatedAppProps> = props => {
+export const AuthenticatedApp: React.FC = () => {
   return (
     <Switch>
       <Route path="/ny">
         <NewDugnadPage />
       </Route>
-      <Route path="/dugnad/:id">
+      <Route exact path="/dugnad/:dugnadId/:taskId">
+        <TaskPage />
+      </Route>
+      <Route exact path="/dugnad/:dugnadId">
         <DugnadPage />
       </Route>
-      <Route path="/" exact>
+      <Route exact path="/">
         <OverviewPage />
       </Route>
       <Redirect to="/" />
