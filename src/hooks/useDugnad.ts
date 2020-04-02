@@ -16,6 +16,7 @@ export type DugnadType = {
 export type TaskType = {
   id: string;
   author: string;
+  assignedUser?: string;
   title: string;
   description: string;
   status: string;
@@ -36,11 +37,12 @@ export const useTasksForDugnad = (dugnadId?: string) =>
   );
 
 export const useTask = (dugnadId?: string, taskId?: string) =>
-  useFirestoreDocData<TaskType>(
-    useDugnadRef(dugnadId)
-      .collection("tasks")
-      .doc(taskId)
-  );
+  useFirestoreDocData<TaskType>(useTaskRef(dugnadId, taskId));
+
+export const useTaskRef = (dugnadId?: string, taskId?: string) =>
+  useDugnadRef(dugnadId)
+    .collection("tasks")
+    .doc(taskId);
 
 export const useUserDugnads = (userId: string) =>
   useFirestoreCollectionData<DugnadType>(

@@ -27,9 +27,11 @@ export const useUser = (): UserType | null => {
   return filledOut ? dbUser : null;
 };
 
-export const useUserById = (id: string) =>
-  useFirestoreDocData<DbUserType>(
+export const useUserById = (id?: string) => {
+  const user = useFirestoreDocData<DbUserType>(
     useFirestore()
       .collection("users")
-      .doc(id)
+      .doc(id || "totally not a valid id")
   );
+  return id ? user : null;
+};
