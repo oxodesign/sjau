@@ -14,6 +14,7 @@ export type DugnadType = {
 
 export type TaskType = {
   id: string;
+  author: string;
   title: string;
   description: string;
   status: string;
