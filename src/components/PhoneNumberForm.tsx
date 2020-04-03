@@ -1,5 +1,6 @@
 import React from "react";
 import { usePersistedState } from "../hooks/usePersistedState";
+import { Button, FormControl, FormLabel, Input } from "@chakra-ui/core";
 
 type PhoneNumberFormProps = {
   onSubmit: (phoneNumber: string) => void;
@@ -16,17 +17,20 @@ export const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
   };
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Hva er telefonnummeret ditt?
-        <br />
-        <input
+      <FormControl isRequired>
+        <FormLabel htmlFor="phoneNumber">
+          Hva er telefonnummeret ditt?
+        </FormLabel>
+        <Input
           type="tel"
           value={phoneNumber}
-          onChange={e => setPhoneNumber(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
           placeholder="F.eks. 926 73 134"
         />
-      </label>
-      <button id="login-button">Logg inn</button>
+      </FormControl>
+      <Button type="submit" id="login-button">
+        Logg inn
+      </Button>
     </form>
   );
 };

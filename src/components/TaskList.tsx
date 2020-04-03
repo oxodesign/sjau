@@ -1,29 +1,86 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Box, Text, Stack, RadioGroup, Radio } from "@chakra-ui/core";
+import { TaskStatusBadge } from "./TaskStatusBadge";
 import { useTasksForDugnad } from "../hooks/useDugnad";
+import { useUser } from "../hooks/useUser";
 
 type TaskListProps = {
   dugnadId: string;
 };
 
+type CurrentFilterType = "all" | "available" | "your own";
 export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
+  const [currentFilter, setCurrentFilter] = React.useState<CurrentFilterType>(
+    "all"
+  );
   const tasks = useTasksForDugnad(dugnadId);
+  const currentUser = useUser();
+  const filteredTasks = React.useMemo(
+    () =>
+      tasks.filter(task => {
+        switch (currentFilter) {
+          case "all":
+            return true;
+          case "available":
+            return task.status === "idle";
+          case "your own":
+            return task.assignedUser === currentUser?.uid;
+          default:
+            return true;
+        }
+      }),
+    [currentUser, tasks, currentFilter]
+  );
   if (!tasks.length) {
-    return <p>Ingen oppgaver er lagt til enda!</p>;
+    return <Text>Ingen oppgaver er lagt til enda!</Text>;
   }
   return (
-    <ul>
-      {tasks.map(task => (
-        <li key={task.id}>
+    <Stack spacing={6}>
+      <RadioGroup
+        value={currentFilter}
+        px={6}
+        isInline
+        onChange={e => setCurrentFilter(e.target.value as CurrentFilterType)}
+      >
+        <Radio value="all">Alle oppgaver</Radio>
+        <Radio value="available">Bare ledige oppgaver</Radio>
+        <Radio value="your own">Bare dine oppgaver</Radio>
+      </RadioGroup>
+      {!filteredTasks.length && currentFilter === "available" && (
+        <Text>
+          Det er ingen oppgaver igjen å plukke! Sjekk om det er noe du kan
+          hjelpe andre med kanskje?
+        </Text>
+      )}
+      {!filteredTasks.length && currentFilter === "your own" && (
+        <Text>
+          Du har ikke tatt noen oppgaver enda. På tide å brette opp erma!{" "}
+          <span role="img" aria-label="Stram musklene">
+            💪
+          </span>
+        </Text>
+      )}
+      {filteredTasks.map(task => (
+        <Box
+          key={task.id}
+          shadow="md"
+          rounded={3}
+          p={6}
+          borderLeftWidth="8px"
+          borderColor={
+            task.assignedUser === currentUser?.uid ? "#38a169" : "white"
+          }
+        >
           <Link to={`/dugnad/${dugnadId}/${task.id}`}>
-            <p>
+            <Box>
               <strong>{task.title}</strong>
-            </p>
-            {task.description && <p>{task.description}</p>}
-            <span>{task.status}</span>
+              <br />
+              <TaskStatusBadge status={task.status} />
+            </Box>
           </Link>
-        </li>
+        </Box>
       ))}
-    </ul>
+    </Stack>
   );
 };

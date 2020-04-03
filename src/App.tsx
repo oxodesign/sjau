@@ -5,11 +5,9 @@ import { OpenApp } from "./pages/OpenApp";
 
 function App() {
   return (
-    <div className="App">
-      <AuthCheck fallback={<OpenApp />}>
-        <AuthenticatedApp />
-      </AuthCheck>
-    </div>
+    <AuthCheck fallback={<OpenApp />}>
+      <AuthenticatedApp />
+    </AuthCheck>
   );
 }
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormFields } from "../hooks/useFormFields";
 import { useFirestore, useAuth } from "reactfire";
+import { Button, FormControl, FormLabel, Input } from "@chakra-ui/core";
 
 type FillOutUserDetailsProps = {
   name?: string;
@@ -21,16 +22,15 @@ export const FillOutUserDetails: React.FC<FillOutUserDetailsProps> = ({
   };
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Hva heter du?
-        <br />
-        <input
+      <FormControl>
+        <FormLabel id="name">Hva heter du?</FormLabel>
+        <Input
+          id="name"
           value={formFields.name}
           onChange={createChangeHandler("name")}
-          required
         />
-      </label>
-      <button>Lagre</button>
+      </FormControl>
+      <Button type="submit">Lagre</Button>
     </form>
   );
 };

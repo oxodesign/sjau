@@ -2,7 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { FirebaseAppProvider, SuspenseWithPerf } from "reactfire";
+import { ThemeProvider, CSSReset } from "@chakra-ui/core";
+import { theme } from "./utils/theme";
 import App from "./App";
+import { StandaloneSpinner } from "./components/StandaloneSpinner";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -19,11 +22,14 @@ const rootEl = document.getElementById("root") as HTMLElement;
 ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-      <SuspenseWithPerf fallback="Loading..." traceId="root-app">
-        <Router>
-          <App />
-        </Router>
-      </SuspenseWithPerf>
+      <ThemeProvider theme={theme}>
+        <CSSReset />
+        <SuspenseWithPerf fallback={<StandaloneSpinner />} traceId="root-app">
+          <Router>
+            <App />
+          </Router>
+        </SuspenseWithPerf>
+      </ThemeProvider>
     </FirebaseAppProvider>
   </React.StrictMode>
 );

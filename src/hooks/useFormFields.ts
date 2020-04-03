@@ -8,8 +8,10 @@ export const useFormFields = <T>(initialValues: T) => {
     const value = e.target.value;
     setFormFields(prev => ({ ...prev, [fieldName]: value }));
   };
-  return [formFields, createChangeHandler] as [
+  const reset = () => setFormFields(initialValues);
+  return [formFields, createChangeHandler, reset] as [
     typeof formFields,
-    typeof createChangeHandler
+    typeof createChangeHandler,
+    typeof reset
   ];
 };

@@ -13,13 +13,15 @@ export type DugnadType = {
   tasks: Array<any>; // TODO create task
 };
 
+export type TaskStatusType = "idle" | "in progress" | "done";
+
 export type TaskType = {
   id: string;
   author: string;
   assignedUser?: string;
   title: string;
   description: string;
-  status: string;
+  status: TaskStatusType;
 };
 
 export const useDugnadRef = (id?: string) =>
@@ -32,7 +34,9 @@ export const useDugnad = (id?: string): DugnadType =>
 
 export const useTasksForDugnad = (dugnadId?: string) =>
   useFirestoreCollectionData<TaskType>(
-    useDugnadRef(dugnadId).collection("tasks"),
+    useDugnadRef(dugnadId)
+      .collection("tasks")
+      .orderBy("status"),
     { idField: "id" }
   );
 

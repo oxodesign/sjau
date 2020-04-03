@@ -3,6 +3,8 @@ import { useAuth } from "reactfire";
 import * as firebase from "firebase";
 import { VerificationCodeForm } from "../components/VerificationCodeForm";
 import { PhoneNumberForm } from "../components/PhoneNumberForm";
+import { Heading } from "@chakra-ui/core";
+import { Container } from "../components/Container";
 
 type LoginPageProps = {};
 
@@ -54,13 +56,13 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Først må vi logge deg inn</h1>
+    <Container>
+      <Heading as="h1">Først må vi logge deg inn</Heading>
       {isWaitingForVerificationCode ? (
         <VerificationCodeForm onSubmit={handleVerificationCodeSubmitted} />
       ) : (
         <PhoneNumberForm onSubmit={handlePhoneNumberSubmitted} />
       )}
-    </div>
+    </Container>
   );
 };
