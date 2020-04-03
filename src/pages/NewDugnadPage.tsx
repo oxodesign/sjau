@@ -5,14 +5,14 @@ import { useFirestore } from "reactfire";
 import { useUser } from "../hooks/useUser";
 import {
   Heading,
-  Text,
   Stack,
   FormControl,
   FormLabel,
   Input,
   Textarea,
   FormHelperText,
-  Button
+  Button,
+  ButtonGroup
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
 
@@ -44,64 +44,82 @@ export const NewDugnadPage = () => {
   };
   return (
     <Container>
-      <Heading as="h1">Lag din egen dugnad</Heading>
-      <Text>
-        En distribuert dugnad er sikrere, og mest sannsynlig bedre også.
-      </Text>
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={3}>
-          <FormControl>
-            <FormLabel htmlFor="name">Hva vil du kalle dugnaden din?</FormLabel>
-            <Input
-              value={formState.name}
-              id="name"
-              onChange={createChangeHandler("name")}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="description">
-              Skriv en velkomsthilsen til folk!
-            </FormLabel>
-            <Textarea
-              id="description"
-              value={formState.description}
-              onChange={createChangeHandler("description")}
-              resize="vertical"
-            />
-          </FormControl>
+      <Stack spacing={6}>
+        <Heading as="h1">Lag din helt egne sjau</Heading>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={3}>
+            <FormControl isRequired>
+              <FormLabel htmlFor="name">Hva vil du kalle sjauen din?</FormLabel>
+              <Input
+                value={formState.name}
+                id="name"
+                onChange={createChangeHandler("name")}
+                aria-describedby="name-description"
+                placeholder="Gateveiens dugnadssjau"
+              />
+              <FormHelperText id="name-description">
+                Navnet på borettslaget ditt, klubben din, barnehagen og så
+                videre
+              </FormHelperText>
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel htmlFor="description">
+                Skriv litt om sjauen din!
+              </FormLabel>
+              <Textarea
+                id="description"
+                aria-describedby="description-description"
+                value={formState.description}
+                onChange={createChangeHandler("description")}
+                resize="vertical"
+                placeholder="Velkommen til sjauen vår!"
+              />
+              <FormHelperText id="description-description">
+                Her kan det være fint å gi en velkomsthilsen, og en beskrivelse
+                a hvor folk kan finne utstyr og andre ting de trenger.
+              </FormHelperText>
+            </FormControl>
 
-          <FormControl>
-            <FormLabel htmlFor="startsAt">
-              Når starter dugnadsperioden?
-            </FormLabel>
-            <Input
-              type="date"
-              id="startsAt"
-              value={formState.startsAt}
-              onChange={createChangeHandler("startsAt")}
-              min={new Date().toLocaleDateString("fr-CA")}
-              aria-describedby="starter-beskrivelse"
-              width="xs"
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="endsAt">Når slutter dugnaden?</FormLabel>
-            <Input
-              id="endsAt"
-              type="date"
-              value={formState.endsAt}
-              onChange={createChangeHandler("endsAt")}
-              min={formState.startsAt}
-              width="xs"
-            />
-            <FormHelperText id="starter-beskrivelse">
-              Distribuerte dugnader fungerer som regel best når man gir folk en
-              litt lengre periode å bidra på. En uke, for eksempel?
-            </FormHelperText>
-          </FormControl>
-        </Stack>
-        <Button type="submit">Lag oppgaver folk kan gjøre!</Button>
-      </form>
+            <FormControl isRequired>
+              <FormLabel htmlFor="startsAt">Når starter sjauen?</FormLabel>
+              <Input
+                type="date"
+                id="startsAt"
+                value={formState.startsAt}
+                onChange={createChangeHandler("startsAt")}
+                min={new Date().toLocaleDateString("fr-CA")}
+                width="xs"
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel htmlFor="endsAt">Når slutter sjauen?</FormLabel>
+              <Input
+                id="endsAt"
+                type="date"
+                value={formState.endsAt}
+                onChange={createChangeHandler("endsAt")}
+                min={formState.startsAt}
+                aria-describedby="slutter-beskrivelse"
+                width="xs"
+              />
+              <FormHelperText id="slutter-beskrivelse">
+                Sjauer fungerer som regel best når man gir folk en litt lengre
+                periode å bidra på. En uke, for eksempel? Eller to?
+              </FormHelperText>
+            </FormControl>
+            <ButtonGroup>
+              <Button
+                size="lg"
+                variant="solid"
+                variantColor="green"
+                type="submit"
+              >
+                Lag oppgaver folk kan gjøre!
+              </Button>
+            </ButtonGroup>
+          </Stack>
+        </form>
+      </Stack>
     </Container>
   );
 };

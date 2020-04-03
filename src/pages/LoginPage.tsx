@@ -3,7 +3,7 @@ import { useAuth } from "reactfire";
 import * as firebase from "firebase";
 import { VerificationCodeForm } from "../components/VerificationCodeForm";
 import { PhoneNumberForm } from "../components/PhoneNumberForm";
-import { Heading } from "@chakra-ui/core";
+import { Heading, Stack, Box } from "@chakra-ui/core";
 import { Container } from "../components/Container";
 
 type LoginPageProps = {};
@@ -33,6 +33,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
       setWaitingForVerificationCode(true);
     } catch (e) {
       console.error("error when trying to sign in with phone number", e);
+      setWaitingForVerificationCode(false);
       window.recaptchaVerifier?.reset();
     }
   };
@@ -57,12 +58,18 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
 
   return (
     <Container>
-      <Heading as="h1">Først må vi logge deg inn</Heading>
-      {isWaitingForVerificationCode ? (
-        <VerificationCodeForm onSubmit={handleVerificationCodeSubmitted} />
-      ) : (
-        <PhoneNumberForm onSubmit={handlePhoneNumberSubmitted} />
-      )}
+      <Box shadow="md" borderWidth="1px" p={6}>
+        <Stack spacing={6}>
+          <Heading as="h1" mt={6}>
+            Først må vi logge deg inn
+          </Heading>
+          {isWaitingForVerificationCode ? (
+            <VerificationCodeForm onSubmit={handleVerificationCodeSubmitted} />
+          ) : (
+            <PhoneNumberForm onSubmit={handlePhoneNumberSubmitted} />
+          )}
+        </Stack>
+      </Box>
     </Container>
   );
 };

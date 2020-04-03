@@ -2,7 +2,7 @@ import React, { FormEvent } from "react";
 import { useAuth } from "reactfire";
 import { useUser } from "../hooks/useUser";
 import { FillOutUserDetails } from "../components/FillOutUserDetails";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useUserDugnads } from "../hooks/useDugnad";
 import {
   Heading,
@@ -18,7 +18,6 @@ import { Container } from "../components/Container";
 export const OverviewPage: React.FC = () => {
   const auth = useAuth();
   const user = useUser();
-  const { push } = useHistory();
   const handleLogoutClick = async (e: FormEvent) => {
     e.preventDefault();
     await auth.signOut();

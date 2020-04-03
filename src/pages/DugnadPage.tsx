@@ -16,7 +16,7 @@ export const DugnadPage = () => {
   const dugnad = useDugnad(dugnadId);
 
   if (!dugnad) {
-    return <Text>Fant ikke den dugnaden!</Text>;
+    return <Text>Fant ikke den sjauen!</Text>;
   }
 
   return (

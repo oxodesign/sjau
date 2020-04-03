@@ -1,6 +1,8 @@
 import React from "react";
-import { Box } from "@chakra-ui/core";
+import { Box, Flex } from "@chakra-ui/core";
 
 export const Container: React.FC = props => (
-  <Box mx="auto" maxWidth={600} px={6} {...props} />
+  <Flex justifyContent="center" alignItems="center" minHeight="100vh">
+    <Box as="main" mx="auto" maxWidth={600} px={6} {...props} />
+  </Flex>
 );
