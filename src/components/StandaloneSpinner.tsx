@@ -1,5 +1,6 @@
 import React from "react";
-import { Spinner, Box } from "@chakra-ui/core";
+import { Spinner } from "@chakra-ui/core";
+import { Container } from "./Container";
 
 type StandaloneSpinnerProps = {
   label?: string;
@@ -7,7 +8,7 @@ type StandaloneSpinnerProps = {
 export const StandaloneSpinner: React.FC<StandaloneSpinnerProps> = ({
   label = "Vennligst vent"
 }) => (
-  <Box mt="100px" textAlign="center">
+  <Container>
     <Spinner size="xl" thickness="4px" speed="0.8s" label={label} />
-  </Box>
+  </Container>
 );

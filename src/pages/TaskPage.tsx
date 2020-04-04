@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import {
   Button,
   Heading,
@@ -8,7 +8,7 @@ import {
   ButtonGroup,
   Stack
 } from "@chakra-ui/core";
-import { MdCheck, MdArrowBack, MdThumbUp } from "react-icons/md";
+import { MdCheck, MdArrowBack, MdThumbUp, MdDelete } from "react-icons/md";
 import { useTask, useTaskRef } from "../hooks/useDugnad";
 import { useUser, useUserById } from "../hooks/useUser";
 import { Container } from "../components/Container";
@@ -22,6 +22,7 @@ export const TaskPage: React.FC = () => {
   const currentUser = useUser();
   const author = useUserById(task.author);
   const assignedUser = useUserById(task.assignedUser);
+  const { replace } = useHistory();
   const isAssignedToSelf = currentUser?.uid === assignedUser?.uid;
   const isCreatedBySelf = currentUser?.uid === author?.uid;
   const handleReassign = () => {
@@ -40,6 +41,10 @@ export const TaskPage: React.FC = () => {
       status: "idle",
       assignedUser: null
     });
+  };
+  const handleDelete = () => {
+    taskRef.delete();
+    replace(`/dugnad/${dugnadId}`);
   };
   return (
     <Container>
@@ -95,13 +100,25 @@ export const TaskPage: React.FC = () => {
         {task.status === "done" && (
           <Button
             type="button"
-            variant="solid"
+            variant="outline"
             variantColor="red"
             leftIcon={MdArrowBack}
             onClick={handleReset}
             size="sm"
           >
             Start oppgaven på nytt
+          </Button>
+        )}
+        {isCreatedBySelf && (
+          <Button
+            type="button"
+            variant="solid"
+            variantColor="red"
+            leftIcon={MdDelete}
+            onClick={handleDelete}
+            size="sm"
+          >
+            Slett
           </Button>
         )}
       </ButtonGroup>
