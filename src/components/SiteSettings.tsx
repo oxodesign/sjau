@@ -63,7 +63,6 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
                   onBlur={updateUser}
                 />
               </FormControl>
-              <Text>Her er det egentlig ikke så mye å gjøre enda</Text>
             </form>
           </Stack>
         </DrawerBody>

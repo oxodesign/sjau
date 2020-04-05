@@ -1,5 +1,4 @@
-import React, { FormEvent } from "react";
-import { useAuth } from "reactfire";
+import React from "react";
 import { useUser } from "../hooks/useUser";
 import { FillOutUserDetails } from "../components/FillOutUserDetails";
 import { Link } from "react-router-dom";
@@ -19,12 +18,7 @@ import { Container } from "../components/Container";
 import broomingSrc from "../images/brooming.jpg";
 
 export const OverviewPage: React.FC = () => {
-  const auth = useAuth();
   const user = useUser();
-  const handleLogoutClick = async (e: FormEvent) => {
-    e.preventDefault();
-    await auth.signOut();
-  };
   const yourDugnads = useUserDugnads(user?.uid);
   const hasAlreadyMadeDugnad = yourDugnads.length > 0;
   const linkProps = {
@@ -112,11 +106,6 @@ export const OverviewPage: React.FC = () => {
               </ButtonGroup>
             </Stack>
           )}
-          <ButtonGroup>
-            <Button type="submit" onClick={handleLogoutClick}>
-              Logg ut
-            </Button>
-          </ButtonGroup>
         </Stack>
       )}
     </Container>
