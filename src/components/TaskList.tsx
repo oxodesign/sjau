@@ -69,7 +69,7 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
           p={6}
           borderLeftWidth="8px"
           borderColor={
-            task.assignedUser === currentUser?.uid ? "#38a169" : "white"
+            task.assignedUser === currentUser?.uid ? "#76a73d" : "white"
           }
         >
           <Link to={`/dugnad/${dugnadId}/${task.id}`}>
