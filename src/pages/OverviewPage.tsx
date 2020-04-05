@@ -33,11 +33,15 @@ export const OverviewPage: React.FC = () => {
     to: "/ny"
   };
   return (
-    <Container>
+    <Container justifyContent={["flex-start", "flex-start", "center"]}>
       {!user && <FillOutUserDetails />}
       {user && (
         <Stack spacing={6}>
-          <Flex>
+          <Flex
+            flexDirection={["column-reverse", "column-reverse", "row", "row"]}
+            justifyContent="center"
+            alignItems="center"
+          >
             <Stack spacing={6}>
               <Heading as="h1">Velkommen, {user.name.split(" ")[0]}!</Heading>
               <Text>Det er flott at du er med å ta i et tak!</Text>
@@ -66,12 +70,15 @@ export const OverviewPage: React.FC = () => {
                 </Stack>
               )}
             </Stack>
-            <Image
-              mx="auto"
-              src={broomingSrc}
-              alt="Mor og barn som koster"
-              width="200px"
-            />
+            <Box>
+              <Image
+                mx="auto"
+                my={6}
+                src={broomingSrc}
+                alt="Mor og barn som koster"
+                width={["150px", "150px", "200px"]}
+              />
+            </Box>
           </Flex>
 
           {hasAlreadyMadeDugnad && (

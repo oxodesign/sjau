@@ -137,7 +137,9 @@ export const NewDugnadPage = () => {
             <Image
               src={leavesSrc}
               alt="En kvinne som raker løv"
-              width="300px"
+              width={["60%", "60%", "300px"]}
+              mx="auto"
+              my={6}
             />
           </Box>
         </Flex>
