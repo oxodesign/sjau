@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Heading, IconButton, Flex } from "@chakra-ui/core";
+import { Heading, IconButton, Flex } from "@chakra-ui/core";
 import { Link } from "react-router-dom";
 import { MdSettings } from "react-icons/md";
 import { SiteSettings } from "./SiteSettings";
