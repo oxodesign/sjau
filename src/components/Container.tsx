@@ -6,7 +6,7 @@ export const Container: React.FC<FlexProps> = ({ children, ...props }) => (
     flexDirection="column"
     justifyContent="center"
     alignItems="flex-end"
-    minHeight="100vh"
+    minHeight="80vh"
     {...props}
   >
     <Box as="main" mx="auto" maxWidth={800} px={6}>
