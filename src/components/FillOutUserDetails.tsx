@@ -1,7 +1,19 @@
 import React from "react";
 import { useFormFields } from "../hooks/useFormFields";
 import { useFirestore, useAuth } from "reactfire";
-import { Button, FormControl, FormLabel, Input } from "@chakra-ui/core";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Stack,
+  Heading,
+  Text,
+  Flex,
+  Image,
+  Box
+} from "@chakra-ui/core";
+import wateringFlowersSrc from "../images/watering-flowers.jpg";
 
 type FillOutUserDetailsProps = {
   name?: string;
@@ -22,15 +34,34 @@ export const FillOutUserDetails: React.FC<FillOutUserDetailsProps> = ({
   };
   return (
     <form onSubmit={handleSubmit}>
-      <FormControl>
-        <FormLabel id="name">Hva heter du?</FormLabel>
-        <Input
-          id="name"
-          value={formFields.name}
-          onChange={createChangeHandler("name")}
+      <Flex
+        flexDirection={["column-reverse", "column-reverse", "row", "row"]}
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Image
+          src={wateringFlowersSrc}
+          alt="En kvinne som vanner en ampel"
+          width="300px"
         />
-      </FormControl>
-      <Button type="submit">Lagre</Button>
+        <Box>
+          <Heading>Velkommen!</Heading>
+          <Text>Så utrolig kult at du vil være med på å ta i et tak!</Text>
+          <Stack spacing={6}>
+            <FormControl>
+              <FormLabel id="name">Hva heter du?</FormLabel>
+              <Input
+                id="name"
+                value={formFields.name}
+                onChange={createChangeHandler("name")}
+              />
+            </FormControl>
+            <Button type="submit" variantColor="green" variant="solid">
+              Lagre
+            </Button>
+          </Stack>
+        </Box>
+      </Flex>
     </form>
   );
 };

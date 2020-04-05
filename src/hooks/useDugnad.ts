@@ -48,7 +48,7 @@ export const useTaskRef = (dugnadId?: string, taskId?: string) =>
     .collection("tasks")
     .doc(taskId);
 
-export const useUserDugnads = (userId: string) =>
+export const useUserDugnads = (userId: string = "") =>
   useFirestoreCollectionData<DugnadType>(
     useFirestore()
       .collection("dugnads")

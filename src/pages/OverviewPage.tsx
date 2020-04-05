@@ -25,7 +25,7 @@ export const OverviewPage: React.FC = () => {
     e.preventDefault();
     await auth.signOut();
   };
-  const yourDugnads = useUserDugnads(user!.uid);
+  const yourDugnads = useUserDugnads(user?.uid);
   const hasAlreadyMadeDugnad = yourDugnads.length > 0;
   const linkProps = {
     // TODO: Remove this and use a regular link when chakra supports passing
@@ -47,21 +47,23 @@ export const OverviewPage: React.FC = () => {
                   fortsette!
                 </Text>
               ) : (
-                <>
+                <Stack spacing={6}>
                   <Text>
                     Du har ikke laget noen sjauer, men kanskje det er på tide at
                     du setter opp en?
                   </Text>
-                  <Button
-                    variantColor="red"
-                    variant="solid"
-                    size="lg"
-                    as={Link}
-                    {...linkProps}
-                  >
-                    Lag en sjau
-                  </Button>
-                </>
+                  <ButtonGroup>
+                    <Button
+                      variantColor="green"
+                      variant="solid"
+                      size="lg"
+                      as={Link}
+                      {...linkProps}
+                    >
+                      Lag din første sjau!
+                    </Button>
+                  </ButtonGroup>
+                </Stack>
               )}
             </Stack>
             <Image
