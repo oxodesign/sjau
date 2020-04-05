@@ -6,7 +6,9 @@ import {
   Text,
   Badge,
   ButtonGroup,
-  Stack
+  Stack,
+  Image,
+  Flex
 } from "@chakra-ui/core";
 import { MdCheck, MdArrowBack, MdThumbUp, MdDelete } from "react-icons/md";
 import { useTask, useTaskRef } from "../hooks/useDugnad";
@@ -14,6 +16,11 @@ import { useUser, useUserById } from "../hooks/useUser";
 import { Container } from "../components/Container";
 import { TaskStatusBadge } from "../components/TaskStatusBadge";
 import { BackLink } from "../components/BackLink";
+import leavesSrc from "../images/leaves.jpg";
+
+const SanitizedMarkdown = React.lazy(() =>
+  import("../components/SanitizedMarkdown")
+);
 
 export const TaskPage: React.FC = () => {
   const { dugnadId, taskId } = useParams();
@@ -47,83 +54,104 @@ export const TaskPage: React.FC = () => {
     replace(`/dugnad/${dugnadId}`);
   };
   return (
-    <Container>
-      <BackLink to={`/dugnad/${dugnadId}`}>Tilbake til dugnaden</BackLink>
-      <Heading as="h1" my={6}>
-        {task.title}!
-      </Heading>
+    <Container justifyContent="flex-start">
+      <Flex flexDirection={["column", "column", "row", "row"]}>
+        <Stack spacing={6}>
+          <BackLink to={`/dugnad/${dugnadId}`}>Tilbake til dugnaden</BackLink>
+          <Heading as="h1">{task.title}!</Heading>
 
-      <Stack isInline my={6}>
-        <TaskStatusBadge status={task.status} />
-        <Badge>Opprettet av {isCreatedBySelf ? "deg" : author!.name}</Badge>
-        {assignedUser && (
-          <Badge>Tildelt {isAssignedToSelf ? "deg" : assignedUser.name}</Badge>
-        )}
-      </Stack>
-      <ButtonGroup spacing={4}>
-        {(!task.status || task.status === "idle") && (
-          <Button
-            type="button"
-            variant="solid"
-            variantColor="green"
-            leftIcon={MdThumbUp}
-            onClick={handleReassign}
-            size="sm"
-          >
-            Ta denne oppgaven
-          </Button>
-        )}
-        {task.status === "in progress" && (
-          <Button
-            type="button"
-            variant="outline"
-            variantColor="gray"
-            leftIcon={MdArrowBack}
-            onClick={handleReassign}
-            size="sm"
-          >
-            {isAssignedToSelf ? "Si fra deg oppgaven" : "Overta denne oppgaven"}
-          </Button>
-        )}
-        {task.status === "in progress" && (
-          <Button
-            type="button"
-            variant="solid"
-            variantColor="green"
-            leftIcon={MdCheck}
-            onClick={handleDone}
-            size="sm"
-          >
-            Ferdigstill
-          </Button>
-        )}
-        {task.status === "done" && (
-          <Button
-            type="button"
-            variant="outline"
-            variantColor="red"
-            leftIcon={MdArrowBack}
-            onClick={handleReset}
-            size="sm"
-          >
-            Start oppgaven på nytt
-          </Button>
-        )}
-        {isCreatedBySelf && (
-          <Button
-            type="button"
-            variant="solid"
-            variantColor="red"
-            leftIcon={MdDelete}
-            onClick={handleDelete}
-            size="sm"
-          >
-            Slett
-          </Button>
-        )}
-      </ButtonGroup>
+          <Stack isInline>
+            <TaskStatusBadge status={task.status} />
+            <Badge>Opprettet av {isCreatedBySelf ? "deg" : author!.name}</Badge>
+            {assignedUser && (
+              <Badge>
+                Tildelt {isAssignedToSelf ? "deg" : assignedUser.name}
+              </Badge>
+            )}
+          </Stack>
+          <ButtonGroup spacing={4}>
+            {(!task.status || task.status === "idle") && (
+              <Button
+                type="button"
+                variant="solid"
+                variantColor="green"
+                leftIcon={MdThumbUp}
+                onClick={handleReassign}
+                size="sm"
+              >
+                Ta denne oppgaven
+              </Button>
+            )}
+            {task.status === "in progress" && (
+              <Button
+                type="button"
+                variant="outline"
+                variantColor="gray"
+                leftIcon={MdArrowBack}
+                onClick={handleReassign}
+                size="sm"
+              >
+                {isAssignedToSelf
+                  ? "Si fra deg oppgaven"
+                  : "Overta denne oppgaven"}
+              </Button>
+            )}
+            {task.status === "in progress" && (
+              <Button
+                type="button"
+                variant="solid"
+                variantColor="green"
+                leftIcon={MdCheck}
+                onClick={handleDone}
+                size="sm"
+              >
+                Ferdigstill
+              </Button>
+            )}
+            {task.status === "done" && (
+              <Button
+                type="button"
+                variant="outline"
+                variantColor="red"
+                leftIcon={MdArrowBack}
+                onClick={handleReset}
+                size="sm"
+              >
+                Start oppgaven på nytt
+              </Button>
+            )}
+            {isCreatedBySelf && (
+              <Button
+                type="button"
+                variant="solid"
+                variantColor="red"
+                leftIcon={MdDelete}
+                onClick={handleDelete}
+                size="sm"
+              >
+                Slett
+              </Button>
+            )}
+          </ButtonGroup>
 
-      <Text mt={6}>{task.description}</Text>
+          <React.Suspense
+            fallback={
+              <Text textAlign="center" my={6}>
+                Henter beskrivelse
+              </Text>
+            }
+          >
+            <SanitizedMarkdown>{task.description}</SanitizedMarkdown>
+          </React.Suspense>
+        </Stack>
+        <Image
+          src={leavesSrc}
+          alt="En kvinne som raker løv"
+          width="200px"
+          my={6}
+          mx={["auto", "auto", 6, 6]}
+        />
+      </Flex>
     </Container>
   );
 };

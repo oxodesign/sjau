@@ -3,8 +3,8 @@ import { useAuth } from "reactfire";
 import * as firebase from "firebase";
 import { VerificationCodeForm } from "../components/VerificationCodeForm";
 import { PhoneNumberForm } from "../components/PhoneNumberForm";
-import { Heading, Stack, Box } from "@chakra-ui/core";
-import { Container } from "../components/Container";
+import { Heading, Stack, Box, Image, Flex } from "@chakra-ui/core";
+import plantingFlowersSrc from "../images/planting-flowers.jpg";
 
 type LoginPageProps = {};
 
@@ -57,8 +57,19 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
   }, []);
 
   return (
-    <Container>
-      <Box shadow="md" borderWidth="1px" p={6}>
+    <Flex
+      minHeight="100vh"
+      alignItems="center"
+      justifyContent="center"
+      flexDirection={["column", "column", "row"]}
+    >
+      <Image
+        width="300px"
+        src={plantingFlowersSrc}
+        alt="En mann som planter blomster"
+        flex="0 0 auto"
+      />
+      <Box p={6}>
         <Stack spacing={6}>
           <Heading as="h1" mt={6}>
             Først må vi logge deg inn
@@ -70,6 +81,6 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
           )}
         </Stack>
       </Box>
-    </Container>
+    </Flex>
   );
 };

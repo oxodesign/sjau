@@ -20,7 +20,7 @@ export const LandingPage = () => {
       <Splash
         backgroundImage={`radial-gradient(circle at center, rgba(0,0,0,0.4), transparent), url(${randomSplashImage})`}
       >
-        <Stack spacing={6} padding={10} backgroundImage="">
+        <Stack spacing={6} padding={10}>
           <Heading as="h1" fontSize="5rem" color="white">
             Sjau
           </Heading>

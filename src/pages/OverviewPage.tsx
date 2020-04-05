@@ -11,9 +11,12 @@ import {
   Stack,
   Text,
   SimpleGrid,
-  Box
+  Box,
+  Flex,
+  Image
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
+import broomingSrc from "../images/brooming.jpg";
 
 export const OverviewPage: React.FC = () => {
   const auth = useAuth();
@@ -34,35 +37,45 @@ export const OverviewPage: React.FC = () => {
       {!user && <FillOutUserDetails />}
       {user && (
         <Stack spacing={6}>
-          <Heading as="h1">Velkommen, {user.name.split(" ")[0]}!</Heading>
-          <Text>Det er flott at du er med å ta i et tak!</Text>
-          {hasAlreadyMadeDugnad ? (
-            <Text>
-              Du er jo allerede i god gang med å lage dugnader, så her er det
-              bare å hoppe inn!
-            </Text>
-          ) : (
-            <>
-              <Text>
-                Du har ikke laget noen dugnader, men kanskje det er på tide at
-                du setter opp en?
-              </Text>
-              <Button
-                variantColor="red"
-                variant="solid"
-                size="lg"
-                as={Link}
-                {...linkProps}
-              >
-                Lag ny dugnad
-              </Button>
-            </>
-          )}
+          <Flex>
+            <Stack spacing={6}>
+              <Heading as="h1">Velkommen, {user.name.split(" ")[0]}!</Heading>
+              <Text>Det er flott at du er med å ta i et tak!</Text>
+              {hasAlreadyMadeDugnad ? (
+                <Text>
+                  Du er jo allerede i god gang med å sjaue, så her er det bare å
+                  fortsette!
+                </Text>
+              ) : (
+                <>
+                  <Text>
+                    Du har ikke laget noen sjauer, men kanskje det er på tide at
+                    du setter opp en?
+                  </Text>
+                  <Button
+                    variantColor="red"
+                    variant="solid"
+                    size="lg"
+                    as={Link}
+                    {...linkProps}
+                  >
+                    Lag en sjau
+                  </Button>
+                </>
+              )}
+            </Stack>
+            <Image
+              mx="auto"
+              src={broomingSrc}
+              alt="Mor og barn som koster"
+              width="200px"
+            />
+          </Flex>
 
           {hasAlreadyMadeDugnad && (
             <Stack spacing={6}>
               <Heading as="h2" fontSize="xl">
-                Dine dugnader
+                Dine sjauer
               </Heading>
               <SimpleGrid columns={[1, 1, 2, 3]} gridGap={3}>
                 {yourDugnads.map(dugnad => (
@@ -85,7 +98,7 @@ export const OverviewPage: React.FC = () => {
                   as={Link}
                   {...linkProps}
                 >
-                  Lag ny dugnad
+                  Lag en sjau
                 </Button>
               </ButtonGroup>
             </Stack>
