@@ -96,8 +96,11 @@ export const OverviewPage: React.FC = () => {
                       shadow="md"
                       rounded="md"
                       borderWidth="1px"
+                      as={props => (
+                        <Link to={`/dugnad/${dugnad.id}`} {...props} />
+                      )}
                     >
-                      <Link to={`/dugnad/${dugnad.id}`}>{dugnad.name}</Link>
+                      {dugnad.name}
                     </Box>
                   ))}
                 </SimpleGrid>
