@@ -4,6 +4,7 @@ import { Box, Text, Stack, RadioGroup, Radio } from "@chakra-ui/core";
 import { TaskStatusBadge } from "./TaskStatusBadge";
 import { useTasksForDugnad } from "../hooks/useDugnad";
 import { useUser } from "../hooks/useUser";
+import { motion } from "framer-motion";
 
 type TaskListProps = {
   dugnadId: string;
@@ -35,6 +36,24 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
   if (!tasks.length) {
     return <Text>Ingen oppgaver er lagt til enda!</Text>;
   }
+
+  const variants = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.3
+      }
+    },
+    hidden: {
+      opacity: 0,
+      y: "50%",
+      transition: {
+        when: "afterChildren"
+      }
+    }
+  };
   return (
     <Stack spacing={6}>
       <RadioGroup
@@ -61,26 +80,28 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
           </span>
         </Text>
       )}
-      {filteredTasks.map(task => (
-        <Box
-          key={task.id}
-          shadow="md"
-          rounded={3}
-          p={6}
-          borderLeftWidth="8px"
-          borderColor={
-            task.assignedUser === currentUser?.uid ? "#76a73d" : "white"
-          }
-        >
-          <Link to={`/dugnad/${dugnadId}/${task.id}`}>
-            <Box>
-              <strong>{task.title}</strong>
-              <br />
-              <TaskStatusBadge status={task.status} />
-            </Box>
-          </Link>
-        </Box>
-      ))}
+      <motion.div initial="hidden" animate="visible" variants={variants}>
+        {filteredTasks.map(task => (
+          <Box
+            key={task.id}
+            shadow="md"
+            rounded={3}
+            p={6}
+            borderLeftWidth="8px"
+            borderColor={
+              task.assignedUser === currentUser?.uid ? "#76a73d" : "white"
+            }
+          >
+            <Link to={`/dugnad/${dugnadId}/${task.id}`}>
+              <Box>
+                <strong>{task.title}</strong>
+                <br />
+                <TaskStatusBadge status={task.status} />
+              </Box>
+            </Link>
+          </Box>
+        ))}
+      </motion.div>
     </Stack>
   );
 };

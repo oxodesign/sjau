@@ -1,6 +1,16 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Badge, Box, Heading, Text, Stack, Flex, Image } from "@chakra-ui/core";
+import {
+  Badge,
+  Box,
+  Heading,
+  Text,
+  Stack,
+  Flex,
+  Image,
+  Collapse,
+  Button
+} from "@chakra-ui/core";
 import isFuture from "date-fns/isFuture";
 import isPast from "date-fns/isPast";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
@@ -11,6 +21,7 @@ import { TaskList } from "../components/TaskList";
 import { useDugnad } from "../hooks/useDugnad";
 import { BackLink } from "../components/BackLink";
 import washingSrc from "../images/washing.jpg";
+import { FadeIn } from "../components/FadeIn";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -19,6 +30,7 @@ const SanitizedMarkdown = React.lazy(() =>
 export const DugnadPage = () => {
   const { dugnadId } = useParams();
   const dugnad = useDugnad(dugnadId);
+  const [isDescriptionVisible, setDescriptionVisible] = React.useState(false);
 
   if (!dugnad) {
     return <Text>Fant ikke den sjauen!</Text>;
@@ -30,34 +42,44 @@ export const DugnadPage = () => {
   return (
     <Container>
       <Stack spacing={6}>
-        <BackLink to="/">Tilbake til oversikten</BackLink>
+        <FadeIn initial="hiddenFromLeft" exit="hiddenFromLeft" key="back-block">
+          <BackLink to="/oversikt">Tilbake til oversikten</BackLink>
+        </FadeIn>
         <Flex>
-          <Box>
+          <FadeIn
+            initial="hiddenFromBottom"
+            exit="hiddenFromBottom"
+            delay={0.2}
+            flex={["1 0 auto", "1 0 auto", "0 0 67%"]}
+            maxWidth="100%"
+          >
             <Heading as="h1">{dugnad.name}</Heading>
-            {isFuture(startsAt) && (
-              <Text>
-                Starter{" "}
-                {formatDistanceToNow(startsAt, {
-                  addSuffix: true,
-                  locale: nbLocale
-                })}
-              </Text>
-            )}
-            {isPast(endsAt) && (
-              <Text>
-                Ble avsluttet for{" "}
-                {formatDistanceToNow(endsAt, {
-                  addSuffix: true,
-                  locale: nbLocale
-                })}
-              </Text>
-            )}
-            {isPast(startsAt) && isFuture(endsAt) && (
-              <Text>
-                <Badge variantColor="green">Aktiv!</Badge> Varer i{" "}
-                {formatDistanceToNow(endsAt, { locale: nbLocale })} til
-              </Text>
-            )}
+            <Box mb={6}>
+              {isFuture(startsAt) && (
+                <Text>
+                  Starter{" "}
+                  {formatDistanceToNow(startsAt, {
+                    addSuffix: true,
+                    locale: nbLocale
+                  })}
+                </Text>
+              )}
+              {isPast(endsAt) && (
+                <Text>
+                  Ble avsluttet for{" "}
+                  {formatDistanceToNow(endsAt, {
+                    addSuffix: true,
+                    locale: nbLocale
+                  })}
+                </Text>
+              )}
+              {isPast(startsAt) && isFuture(endsAt) && (
+                <Box>
+                  <Badge variantColor="green">Aktiv!</Badge> Varer i{" "}
+                  {formatDistanceToNow(endsAt, { locale: nbLocale })} til
+                </Box>
+              )}
+            </Box>
 
             {dugnad.description && (
               <React.Suspense
@@ -67,26 +89,62 @@ export const DugnadPage = () => {
                   </Text>
                 }
               >
-                <SanitizedMarkdown>{dugnad.description}</SanitizedMarkdown>
+                <Collapse
+                  isOpen={isDescriptionVisible}
+                  startingHeight={100}
+                  position="relative"
+                >
+                  {!isDescriptionVisible && (
+                    <Box
+                      bgImage="linear-gradient(to top, white, transparent)"
+                      position="absolute"
+                      top={0}
+                      pointerEvents="none"
+                      height={100}
+                      width="100%"
+                    />
+                  )}
+                  <SanitizedMarkdown>{dugnad.description}</SanitizedMarkdown>
+                </Collapse>
+                <Button
+                  variant="solid"
+                  variantColor="gray"
+                  onClick={() => setDescriptionVisible(prev => !prev)}
+                  my={3}
+                >
+                  {isDescriptionVisible ? "Skjul" : "Vis mer"}
+                </Button>
               </React.Suspense>
             )}
             <Box shadow="md" borderWidth="1px" p={5}>
               <AddTask dugnadId={dugnadId!!} />
             </Box>
-          </Box>
+          </FadeIn>
 
           <Box
-            flex="1 0 33%"
+            flex="0 0 33%"
             alignSelf="flex-start"
             ml={30}
             mt={30}
             display={["none", "none", "block"]}
           >
-            <Image src={washingSrc} alt="En mann med vaskebøtte og svamp" />
+            <FadeIn
+              initial="hiddenFromRight"
+              exit="hiddenFromRight"
+              delay={0.3}
+            >
+              <Image src={washingSrc} alt="En mann med vaskebøtte og svamp" />
+            </FadeIn>
           </Box>
         </Flex>
-        <Box>
-          <TaskList dugnadId={dugnadId!!} />
+        <Box pb={30}>
+          <FadeIn
+            initial="hiddenFromBottom"
+            exit="hiddenFromBottom"
+            delay={0.4}
+          >
+            <TaskList dugnadId={dugnadId!!} />
+          </FadeIn>
         </Box>
       </Stack>
     </Container>

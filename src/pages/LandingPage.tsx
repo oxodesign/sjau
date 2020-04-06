@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Heading, Text, Button, Stack } from "@chakra-ui/core";
 import { Splash } from "../components/Splash";
+import { AuthCheck } from "reactfire";
 
 const splashImages = [
   "https://images.unsplash.com/photo-1549448046-b89e7214060d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1800&q=80",
@@ -11,10 +12,9 @@ const splashImages = [
 ];
 
 export const LandingPage = () => {
-  const randomSplashImage = React.useMemo(
-    () => splashImages.sort(() => Math.random() - 0.5).pop(),
-    []
-  ) as string;
+  const randomSplashImage =
+    React.useMemo(() => splashImages.sort(() => Math.random() - 0.5)[0], []) ||
+    "";
   return (
     <div>
       <Splash
@@ -32,12 +32,12 @@ export const LandingPage = () => {
             Når det passer.
           </Text>
           <Button
-            as={props => <Link to="/login" {...props} />}
+            as={props => <Link to="/oversikt" {...props} />}
             variant="solid"
             variantColor="green"
             size="lg"
           >
-            Kom i gang nå!
+            <AuthCheck fallback="Kom i gang nå">Gå til din oversikt</AuthCheck>
           </Button>
         </Stack>
       </Splash>

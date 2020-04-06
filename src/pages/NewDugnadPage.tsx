@@ -4,7 +4,6 @@ import { useFormFields } from "../hooks/useFormFields";
 import { useFirestore } from "reactfire";
 import { useUser } from "../hooks/useUser";
 import {
-  Box,
   Heading,
   Stack,
   FormControl,
@@ -19,6 +18,7 @@ import {
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
 import leavesSrc from "../images/leaves.jpg";
+import { FadeIn } from "../components/FadeIn";
 
 const A_WEEK = 1000 * 60 * 60 * 24 * 7;
 
@@ -56,84 +56,115 @@ export const NewDugnadPage = () => {
           alignItems="center"
         >
           <form onSubmit={handleSubmit}>
-            <Stack spacing={3}>
-              <FormControl isRequired>
-                <FormLabel htmlFor="name">
-                  Hva vil du kalle sjauen din?
-                </FormLabel>
-                <Input
-                  value={formState.name}
-                  id="name"
-                  onChange={createChangeHandler("name")}
-                  aria-describedby="name-description"
-                  placeholder="Gateveiens dugnadssjau"
-                  maxWidth="100%"
-                />
-                <FormHelperText id="name-description">
-                  Navnet på borettslaget ditt, klubben din, barnehagen og så
-                  videre
-                </FormHelperText>
-              </FormControl>
-              <FormControl isRequired>
-                <FormLabel htmlFor="description">
-                  Skriv litt om sjauen din!
-                </FormLabel>
-                <Textarea
-                  id="description"
-                  aria-describedby="description-description"
-                  value={formState.description}
-                  onChange={createChangeHandler("description")}
-                  resize="vertical"
-                  placeholder="Velkommen til sjauen vår!"
-                  maxWidth="100%"
-                />
-                <FormHelperText id="description-description">
-                  Her kan det være fint å gi en velkomsthilsen, og en
-                  beskrivelse a hvor folk kan finne utstyr og andre ting de
-                  trenger.
-                </FormHelperText>
-              </FormControl>
+            <Stack spacing={6}>
+              <FadeIn initial="hiddenFromLeft" exit="hiddenFromRight">
+                <FormControl isRequired>
+                  <FormLabel htmlFor="name">
+                    Hva vil du kalle sjauen din?
+                  </FormLabel>
+                  <Input
+                    value={formState.name}
+                    id="name"
+                    onChange={createChangeHandler("name")}
+                    aria-describedby="name-description"
+                    placeholder="Gateveiens dugnadssjau"
+                    maxWidth="100%"
+                  />
+                  <FormHelperText id="name-description">
+                    Navnet på borettslaget ditt, klubben din, barnehagen og så
+                    videre
+                  </FormHelperText>
+                </FormControl>
+              </FadeIn>
+              <FadeIn
+                initial="hiddenFromLeft"
+                exit="hiddenFromRight"
+                delay={0.1}
+              >
+                <FormControl isRequired>
+                  <FormLabel htmlFor="description">
+                    Skriv litt om sjauen din!
+                  </FormLabel>
+                  <Textarea
+                    id="description"
+                    aria-describedby="description-description"
+                    value={formState.description}
+                    onChange={createChangeHandler("description")}
+                    resize="vertical"
+                    placeholder="Velkommen til sjauen vår!"
+                    maxWidth="100%"
+                  />
+                  <FormHelperText id="description-description">
+                    Her kan det være fint å gi en velkomsthilsen, og en
+                    beskrivelse a hvor folk kan finne utstyr og andre ting de
+                    trenger.
+                  </FormHelperText>
+                </FormControl>
+              </FadeIn>
 
-              <FormControl isRequired>
-                <FormLabel htmlFor="startsAt">Når starter sjauen?</FormLabel>
-                <Input
-                  type="date"
-                  id="startsAt"
-                  value={formState.startsAt}
-                  onChange={createChangeHandler("startsAt")}
-                  min={new Date().toLocaleDateString("fr-CA")}
-                  width="xs"
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormLabel htmlFor="endsAt">Når slutter sjauen?</FormLabel>
-                <Input
-                  id="endsAt"
-                  type="date"
-                  value={formState.endsAt}
-                  onChange={createChangeHandler("endsAt")}
-                  min={formState.startsAt}
-                  aria-describedby="slutter-beskrivelse"
-                  width="xs"
-                />
-                <FormHelperText id="slutter-beskrivelse">
-                  Sjauer fungerer som regel best når man gir folk en litt lengre
-                  periode å bidra på. En uke, for eksempel? Eller to?
-                </FormHelperText>
-              </FormControl>
-              <ButtonGroup>
-                <Button
-                  size="lg"
-                  variant="solid"
-                  variantColor="green"
-                  type="submit"
-                >
-                  Lag oppgaver folk kan gjøre!
-                </Button>
-              </ButtonGroup>
+              <FadeIn
+                initial="hiddenFromLeft"
+                exit="hiddenFromRight"
+                delay={0.2}
+              >
+                <FormControl isRequired>
+                  <FormLabel htmlFor="startsAt">Når starter sjauen?</FormLabel>
+                  <Input
+                    type="date"
+                    id="startsAt"
+                    value={formState.startsAt}
+                    onChange={createChangeHandler("startsAt")}
+                    min={new Date().toLocaleDateString("fr-CA")}
+                    width="xs"
+                  />
+                </FormControl>
+              </FadeIn>
+              <FadeIn
+                initial="hiddenFromLeft"
+                exit="hiddenFromRight"
+                delay={0.3}
+              >
+                <FormControl isRequired>
+                  <FormLabel htmlFor="endsAt">Når slutter sjauen?</FormLabel>
+                  <Input
+                    id="endsAt"
+                    type="date"
+                    value={formState.endsAt}
+                    onChange={createChangeHandler("endsAt")}
+                    min={formState.startsAt}
+                    aria-describedby="slutter-beskrivelse"
+                    width="xs"
+                  />
+                  <FormHelperText id="slutter-beskrivelse">
+                    Sjauer fungerer som regel best når man gir folk en litt
+                    lengre periode å bidra på. En uke, for eksempel? Eller to?
+                  </FormHelperText>
+                </FormControl>
+              </FadeIn>
+              <FadeIn
+                initial="hiddenFromLeft"
+                exit="hiddenFromRight"
+                delay={0.4}
+              >
+                <ButtonGroup>
+                  <Button
+                    size="lg"
+                    variant="solid"
+                    variantColor="green"
+                    type="submit"
+                  >
+                    Lag oppgaver folk kan gjøre!
+                  </Button>
+                </ButtonGroup>
+              </FadeIn>
             </Stack>
           </form>
-          <Box mx={6}>
+          <FadeIn
+            mx={6}
+            initial="hiddenFromRight"
+            exit="hiddenFromRight"
+            delay={0.5}
+          >
             <Image
               src={leavesSrc}
               alt="En kvinne som raker løv"
@@ -141,7 +172,7 @@ export const NewDugnadPage = () => {
               mx="auto"
               my={6}
             />
-          </Box>
+          </FadeIn>
         </Flex>
       </Stack>
     </Container>

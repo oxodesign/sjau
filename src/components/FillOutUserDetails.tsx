@@ -10,10 +10,10 @@ import {
   Heading,
   Text,
   Flex,
-  Image,
-  Box
+  Image
 } from "@chakra-ui/core";
 import wateringFlowersSrc from "../images/watering-flowers.jpg";
+import { FadeIn } from "./FadeIn";
 
 type FillOutUserDetailsProps = {
   name?: string;
@@ -39,28 +39,33 @@ export const FillOutUserDetails: React.FC<FillOutUserDetailsProps> = ({
         justifyContent="center"
         alignItems="center"
       >
-        <Image
-          src={wateringFlowersSrc}
-          alt="En kvinne som vanner en ampel"
-          width="300px"
-        />
-        <Box>
-          <Heading>Velkommen!</Heading>
-          <Text>Så utrolig kult at du vil være med på å ta i et tak!</Text>
+        <FadeIn initial="hiddenFromLeft" delay={0.3}>
+          <Image
+            src={wateringFlowersSrc}
+            alt="En kvinne som vanner en ampel"
+            width="300px"
+          />
+        </FadeIn>
+        <FadeIn initial="hiddenFromRight" ml={[0, 0, 6]}>
           <Stack spacing={6}>
-            <FormControl>
-              <FormLabel id="name">Hva heter du?</FormLabel>
-              <Input
-                id="name"
-                value={formFields.name}
-                onChange={createChangeHandler("name")}
-              />
-            </FormControl>
-            <Button type="submit" variantColor="green" variant="solid">
-              Lagre
-            </Button>
+            <Heading>Velkommen!</Heading>
+            <Text>Så utrolig kult at du vil være med på å ta i et tak!</Text>
+            <Stack spacing={6}>
+              <FormControl>
+                <FormLabel id="name">Hva heter du?</FormLabel>
+                <Input
+                  id="name"
+                  value={formFields.name}
+                  onChange={createChangeHandler("name")}
+                  autoComplete="off"
+                />
+              </FormControl>
+              <Button type="submit" variantColor="green" variant="solid">
+                Lagre
+              </Button>
+            </Stack>
           </Stack>
-        </Box>
+        </FadeIn>
       </Flex>
     </form>
   );

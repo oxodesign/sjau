@@ -17,6 +17,7 @@ import {
 import { useAuth, useFirestore } from "reactfire";
 import { useFormFields } from "../hooks/useFormFields";
 import { useUser } from "../hooks/useUser";
+import { useHistory } from "react-router-dom";
 
 type SiteSettingsProps = {
   isOpen: boolean;
@@ -28,6 +29,7 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
   onClose
 }) => {
   const auth = useAuth();
+  const { push } = useHistory();
   const user = useUser();
   const userRef = useFirestore()
     .collection("users")
@@ -42,6 +44,10 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
     e.preventDefault();
     updateUser();
     onClose();
+  };
+  const handleLogout = async () => {
+    await auth.signOut();
+    push("/?kthx=bye");
   };
 
   return (
@@ -67,7 +73,7 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
         </DrawerBody>
         <DrawerFooter borderTop="1px">
           <ButtonGroup>
-            <Button onClick={() => auth.signOut()}>Logg ut</Button>
+            <Button onClick={handleLogout}>Logg ut</Button>
           </ButtonGroup>
         </DrawerFooter>
       </DrawerContent>

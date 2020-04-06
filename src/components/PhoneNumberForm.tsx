@@ -4,16 +4,16 @@ import { Button, FormControl, FormLabel, Input, Stack } from "@chakra-ui/core";
 
 type PhoneNumberFormProps = {
   onSubmit: (phoneNumber: string) => void;
+  isLoading: boolean;
 };
 export const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
-  onSubmit
+  onSubmit,
+  isLoading
 }) => {
   const [phoneNumber, setPhoneNumber] = usePersistedState("phone-number", "");
-  const [isLoading, setLoading] = React.useState(false);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (phoneNumber) {
-      setLoading(true);
       onSubmit(phoneNumber);
     }
   };

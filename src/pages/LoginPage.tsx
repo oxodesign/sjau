@@ -5,14 +5,44 @@ import { VerificationCodeForm } from "../components/VerificationCodeForm";
 import { PhoneNumberForm } from "../components/PhoneNumberForm";
 import { Heading, Stack, Box, Image, Flex } from "@chakra-ui/core";
 import plantingFlowersSrc from "../images/planting-flowers.jpg";
+import { FadeIn } from "../components/FadeIn";
+import { Container } from "../components/Container";
 
 type LoginPageProps = {};
 
+type LoginState =
+  | "initial"
+  | "verification code requested"
+  | "verification code sent"
+  | "verifying code"
+  | "success"
+  | "invalid phone number"
+  | "captcha check failed"
+  | "too many attempts"
+  | "expired code"
+  | "invalid code"
+  | "generic error";
+
+const getErrorText = (loginState: LoginState) => {
+  switch (loginState) {
+    case "invalid phone number":
+      return "Det ser ut til at du har skrevet inn et ugyldig telefonnummer. Sjekk at alt er riktig, og prøv igjen.";
+    case "captcha check failed":
+      return "Den automatiske sikkerhetssjekken vår tror visst du er en robot. Last inn siden på nytt og prøv igjen.";
+    case "too many attempts":
+      return "Æsj, nå har du prøvd for mange ganger på rad. Vent litt, så kan du prøve igjen.";
+    case "expired code":
+      return "Søren, nå brukte du for lang tid på å skrive inn koden. Be om en ny kode og prøv igjen!";
+    case "invalid code":
+      return "Hmm… Det ser ut til at du skrev inn feil kode. Prøv en gang til!";
+    case "generic error":
+    default:
+      return "Æsj, nå var det noe som ikke fungerte som det skulle. Prøv igjen, og se om det ordner seg!";
+  }
+};
+
 export const LoginPage: React.FC<LoginPageProps> = () => {
-  const [
-    isWaitingForVerificationCode,
-    setWaitingForVerificationCode
-  ] = React.useState(false);
+  const [loginState, setLoginState] = React.useState<LoginState>("initial");
   const auth = useAuth();
   auth.languageCode = "nb";
   const confirmationResultRef = React.useRef<
@@ -26,23 +56,57 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     // next, remove any non-numeric characters
     normalizedPhoneNumber = normalizedPhoneNumber.split(/[ \-()]/).join("");
     try {
+      setLoginState("verification code requested");
+      console.log("stuff is requested");
       confirmationResultRef.current = await auth.signInWithPhoneNumber(
         normalizedPhoneNumber,
         window.recaptchaVerifier
       );
-      setWaitingForVerificationCode(true);
+      console.log("stuff is stuff is resolved");
+      setLoginState("verification code sent");
     } catch (e) {
-      console.error("error when trying to sign in with phone number", e);
-      setWaitingForVerificationCode(false);
+      console.log("error", e);
       window.recaptchaVerifier?.reset();
+      switch (e.code) {
+        case "auth/captcha-check-failed": {
+          setLoginState("captcha check failed");
+          return;
+        }
+        case "auth/invalid-phone-number": {
+          setLoginState("invalid phone number");
+          return;
+        }
+        case "auth/too-many-requests": {
+          setLoginState("too many attempts");
+          return;
+        }
+        default: {
+          console.warn("Saw unrecognized error: ", e);
+          setLoginState("generic error");
+        }
+      }
     }
   };
-  const handleVerificationCodeSubmitted = (verificationCode: string) => {
+  const handleVerificationCodeSubmitted = async (verificationCode: string) => {
     try {
-      confirmationResultRef.current?.confirm(verificationCode);
+      setLoginState("verifying code");
+      await confirmationResultRef.current?.confirm(verificationCode);
+      setLoginState("success");
     } catch (e) {
-      setWaitingForVerificationCode(false);
-      console.error(e);
+      switch (e.code) {
+        case "auth/invalid-verification-code": {
+          setLoginState("invalid code");
+          return;
+        }
+        case "auth/too-many-requests": {
+          setLoginState("too many attempts");
+          return;
+        }
+        default: {
+          console.warn("Saw unrecognized error: ", e);
+          setLoginState("generic error");
+        }
+      }
     }
   };
 
@@ -56,31 +120,78 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     };
   }, []);
 
+  const hasError = ![
+    "initial",
+    "success",
+    "verification code requested",
+    "verification code sent",
+    "verifying code"
+  ].includes(loginState);
+  const showVerificationForm = [
+    "success",
+    "verification code sent",
+    "verifying code",
+    "invalid code"
+  ].includes(loginState);
+
+  console.log(showVerificationForm);
+
   return (
-    <Flex
-      minHeight="100vh"
-      alignItems="center"
-      justifyContent="center"
-      flexDirection={["column", "column", "row"]}
-    >
-      <Image
-        width="300px"
-        src={plantingFlowersSrc}
-        alt="En mann som planter blomster"
-        flex="0 0 auto"
-      />
-      <Box p={6}>
-        <Stack spacing={6}>
-          <Heading as="h1" mt={6}>
-            Først må vi logge deg inn
-          </Heading>
-          {isWaitingForVerificationCode ? (
-            <VerificationCodeForm onSubmit={handleVerificationCodeSubmitted} />
-          ) : (
-            <PhoneNumberForm onSubmit={handlePhoneNumberSubmitted} />
-          )}
-        </Stack>
-      </Box>
-    </Flex>
+    <Container>
+      <Flex
+        minHeight="100vh"
+        alignItems="center"
+        justifyContent="center"
+        flexDirection={["column", "column", "row"]}
+      >
+        <FadeIn
+          flex="0 0 33%"
+          initial="hiddenFromLeft"
+          exit="hiddenFromLeft"
+          delay={0.3}
+        >
+          <Image
+            width="300px"
+            src={plantingFlowersSrc}
+            alt="En mann som planter blomster"
+          />
+        </FadeIn>
+        <Box flex="0 0 67%" p={6}>
+          <Box p={6}>
+            <Stack spacing={6}>
+              <Heading as="h1" mt={6}>
+                Først må vi logge deg inn
+              </Heading>
+              {hasError && (
+                <Box
+                  bg="red.100"
+                  rounded="md"
+                  borderWidth="2px"
+                  borderColor="red.500"
+                  maxWidth="400px"
+                  my={6}
+                  p={6}
+                >
+                  {getErrorText(loginState)}
+                </Box>
+              )}
+              {showVerificationForm ? (
+                <VerificationCodeForm
+                  onSubmit={handleVerificationCodeSubmitted}
+                  key="verification-code-form"
+                  isLoading={loginState === "verifying code"}
+                />
+              ) : (
+                <PhoneNumberForm
+                  onSubmit={handlePhoneNumberSubmitted}
+                  isLoading={loginState === "verification code requested"}
+                  key="phone-number-form"
+                />
+              )}
+            </Stack>
+          </Box>
+        </Box>
+      </Flex>
+    </Container>
   );
 };
