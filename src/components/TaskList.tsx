@@ -34,7 +34,14 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
     [currentUser, tasks, currentFilter]
   );
   if (!tasks.length) {
-    return <Text>Ingen oppgaver er lagt til enda!</Text>;
+    return (
+      <Text>
+        Ingen oppgaver er lagt til enda!{" "}
+        <span role="img" aria-label="Dra på skuldrene">
+          🤷‍♂️
+        </span>
+      </Text>
+    );
   }
 
   const variants = {
