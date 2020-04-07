@@ -59,7 +59,7 @@ export const NewDugnadPage = () => {
             <Stack spacing={6}>
               <FadeIn initial="hiddenFromLeft" exit="hiddenFromRight">
                 <FormControl isRequired>
-                  <FormLabel htmlFor="name">
+                  <FormLabel htmlFor="name" fontWeight="600">
                     Hva vil du kalle sjauen din?
                   </FormLabel>
                   <Input
@@ -82,7 +82,7 @@ export const NewDugnadPage = () => {
                 delay={0.1}
               >
                 <FormControl isRequired>
-                  <FormLabel htmlFor="description">
+                  <FormLabel htmlFor="description" fontWeight="600">
                     Skriv litt om sjauen din!
                   </FormLabel>
                   <Textarea
@@ -108,7 +108,9 @@ export const NewDugnadPage = () => {
                 delay={0.2}
               >
                 <FormControl isRequired>
-                  <FormLabel htmlFor="startsAt">Når starter sjauen?</FormLabel>
+                  <FormLabel htmlFor="startsAt" fontWeight="600">
+                    Når starter sjauen?
+                  </FormLabel>
                   <Input
                     type="date"
                     id="startsAt"
@@ -125,7 +127,9 @@ export const NewDugnadPage = () => {
                 delay={0.3}
               >
                 <FormControl isRequired>
-                  <FormLabel htmlFor="endsAt">Når slutter sjauen?</FormLabel>
+                  <FormLabel htmlFor="endsAt" fontWeight="600">
+                    Når slutter sjauen?
+                  </FormLabel>
                   <Input
                     id="endsAt"
                     type="date"
