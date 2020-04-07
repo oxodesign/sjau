@@ -10,6 +10,7 @@ import {
   Button,
   Stack
 } from "@chakra-ui/core";
+import { useAnalytics } from "reactfire";
 
 type AddTaskProps = {
   dugnadId: string;
