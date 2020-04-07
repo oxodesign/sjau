@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { useFormFields } from "../hooks/useFormFields";
-import { useFirestore } from "reactfire";
+import { useFirestore, useAnalytics } from "reactfire";
 import { useUser } from "../hooks/useUser";
 import {
   Heading,
@@ -32,6 +32,7 @@ export const NewDugnadPage = () => {
   });
   const dugnadsRef = useFirestore().collection("dugnads");
   const user = useUser();
+  const analytics = useAnalytics();
 
   const { push } = useHistory();
 
@@ -42,6 +43,7 @@ export const NewDugnadPage = () => {
         ...formState,
         author: user!.uid
       });
+      analytics.logEvent("create_sjau");
       push(`/dugnad/${result.id}`);
     } catch (e) {
       console.error("Kunne ikke opprette ting", e);
