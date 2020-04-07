@@ -24,12 +24,14 @@ export const AddTask: React.FC<AddTaskProps> = ({ dugnadId }) => {
   const dugnadRef = useDugnadRef(dugnadId);
   const user = useUser();
   const titleRef = React.useRef<HTMLInputElement | null>(null);
+  const analytics = useAnalytics();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await dugnadRef
       .collection("tasks")
       .add({ ...formState, author: user!.uid, status: "idle" });
+    analytics.logEvent("add_task", { dugnadId });
     resetFormFields();
     titleRef.current?.focus();
   };
