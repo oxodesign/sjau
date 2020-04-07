@@ -19,18 +19,25 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
   const currentUser = useUser();
   const filteredTasks = React.useMemo(
     () =>
-      tasks.filter(task => {
-        switch (currentFilter) {
-          case "all":
-            return true;
-          case "available":
-            return task.status === "idle";
-          case "your own":
-            return task.assignedUser === currentUser?.uid;
-          default:
-            return true;
-        }
-      }),
+      tasks
+        .filter(task => {
+          switch (currentFilter) {
+            case "all":
+              return true;
+            case "available":
+              return task.status === "idle";
+            case "your own":
+              return task.assignedUser === currentUser?.uid;
+            default:
+              return true;
+          }
+        })
+        .sort((a, b) => {
+          const sortOrder = { idle: 0, "in progress": 1, done: 2 };
+          if (sortOrder[a.status] < sortOrder[b.status]) return -1;
+          if (sortOrder[a.status] > sortOrder[b.status]) return 1;
+          return a.title.localeCompare(b.title);
+        }),
     [currentUser, tasks, currentFilter]
   );
   if (!tasks.length) {
