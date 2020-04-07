@@ -14,7 +14,8 @@ import {
   FormHelperText,
   Button,
   ButtonGroup,
-  Image
+  Image,
+  Text
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
 import leavesSrc from "../images/leaves.jpg";
@@ -50,6 +51,14 @@ export const NewDugnadPage = () => {
     <Container>
       <Stack spacing={6}>
         <Heading as="h1">Lag din helt egne sjau</Heading>
+        <Text maxWidth="550px">
+          Nå er det på tide vi kommer i gang med litt god gammeldags sjauing!
+          Start med å fylle ut litt enkle detaljer om hva den skal hete og når
+          dere skal starte.{" "}
+          <span role="img" aria-label="Stram musklene">
+            💪
+          </span>
+        </Text>
         <Flex
           flexDirection={["column", "column", "row", "row"]}
           justifyContent="center"
