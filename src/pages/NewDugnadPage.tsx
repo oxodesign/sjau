@@ -56,7 +56,7 @@ export const NewDugnadPage = () => {
           alignItems="center"
         >
           <form onSubmit={handleSubmit}>
-            <Stack spacing={6}>
+            <Stack spacing={10}>
               <FadeIn initial="hiddenFromLeft" exit="hiddenFromRight">
                 <FormControl isRequired>
                   <FormLabel htmlFor="name" fontWeight="600">
