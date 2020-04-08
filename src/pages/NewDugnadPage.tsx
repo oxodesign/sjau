@@ -107,7 +107,7 @@ export const NewDugnadPage = () => {
                   />
                   <FormHelperText id="description-description">
                     Her kan det være fint å gi en velkomsthilsen, og en
-                    beskrivelse a hvor folk kan finne utstyr og andre ting de
+                    beskrivelse av hvor folk kan finne utstyr og andre ting de
                     trenger.
                   </FormHelperText>
                 </FormControl>
