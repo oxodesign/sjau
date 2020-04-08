@@ -12,7 +12,9 @@ export const CommentSection: React.FC<CommentSectionProps> = () => {
   const comments = useTaskComments(dugnadId!, taskId!);
   return (
     <Box>
-      <Heading as="h3">Kommentarer</Heading>
+      <Heading as="h3" fontSize="2xl">
+        Kommentarer
+      </Heading>
       <Stack spacing={6}>
         <Text maxWidth="600px">
           Kommentarfeltet lar oss prate sammen om oppgaven! Spør om hjelp, skriv
