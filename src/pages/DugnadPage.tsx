@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams, useLocation } from "react-router-dom";
 import {
-  Badge,
   Box,
   Heading,
   Text,
@@ -15,10 +14,6 @@ import {
   EditablePreview,
   ButtonGroup
 } from "@chakra-ui/core";
-import isFuture from "date-fns/isFuture";
-import isPast from "date-fns/isPast";
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import nbLocale from "date-fns/locale/nb";
 import { Container } from "../components/Container";
 import { AddTask } from "../components/AddTask";
 import { TaskList } from "../components/TaskList";
@@ -30,6 +25,7 @@ import { useAuth } from "reactfire";
 import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
 import { MdEdit } from "react-icons/md";
 import { EditableDescription } from "../components/EditableDescription";
+import { DugnadTiming } from "../components/DugnadTiming";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -42,7 +38,7 @@ export const DugnadPage = () => {
   const auth = useAuth();
   const { search } = useLocation();
   const dugnadsForUser = useUserDugnads(auth.currentUser?.uid);
-  const [isDescriptionVisible, setDescriptionVisible] = React.useState(false);
+  const [isDescriptionVisible, setDescriptionVisible] = React.useState(true);
   const [isEditingDescription, setEditingDescription] = React.useState(false);
 
   const justCreatedDugnad = search === "?created";
@@ -61,9 +57,6 @@ export const DugnadPage = () => {
   if (!dugnad) {
     return <Text>Fant ikke den sjauen!</Text>;
   }
-
-  const startsAt = new Date(dugnad.startsAt);
-  const endsAt = new Date(dugnad.endsAt);
 
   const hasLongDescription = (dugnad!.description?.length ?? 0) > 300;
 
@@ -93,32 +86,11 @@ export const DugnadPage = () => {
                 <EditablePreview />
               </Editable>
             </Heading>
-            <Box mb={6}>
-              {isFuture(startsAt) && (
-                <Text>
-                  Starter{" "}
-                  {formatDistanceToNow(startsAt, {
-                    addSuffix: true,
-                    locale: nbLocale
-                  })}
-                </Text>
-              )}
-              {isPast(endsAt) && (
-                <Text>
-                  Ble avsluttet for{" "}
-                  {formatDistanceToNow(endsAt, {
-                    addSuffix: true,
-                    locale: nbLocale
-                  })}
-                </Text>
-              )}
-              {isPast(startsAt) && isFuture(endsAt) && (
-                <Box>
-                  <Badge variantColor="green">Aktiv!</Badge> Varer i{" "}
-                  {formatDistanceToNow(endsAt, { locale: nbLocale })} til
-                </Box>
-              )}
-            </Box>
+            <DugnadTiming
+              dugnadId={dugnadId!}
+              startsAt={dugnad.startsAt}
+              endsAt={dugnad.endsAt}
+            />
             <React.Suspense
               fallback={
                 <Text textAlign="center" my={6}>
@@ -136,6 +108,7 @@ export const DugnadPage = () => {
                   isOpen={isDescriptionVisible}
                   startingHeight={hasLongDescription ? 100 : 25}
                   position="relative"
+                  aria-hidden={!isDescriptionVisible}
                 >
                   {!isDescriptionVisible && (
                     <Box
