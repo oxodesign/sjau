@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Redirect } from "react-router-dom";
+import { Switch, Redirect, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { NewDugnadPage } from "./pages/NewDugnadPage";
 import { DugnadPage } from "./pages/DugnadPage";
@@ -11,6 +11,10 @@ import { useAnalytics } from "reactfire";
 
 export const App: React.FC = () => {
   useAnalytics();
+  const location = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   return (
     <>
       <main>
