@@ -15,7 +15,7 @@ import isFuture from "date-fns/isFuture";
 import isPast from "date-fns/isPast";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import nbLocale from "date-fns/locale/nb";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdCheck } from "react-icons/md";
 
 type DugnadTimingProps = {
   dugnadId: string;
@@ -33,8 +33,10 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
     startsAt,
     endsAt
   });
+  const editButtonRef = React.useRef<HTMLButtonElement>();
   const handleUpdate = () => {
     setEditing(false);
+    editButtonRef.current?.focus();
     dugnadRef.update(formState);
   };
   const startsAtDate = new Date(startsAt);
@@ -78,6 +80,7 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
             icon={MdEdit}
             aria-label="Endre start- og sluttetid"
             onClick={() => setEditing(true)}
+            ref={editButtonRef}
           />
         )}
       </Stack>
@@ -93,6 +96,10 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
                 value={formState.startsAt}
                 onChange={createUpdater("startsAt")}
                 onBlur={handleUpdate}
+                onKeyPress={(e: React.KeyboardEvent) =>
+                  e.key === "Enter" && handleUpdate()
+                }
+                autoFocus
               />
             </FormControl>
             <FormControl>
@@ -107,6 +114,15 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
                 min={formState.startsAt}
               />
             </FormControl>
+            <IconButton
+              icon={MdCheck}
+              variant="solid"
+              variantColor="green"
+              aria-label="Lagre"
+              size="sm"
+              mt="28px"
+              onClick={() => setEditing(false)}
+            />
           </Stack>
         </Box>
       )}
