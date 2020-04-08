@@ -34,7 +34,6 @@ export const DugnadPage = () => {
   const dugnad = useDugnad(dugnadId);
   const auth = useAuth();
   const { search } = useLocation();
-  console.log(search);
   const justCreatedDugnad = search === "?created";
   const dugnadsForUser = useUserDugnads(auth.currentUser?.uid);
   const [isDescriptionVisible, setDescriptionVisible] = React.useState(false);

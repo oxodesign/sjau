@@ -18,6 +18,7 @@ import { TaskStatusBadge } from "../components/TaskStatusBadge";
 import { BackLink } from "../components/BackLink";
 import leavesSrc from "../images/leaves.jpg";
 import { FadeIn } from "../components/FadeIn";
+import { CommentSection } from "../components/CommentSection";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -55,9 +56,9 @@ export const TaskPage: React.FC = () => {
     replace(`/dugnad/${dugnadId}`);
   };
   return (
-    <Container justifyContent="flex-start">
+    <Container justifyContent="flex-start" mb={60}>
       <Flex flexDirection={["column", "column", "row"]}>
-        <FadeIn initial="hiddenFromLeft" exit="hiddenFromLeft">
+        <FadeIn initial="hiddenFromLeft" exit="hiddenFromLeft" flexGrow={1}>
           <Stack spacing={6}>
             <BackLink to={`/dugnad/${dugnadId}`}>Tilbake til dugnaden</BackLink>
             <Heading as="h1">{task.title}!</Heading>
@@ -178,6 +179,7 @@ export const TaskPage: React.FC = () => {
           />
         </FadeIn>
       </Flex>
+      <CommentSection />
     </Container>
   );
 };
