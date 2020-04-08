@@ -8,7 +8,10 @@ import {
   ButtonGroup,
   Stack,
   Image,
-  Flex
+  Flex,
+  Editable,
+  EditableInput,
+  EditablePreview
 } from "@chakra-ui/core";
 import {
   MdCheck,
@@ -68,13 +71,21 @@ export const TaskPage: React.FC = () => {
     setEditingDescription(false);
     taskRef.update({ description });
   };
+  const handleEditTitle = (title: string) => {
+    taskRef.update({ title });
+  };
   return (
     <Container justifyContent="flex-start" mb={60}>
       <Flex flexDirection={["column", "column", "row"]}>
         <FadeIn initial="hiddenFromLeft" exit="hiddenFromLeft" flexGrow={1}>
           <Stack spacing={6}>
             <BackLink to={`/dugnad/${dugnadId}`}>Tilbake til dugnaden</BackLink>
-            <Heading as="h1">{task.title}!</Heading>
+            <Heading as="h1">
+              <Editable defaultValue={task.title} onSubmit={handleEditTitle}>
+                <EditableInput />
+                <EditablePreview />
+              </Editable>
+            </Heading>
 
             <Stack isInline>
               <FadeIn
