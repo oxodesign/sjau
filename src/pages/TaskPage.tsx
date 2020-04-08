@@ -10,7 +10,13 @@ import {
   Image,
   Flex
 } from "@chakra-ui/core";
-import { MdCheck, MdArrowBack, MdThumbUp, MdDelete } from "react-icons/md";
+import {
+  MdCheck,
+  MdArrowBack,
+  MdThumbUp,
+  MdDelete,
+  MdEdit
+} from "react-icons/md";
 import { useTask, useTaskRef } from "../hooks/useDugnad";
 import { useUser, useUserById } from "../hooks/useUser";
 import { Container } from "../components/Container";
@@ -19,6 +25,7 @@ import { BackLink } from "../components/BackLink";
 import leavesSrc from "../images/leaves.jpg";
 import { FadeIn } from "../components/FadeIn";
 import { CommentSection } from "../components/CommentSection";
+import { EditableDescription } from "../components/EditableDescription";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -32,8 +39,10 @@ export const TaskPage: React.FC = () => {
   const author = useUserById(task.author);
   const assignedUser = useUserById(task.assignedUser);
   const { replace } = useHistory();
+  const [isEditingDescription, setEditingDescription] = React.useState(false);
   const isAssignedToSelf = currentUser?.uid === assignedUser?.uid;
   const isCreatedBySelf = currentUser?.uid === author?.uid;
+
   const handleReassign = () => {
     taskRef.update({
       assignedUser: isAssignedToSelf ? null : currentUser!.uid,
@@ -54,6 +63,10 @@ export const TaskPage: React.FC = () => {
   const handleDelete = () => {
     taskRef.delete();
     replace(`/dugnad/${dugnadId}`);
+  };
+  const handleEditDescription = (description: string) => {
+    setEditingDescription(false);
+    taskRef.update({ description });
   };
   return (
     <Container justifyContent="flex-start" mb={60}>
@@ -156,6 +169,19 @@ export const TaskPage: React.FC = () => {
                   Slett
                 </Button>
               )}
+              {!isEditingDescription && (
+                <Button
+                  type="button"
+                  leftIcon={MdEdit}
+                  variant="outline"
+                  variantColor="grey"
+                  size="sm"
+                  mb={4}
+                  onClick={() => setEditingDescription(true)}
+                >
+                  Endre beskrivelse
+                </Button>
+              )}
             </ButtonGroup>
 
             <React.Suspense
@@ -165,7 +191,13 @@ export const TaskPage: React.FC = () => {
                 </Text>
               }
             >
-              <SanitizedMarkdown>{task.description}</SanitizedMarkdown>
+              <EditableDescription
+                isEditing={isEditingDescription}
+                onSubmit={handleEditDescription}
+                defaultValue={task.description}
+              >
+                <SanitizedMarkdown>{task.description}</SanitizedMarkdown>
+              </EditableDescription>
             </React.Suspense>
           </Stack>
         </FadeIn>

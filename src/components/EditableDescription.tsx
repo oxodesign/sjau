@@ -1,5 +1,13 @@
 import React from "react";
-import { Textarea, Box, Button, Stack, ButtonGroup } from "@chakra-ui/core";
+import {
+  Textarea,
+  Box,
+  Button,
+  Stack,
+  ButtonGroup,
+  FormControl,
+  FormLabel
+} from "@chakra-ui/core";
 
 type EditableDescriptionProps = {
   onSubmit: (newValue: string) => void;
@@ -29,13 +37,18 @@ export const EditableDescription: React.FC<EditableDescriptionProps> = ({
     return (
       <form onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          <Textarea
-            value={value}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setValue(e.target.value)
-            }
-            onBlur={handleBlur}
-          />
+          <FormControl>
+            <FormLabel htmlFor="description">Beskrivelse</FormLabel>
+            <Textarea
+              id="description"
+              value={value}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setValue(e.target.value)
+              }
+              onBlur={handleBlur}
+              autoFocus
+            />
+          </FormControl>
           <ButtonGroup>
             <Button type="submit" variant="outline" size="sm">
               Lagre endringer
