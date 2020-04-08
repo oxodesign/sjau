@@ -9,7 +9,10 @@ import {
   Flex,
   Image,
   Collapse,
-  Button
+  Button,
+  Editable,
+  EditableInput,
+  EditablePreview
 } from "@chakra-ui/core";
 import isFuture from "date-fns/isFuture";
 import isPast from "date-fns/isPast";
@@ -18,7 +21,7 @@ import nbLocale from "date-fns/locale/nb";
 import { Container } from "../components/Container";
 import { AddTask } from "../components/AddTask";
 import { TaskList } from "../components/TaskList";
-import { useDugnad, useUserDugnads } from "../hooks/useDugnad";
+import { useDugnad, useUserDugnads, useDugnadRef } from "../hooks/useDugnad";
 import { BackLink } from "../components/BackLink";
 import washingSrc from "../images/washing.jpg";
 import { FadeIn } from "../components/FadeIn";
@@ -32,11 +35,19 @@ const SanitizedMarkdown = React.lazy(() =>
 export const DugnadPage = () => {
   const { dugnadId } = useParams();
   const dugnad = useDugnad(dugnadId);
+  const dugnadRef = useDugnadRef(dugnadId);
   const auth = useAuth();
   const { search } = useLocation();
   const justCreatedDugnad = search === "?created";
   const dugnadsForUser = useUserDugnads(auth.currentUser?.uid);
   const [isDescriptionVisible, setDescriptionVisible] = React.useState(false);
+
+  const createEditFieldUpdater = (fieldName: string) => (value: string) => {
+    if (!value) {
+      return;
+    }
+    dugnadRef.update({ [fieldName]: value });
+  };
 
   if (!dugnad) {
     return <Text>Fant ikke den sjauen!</Text>;
@@ -65,7 +76,16 @@ export const DugnadPage = () => {
                 dugnadId={dugnadId!}
               />
             )}
-            <Heading as="h1">{dugnad.name}</Heading>
+            <Heading as="h1">
+              <Editable
+                onSubmit={createEditFieldUpdater("name")}
+                defaultValue={dugnad.name}
+              >
+                <EditableInput />
+                <EditablePreview />
+              </Editable>
+            </Heading>
+
             <Box mb={6}>
               {isFuture(startsAt) && (
                 <Text>
@@ -92,7 +112,6 @@ export const DugnadPage = () => {
                 </Box>
               )}
             </Box>
-
             {dugnad.description && (
               <React.Suspense
                 fallback={
@@ -108,7 +127,7 @@ export const DugnadPage = () => {
                 >
                   {!isDescriptionVisible && (
                     <Box
-                      bgImage="linear-gradient(to top, white, transparent)"
+                      bgImage="linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0))"
                       position="absolute"
                       top={0}
                       pointerEvents="none"
