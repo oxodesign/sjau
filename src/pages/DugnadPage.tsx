@@ -12,7 +12,8 @@ import {
   Button,
   Editable,
   EditableInput,
-  EditablePreview
+  EditablePreview,
+  ButtonGroup
 } from "@chakra-ui/core";
 import isFuture from "date-fns/isFuture";
 import isPast from "date-fns/isPast";
@@ -27,6 +28,8 @@ import washingSrc from "../images/washing.jpg";
 import { FadeIn } from "../components/FadeIn";
 import { useAuth } from "reactfire";
 import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
+import { MdEdit } from "react-icons/md";
+import { EditableDescription } from "../components/EditableDescription";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -38,15 +41,21 @@ export const DugnadPage = () => {
   const dugnadRef = useDugnadRef(dugnadId);
   const auth = useAuth();
   const { search } = useLocation();
-  const justCreatedDugnad = search === "?created";
   const dugnadsForUser = useUserDugnads(auth.currentUser?.uid);
   const [isDescriptionVisible, setDescriptionVisible] = React.useState(false);
+  const [isEditingDescription, setEditingDescription] = React.useState(false);
 
-  const createEditFieldUpdater = (fieldName: string) => (value: string) => {
+  const justCreatedDugnad = search === "?created";
+
+  const handleNameSubmit = (value: string) => {
     if (!value) {
       return;
     }
-    dugnadRef.update({ [fieldName]: value });
+    dugnadRef.update({ name: value });
+  };
+  const handleDescriptionSubmit = (description: string) => {
+    dugnadRef.update({ description });
+    setEditingDescription(false);
   };
 
   if (!dugnad) {
@@ -55,6 +64,8 @@ export const DugnadPage = () => {
 
   const startsAt = new Date(dugnad.startsAt);
   const endsAt = new Date(dugnad.endsAt);
+
+  const hasLongDescription = (dugnad!.description?.length ?? 0) > 300;
 
   return (
     <Container>
@@ -77,15 +88,11 @@ export const DugnadPage = () => {
               />
             )}
             <Heading as="h1">
-              <Editable
-                onSubmit={createEditFieldUpdater("name")}
-                defaultValue={dugnad.name}
-              >
+              <Editable onSubmit={handleNameSubmit} defaultValue={dugnad.name}>
                 <EditableInput />
                 <EditablePreview />
               </Editable>
             </Heading>
-
             <Box mb={6}>
               {isFuture(startsAt) && (
                 <Text>
@@ -112,17 +119,21 @@ export const DugnadPage = () => {
                 </Box>
               )}
             </Box>
-            {dugnad.description && (
-              <React.Suspense
-                fallback={
-                  <Text textAlign="center" my={6}>
-                    Henter beskrivelse
-                  </Text>
-                }
+            <React.Suspense
+              fallback={
+                <Text textAlign="center" my={6}>
+                  Henter beskrivelse
+                </Text>
+              }
+            >
+              <EditableDescription
+                onSubmit={handleDescriptionSubmit}
+                defaultValue={dugnad.description}
+                isEditing={isEditingDescription}
               >
                 <Collapse
                   isOpen={isDescriptionVisible}
-                  startingHeight={100}
+                  startingHeight={hasLongDescription ? 100 : 25}
                   position="relative"
                 >
                   {!isDescriptionVisible && (
@@ -137,16 +148,31 @@ export const DugnadPage = () => {
                   )}
                   <SanitizedMarkdown>{dugnad.description}</SanitizedMarkdown>
                 </Collapse>
-                <Button
-                  variant="solid"
-                  variantColor="gray"
-                  onClick={() => setDescriptionVisible(prev => !prev)}
-                  my={3}
-                >
-                  {isDescriptionVisible ? "Skjul" : "Vis mer"}
-                </Button>
-              </React.Suspense>
-            )}
+              </EditableDescription>
+              <ButtonGroup mb={3} spacing={3}>
+                {hasLongDescription && (
+                  <Button
+                    variant="solid"
+                    variantColor="gray"
+                    onClick={() => setDescriptionVisible(prev => !prev)}
+                    mt={3}
+                  >
+                    {isDescriptionVisible ? "Skjul" : "Vis mer"}
+                  </Button>
+                )}
+                {!isEditingDescription && (
+                  <Button
+                    leftIcon={MdEdit}
+                    variant="outline"
+                    variantColor="grey"
+                    size="xs"
+                    onClick={() => setEditingDescription(true)}
+                  >
+                    Endre beskrivelse
+                  </Button>
+                )}
+              </ButtonGroup>
+            </React.Suspense>
             <Box shadow="md" borderWidth="1px" p={5}>
               <AddTask dugnadId={dugnadId!!} />
             </Box>

@@ -11,6 +11,9 @@ const MarkdownStyler = styled.div`
   p {
     margin-bottom: 1em;
   }
+  a  {
+    text-decoration: underline;
+  }
 `;
 
 export const SanitizedMarkdown: React.FC<SanitizedMarkdownProps> = ({
