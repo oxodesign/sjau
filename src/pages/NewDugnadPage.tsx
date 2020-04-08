@@ -44,7 +44,7 @@ export const NewDugnadPage = () => {
         author: user!.uid
       });
       analytics.logEvent("create_sjau");
-      push(`/dugnad/${result.id}`);
+      push(`/dugnad/${result.id}?created`);
     } catch (e) {
       console.error("Kunne ikke opprette ting", e);
     }

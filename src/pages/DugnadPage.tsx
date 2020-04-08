@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import {
   Badge,
   Box,
@@ -18,10 +18,12 @@ import nbLocale from "date-fns/locale/nb";
 import { Container } from "../components/Container";
 import { AddTask } from "../components/AddTask";
 import { TaskList } from "../components/TaskList";
-import { useDugnad } from "../hooks/useDugnad";
+import { useDugnad, useUserDugnads } from "../hooks/useDugnad";
 import { BackLink } from "../components/BackLink";
 import washingSrc from "../images/washing.jpg";
 import { FadeIn } from "../components/FadeIn";
+import { useAuth } from "reactfire";
+import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -30,6 +32,11 @@ const SanitizedMarkdown = React.lazy(() =>
 export const DugnadPage = () => {
   const { dugnadId } = useParams();
   const dugnad = useDugnad(dugnadId);
+  const auth = useAuth();
+  const { search } = useLocation();
+  console.log(search);
+  const justCreatedDugnad = search === "?created";
+  const dugnadsForUser = useUserDugnads(auth.currentUser?.uid);
   const [isDescriptionVisible, setDescriptionVisible] = React.useState(false);
 
   if (!dugnad) {
@@ -53,6 +60,12 @@ export const DugnadPage = () => {
             flex={["1 0 auto", "1 0 auto", "0 0 67%"]}
             maxWidth="100%"
           >
+            {justCreatedDugnad && (
+              <DugnadCreatedCallout
+                isFirstTime={dugnadsForUser.length === 1}
+                dugnadId={dugnadId!}
+              />
+            )}
             <Heading as="h1">{dugnad.name}</Heading>
             <Box mb={6}>
               {isFuture(startsAt) && (
