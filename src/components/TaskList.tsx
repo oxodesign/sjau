@@ -27,7 +27,7 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
             case "available":
               return task.status === "idle";
             case "your own":
-              return task.assignedUser === currentUser?.uid;
+              return task.assignedUsers.includes(currentUser!.uid);
             default:
               return true;
           }
@@ -103,7 +103,9 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
             p={6}
             borderLeftWidth="8px"
             borderColor={
-              task.assignedUser === currentUser?.uid ? "#76a73d" : "white"
+              task.assignedUsers.includes(currentUser!.uid)
+                ? "#76a73d"
+                : "white"
             }
           >
             <Link to={`/dugnad/${dugnadId}/${task.id}`}>

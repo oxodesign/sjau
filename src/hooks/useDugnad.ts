@@ -7,11 +7,12 @@ import { UserType } from "./useUser";
 
 export type DugnadType = {
   id: string;
+  author: string;
   name: string;
   description?: string;
   startsAt: string;
   endsAt: string;
-  tasks: Array<any>; // TODO create task
+  tasks: TaskType[];
 };
 
 export type TaskStatusType = "idle" | "in progress" | "done";
@@ -20,6 +21,7 @@ export type TaskType = {
   id: string;
   author: string;
   assignedUser?: string;
+  assignedUsers: string[];
   title: string;
   description: string;
   status: TaskStatusType;
@@ -33,16 +35,32 @@ export const useDugnadRef = (id?: string) =>
 export const useDugnad = (id?: string): DugnadType =>
   useFirestoreDocData(useDugnadRef(id));
 
+// Handle legacy cases where we only supported a single assigned user
+const mapOldTaskToNewTask = ({
+  assignedUser,
+  assignedUsers,
+  ...task
+}: TaskType) => {
+  return {
+    ...task,
+    assignedUser: undefined,
+    assignedUsers: assignedUsers ?? [assignedUser].filter(Boolean)
+  };
+};
+
 export const useTasksForDugnad = (dugnadId?: string) =>
   useFirestoreCollectionData<TaskType>(
     useDugnadRef(dugnadId)
       .collection("tasks")
       .orderBy("status"),
     { idField: "id" }
-  );
+  ).map(mapOldTaskToNewTask);
 
 export const useTask = (dugnadId?: string, taskId?: string) =>
-  useFirestoreDocData<TaskType>(useTaskRef(dugnadId, taskId));
+  // todo map to new format
+  mapOldTaskToNewTask(
+    useFirestoreDocData<TaskType>(useTaskRef(dugnadId, taskId))
+  );
 
 export const useTaskRef = (dugnadId?: string, taskId?: string) =>
   useDugnadRef(dugnadId)

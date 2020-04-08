@@ -21,7 +21,7 @@ import {
   MdEdit
 } from "react-icons/md";
 import { useTask, useTaskRef } from "../hooks/useDugnad";
-import { useUser, useUserById } from "../hooks/useUser";
+import { useUser, useUserById, useUsersById } from "../hooks/useUser";
 import { Container } from "../components/Container";
 import { TaskStatusBadge } from "../components/TaskStatusBadge";
 import { BackLink } from "../components/BackLink";
@@ -40,18 +40,14 @@ export const TaskPage: React.FC = () => {
   const taskRef = useTaskRef(dugnadId, taskId);
   const currentUser = useUser();
   const author = useUserById(task.author);
-  const assignedUser = useUserById(task.assignedUser);
+  const assignedUsers = useUsersById(task.assignedUsers);
   const { replace } = useHistory();
   const [isEditingDescription, setEditingDescription] = React.useState(false);
-  const isAssignedToSelf = currentUser?.uid === assignedUser?.uid;
+  const isAssignedToSelf = assignedUsers.some(
+    user => user.uid === currentUser!.uid
+  );
   const isCreatedBySelf = currentUser?.uid === author?.uid;
 
-  const handleReassign = () => {
-    taskRef.update({
-      assignedUser: isAssignedToSelf ? null : currentUser!.uid,
-      status: isAssignedToSelf ? "idle" : "in progress"
-    });
-  };
   const handleDone = () => {
     taskRef.update({
       status: "done"
@@ -60,7 +56,7 @@ export const TaskPage: React.FC = () => {
   const handleReset = () => {
     taskRef.update({
       status: "idle",
-      assignedUser: null
+      assignedUsers: []
     });
   };
   const handleDelete = () => {
@@ -73,6 +69,18 @@ export const TaskPage: React.FC = () => {
   };
   const handleEditTitle = (title: string) => {
     taskRef.update({ title });
+  };
+  const handleJoinOrLeave = () => {
+    const assignedUsers = isAssignedToSelf
+      ? task.assignedUsers.filter(
+          assignedUser => assignedUser !== currentUser!.uid
+        )
+      : [...task.assignedUsers, currentUser!.uid];
+
+    taskRef.update({
+      assignedUsers,
+      status: assignedUsers.length === 0 ? "idle" : "in progress"
+    });
   };
   return (
     <Container justifyContent="flex-start" mb={60}>
@@ -104,26 +112,27 @@ export const TaskPage: React.FC = () => {
                   Opprettet av {isCreatedBySelf ? "deg" : author!.name}
                 </Badge>
               </FadeIn>
-              {assignedUser && (
+              {assignedUsers.length > 0 && (
                 <FadeIn initial="hiddenFromLeft" exit="hiddenFromRight">
                   <Badge>
-                    Tildelt {isAssignedToSelf ? "deg" : assignedUser.name}
+                    Tildelt {assignedUsers.map(user => user.name).join(", ")}
                   </Badge>
                 </FadeIn>
               )}
             </Stack>
             <ButtonGroup spacing={4}>
-              {(!task.status || task.status === "idle") && (
+              {(!task.status || task.status === "idle") && !isAssignedToSelf && (
                 <Button
                   type="button"
                   variant="solid"
                   variantColor="green"
                   leftIcon={MdThumbUp}
-                  onClick={handleReassign}
+                  onClick={handleJoinOrLeave}
                   size="sm"
                   mb={4}
                 >
-                  Ta denne oppgaven
+                  {task.assignedUsers.length > 0 ? "Bli med på" : "Ta"} denne
+                  oppgaven
                 </Button>
               )}
               {task.status === "in progress" && (
@@ -131,14 +140,14 @@ export const TaskPage: React.FC = () => {
                   type="button"
                   variant="outline"
                   variantColor="gray"
-                  leftIcon={MdArrowBack}
-                  onClick={handleReassign}
+                  leftIcon={isAssignedToSelf ? MdArrowBack : MdCheck}
+                  onClick={handleJoinOrLeave}
                   size="sm"
                   mb={4}
                 >
                   {isAssignedToSelf
                     ? "Si fra deg oppgaven"
-                    : "Overta denne oppgaven"}
+                    : "Bli med på oppgaven"}
                 </Button>
               )}
               {task.status === "in progress" && (

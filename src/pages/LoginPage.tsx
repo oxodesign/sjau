@@ -57,15 +57,12 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     normalizedPhoneNumber = normalizedPhoneNumber.split(/[ \-()]/).join("");
     try {
       setLoginState("verification code requested");
-      console.log("stuff is requested");
       confirmationResultRef.current = await auth.signInWithPhoneNumber(
         normalizedPhoneNumber,
         window.recaptchaVerifier
       );
-      console.log("stuff is stuff is resolved");
       setLoginState("verification code sent");
     } catch (e) {
-      console.log("error", e);
       window.recaptchaVerifier?.reset();
       switch (e.code) {
         case "auth/captcha-check-failed": {
@@ -133,8 +130,6 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     "verifying code",
     "invalid code"
   ].includes(loginState);
-
-  console.log(showVerificationForm);
 
   return (
     <Container>

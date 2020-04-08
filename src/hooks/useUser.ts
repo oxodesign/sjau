@@ -1,7 +1,8 @@
 import {
   useUser as useFirebaseUser,
   useFirestoreDocData,
-  useFirestore
+  useFirestore,
+  useFirestoreCollectionData
 } from "reactfire";
 
 export type UserType = {
@@ -34,4 +35,12 @@ export const useUserById = (id?: string) => {
       .doc(id || "totally not a valid id")
   );
   return id ? user : null;
+};
+
+export const useUsersById = (ids: string[]) => {
+  return useFirestoreCollectionData<DbUserType>(
+    useFirestore()
+      .collection("users")
+      .where("uid", "in", ids.length > 0 ? ids : ["totally not a valid id"])
+  );
 };
