@@ -6,20 +6,24 @@ import {
   Stack,
   ButtonGroup,
   FormControl,
-  FormLabel
+  FormLabel,
+  BoxProps
 } from "@chakra-ui/core";
-
-type EditableDescriptionProps = {
-  onSubmit: (newValue: string) => void;
-  isEditing: boolean;
-  defaultValue?: string;
-  children: React.ReactNode;
-};
+type EditableDescriptionProps = Overwrite<
+  BoxProps,
+  {
+    onSubmit: (e: string) => void;
+    isEditing: boolean;
+    defaultValue?: string;
+    children: React.ReactNode;
+  }
+>;
 export const EditableDescription: React.FC<EditableDescriptionProps> = ({
   onSubmit,
   defaultValue = "",
   children,
-  isEditing
+  isEditing,
+  ...rest
 }) => {
   const [value, setValue] = React.useState(defaultValue);
   React.useEffect(() => {
@@ -35,7 +39,7 @@ export const EditableDescription: React.FC<EditableDescriptionProps> = ({
   };
   if (isEditing) {
     return (
-      <form onSubmit={handleSubmit}>
+      <Box {...rest} as="form" onSubmit={handleSubmit}>
         <Stack spacing={3}>
           <FormControl>
             <FormLabel htmlFor="description">Beskrivelse</FormLabel>
@@ -50,13 +54,13 @@ export const EditableDescription: React.FC<EditableDescriptionProps> = ({
             />
           </FormControl>
           <ButtonGroup>
-            <Button type="submit" variant="outline" size="sm">
+            <Button type="submit" variant="outline" size="xs">
               Lagre endringer
             </Button>
           </ButtonGroup>
         </Stack>
-      </form>
+      </Box>
     );
   }
-  return <Box>{children}</Box>;
+  return <Box {...rest}>{children}</Box>;
 };

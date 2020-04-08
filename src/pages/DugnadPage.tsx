@@ -130,6 +130,7 @@ export const DugnadPage = () => {
                 onSubmit={handleDescriptionSubmit}
                 defaultValue={dugnad.description}
                 isEditing={isEditingDescription}
+                mb={3}
               >
                 <Collapse
                   isOpen={isDescriptionVisible}
@@ -149,29 +150,32 @@ export const DugnadPage = () => {
                   <SanitizedMarkdown>{dugnad.description}</SanitizedMarkdown>
                 </Collapse>
               </EditableDescription>
-              <ButtonGroup mb={3} spacing={3}>
-                {hasLongDescription && (
-                  <Button
-                    variant="solid"
-                    variantColor="gray"
-                    onClick={() => setDescriptionVisible(prev => !prev)}
-                    mt={3}
-                  >
-                    {isDescriptionVisible ? "Skjul" : "Vis mer"}
-                  </Button>
-                )}
-                {!isEditingDescription && (
+              {!isEditingDescription && (
+                <ButtonGroup my={3} spacing={3}>
+                  {hasLongDescription && (
+                    <Button
+                      variant="solid"
+                      variantColor="gray"
+                      size="xs"
+                      onClick={() => setDescriptionVisible(prev => !prev)}
+                    >
+                      {isDescriptionVisible ? "Skjul" : "Vis mer"}
+                    </Button>
+                  )}
                   <Button
                     leftIcon={MdEdit}
                     variant="outline"
                     variantColor="grey"
                     size="xs"
-                    onClick={() => setEditingDescription(true)}
+                    onClick={() => {
+                      setDescriptionVisible(true);
+                      setEditingDescription(true);
+                    }}
                   >
                     Endre beskrivelse
                   </Button>
-                )}
-              </ButtonGroup>
+                </ButtonGroup>
+              )}
             </React.Suspense>
             <Box shadow="md" borderWidth="1px" p={5}>
               <AddTask dugnadId={dugnadId!!} />
