@@ -2,6 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useFormFields } from "../hooks/useFormFields";
 import { useFirestore, useAnalytics } from "reactfire";
+import addWeeks from "date-fns/addWeeks";
 import { useUser } from "../hooks/useUser";
 import {
   Heading,
@@ -21,14 +22,14 @@ import { Container } from "../components/Container";
 import leavesSrc from "../images/leaves.jpg";
 import { FadeIn } from "../components/FadeIn";
 
-const A_WEEK = 1000 * 60 * 60 * 24 * 7;
+const Datepicker = React.lazy(() => import("../components/Datepicker"));
 
 export const NewDugnadPage = () => {
   const [formState, createChangeHandler] = useFormFields({
     name: "",
     description: "",
     startsAt: new Date().toLocaleDateString("fr-CA"),
-    endsAt: new Date(Date.now() + A_WEEK).toLocaleDateString("fr-CA")
+    endsAt: addWeeks(new Date(), 1).toLocaleDateString("fr-CA")
   });
   const dugnadsRef = useFirestore().collection("dugnads");
   const user = useUser();
@@ -123,13 +124,11 @@ export const NewDugnadPage = () => {
                   <FormLabel htmlFor="startsAt" fontWeight="600">
                     Når starter sjauen?
                   </FormLabel>
-                  <Input
-                    type="date"
+                  <Datepicker
                     id="startsAt"
                     value={formState.startsAt}
                     onChange={createChangeHandler("startsAt")}
-                    min={new Date().toLocaleDateString("fr-CA")}
-                    width="xs"
+                    minDate={addWeeks(new Date(), 1)}
                   />
                 </FormControl>
               </FadeIn>
@@ -142,14 +141,12 @@ export const NewDugnadPage = () => {
                   <FormLabel htmlFor="endsAt" fontWeight="600">
                     Når slutter sjauen?
                   </FormLabel>
-                  <Input
+                  <Datepicker
                     id="endsAt"
-                    type="date"
                     value={formState.endsAt}
                     onChange={createChangeHandler("endsAt")}
-                    min={formState.startsAt}
+                    minDate={new Date(formState.startsAt)}
                     aria-describedby="slutter-beskrivelse"
-                    width="xs"
                   />
                   <FormHelperText id="slutter-beskrivelse">
                     Sjauer fungerer som regel best når man gir folk en litt

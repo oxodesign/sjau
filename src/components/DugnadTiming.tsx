@@ -5,7 +5,6 @@ import {
   FormLabel,
   Box,
   FormControl,
-  Input,
   Stack,
   IconButton,
   Badge,
@@ -16,6 +15,8 @@ import isPast from "date-fns/isPast";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import nbLocale from "date-fns/locale/nb";
 import { MdEdit, MdCheck } from "react-icons/md";
+
+const Datepicker = React.lazy(() => import("./Datepicker"));
 
 type DugnadTimingProps = {
   dugnadId: string;
@@ -89,14 +90,12 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
           <Stack isInline spacing={3}>
             <FormControl>
               <FormLabel htmlFor="startsAt">Starter</FormLabel>
-              <Input
-                type="date"
+              <Datepicker
                 id="startsAt"
-                size="sm"
                 value={formState.startsAt}
                 onChange={createUpdater("startsAt")}
                 onBlur={handleUpdate}
-                onKeyPress={(e: React.KeyboardEvent) =>
+                onKeyDown={(e: React.KeyboardEvent) =>
                   e.key === "Enter" && handleUpdate()
                 }
                 autoFocus
@@ -104,14 +103,15 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="endsAt">Slutter</FormLabel>
-              <Input
-                type="date"
+              <Datepicker
                 id="endsAt"
-                size="sm"
                 value={formState.endsAt}
                 onChange={createUpdater("endsAt")}
                 onBlur={handleUpdate}
-                min={formState.startsAt}
+                onKeyDown={(e: React.KeyboardEvent) =>
+                  e.key === "Enter" && handleUpdate()
+                }
+                minDate={new Date(formState.startsAt)}
               />
             </FormControl>
             <IconButton
@@ -119,7 +119,7 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
               variant="solid"
               variantColor="green"
               aria-label="Lagre"
-              size="sm"
+              size="md"
               mt="28px"
               onClick={() => setEditing(false)}
             />
