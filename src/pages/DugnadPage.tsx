@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useHistory } from "react-router-dom";
 import {
   Box,
   Heading,
@@ -38,6 +38,7 @@ export const DugnadPage = () => {
   const dugnadRef = useDugnadRef(dugnadId);
   const user = useUser();
   const { search } = useLocation();
+  const { replace } = useHistory();
   const dugnadsForUser = useUserDugnads(user?.uid);
   const [isDescriptionVisible, setDescriptionVisible] = React.useState(true);
   const [isEditingDescription, setEditingDescription] = React.useState(false);
@@ -51,6 +52,7 @@ export const DugnadPage = () => {
 
   const justCreatedDugnad = search === "?created";
   const hasLongDescription = (dugnad!.description?.length ?? 0) > 300;
+  const ownsDugnad = dugnad!.author === user?.uid;
 
   const handleNameSubmit = (value: string) => {
     if (!value) {
@@ -61,6 +63,16 @@ export const DugnadPage = () => {
   const handleDescriptionSubmit = (description: string) => {
     dugnadRef.update({ description });
     setEditingDescription(false);
+  };
+  const handleDeleteDugnad = () => {
+    if (
+      window.confirm(
+        "Er du sikker på at du vil slette hele dugnaden?\n\nVi har ikke noen angrefunksjonalitet, så da forsvinner alle oppgaver, kommentarer og annen historikk."
+      )
+    ) {
+      dugnadRef.delete();
+      replace("/oversikt");
+    }
   };
 
   return (
@@ -222,6 +234,17 @@ export const DugnadPage = () => {
             >
               Forlat sjauen
             </Button>
+            {ownsDugnad && (
+              <Button
+                size="md"
+                variant="solid"
+                variantColor="red"
+                leftIcon={MdArrowBack}
+                onClick={handleDeleteDugnad}
+              >
+                Slett sjauen
+              </Button>
+            )}
           </ButtonGroup>
         )}
       </Stack>
