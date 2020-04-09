@@ -33,7 +33,7 @@ export const App: React.FC = () => {
           <AnimatedRoute exact path="/oversikt" requiresAuth>
             <OverviewPage />
           </AnimatedRoute>
-          <AnimatedRoute exact path="/personvern" requiresAuth>
+          <AnimatedRoute exact path="/personvern">
             <PrivacyPage />
           </AnimatedRoute>
           <AnimatedRoute exact path="/">
