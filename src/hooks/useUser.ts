@@ -8,7 +8,6 @@ import {
 export type UserType = {
   name: string;
   uid: string;
-  participatingIn?: string[];
 };
 
 type DbUserType = UserType & {

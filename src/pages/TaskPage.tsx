@@ -21,12 +21,7 @@ import {
   MdEdit
 } from "react-icons/md";
 import { useTask, useTaskRef } from "../hooks/useDugnad";
-import {
-  useUser,
-  useUserById,
-  useUsersById,
-  useUserRef
-} from "../hooks/useUser";
+import { useUser, useUserById, useUsersById } from "../hooks/useUser";
 import { Container } from "../components/Container";
 import { TaskStatusBadge } from "../components/TaskStatusBadge";
 import { BackLink } from "../components/BackLink";
@@ -34,6 +29,7 @@ import leavesSrc from "../images/leaves.jpg";
 import { FadeIn } from "../components/FadeIn";
 import { CommentSection } from "../components/CommentSection";
 import { EditableDescription } from "../components/EditableDescription";
+import { useParticipation } from "../hooks/useParticipation";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -44,15 +40,14 @@ export const TaskPage: React.FC = () => {
   const task = useTask(dugnadId, taskId);
   const taskRef = useTaskRef(dugnadId, taskId);
   const user = useUser();
-  const userRef = useUserRef();
   const author = useUserById(task.author);
   const assignedUsers = useUsersById(task.assignedUsers);
   const { replace } = useHistory();
   const [isEditingDescription, setEditingDescription] = React.useState(false);
+  const { participate } = useParticipation(dugnadId!);
 
   const isAssignedToSelf = assignedUsers.some(user => user.uid === user!.uid);
   const isCreatedBySelf = user?.uid === author?.uid;
-  const isParticipating = user?.participatingIn?.includes(dugnadId!);
 
   const handleDone = () => {
     taskRef.update({
@@ -85,12 +80,7 @@ export const TaskPage: React.FC = () => {
       assignedUsers,
       status: assignedUsers.length === 0 ? "idle" : "in progress"
     });
-    // If you weren't participating in the dugnad, you are now!
-    if (!isParticipating) {
-      userRef.update({
-        participatingIn: [...(user?.participatingIn ?? []), dugnadId]
-      });
-    }
+    participate();
   };
   return (
     <Container>

@@ -41,7 +41,8 @@ export const NewDugnadPage = () => {
     try {
       const result = await dugnadsRef.add({
         ...formState,
-        author: user!.uid
+        author: user!.uid,
+        participants: [user!.uid]
       });
       analytics.logEvent("create_sjau");
       push(`/dugnad/${result.id}?created`);

@@ -25,7 +25,8 @@ import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
 import { MdEdit, MdCheck, MdArrowBack } from "react-icons/md";
 import { EditableDescription } from "../components/EditableDescription";
 import { DugnadTiming } from "../components/DugnadTiming";
-import { useUser, useUserRef } from "../hooks/useUser";
+import { useUser } from "../hooks/useUser";
+import { useParticipation } from "../hooks/useParticipation";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -36,15 +37,20 @@ export const DugnadPage = () => {
   const dugnad = useDugnad(dugnadId);
   const dugnadRef = useDugnadRef(dugnadId);
   const user = useUser();
-  const userRef = useUserRef();
   const { search } = useLocation();
   const dugnadsForUser = useUserDugnads(user?.uid);
   const [isDescriptionVisible, setDescriptionVisible] = React.useState(true);
   const [isEditingDescription, setEditingDescription] = React.useState(false);
+  const { isParticipatingInDugnad, toggleParticipation } = useParticipation(
+    dugnadId!
+  );
 
   if (!dugnad) {
     return <Text>Fant ikke den sjauen!</Text>;
   }
+
+  const justCreatedDugnad = search === "?created";
+  const hasLongDescription = (dugnad!.description?.length ?? 0) > 300;
 
   const handleNameSubmit = (value: string) => {
     if (!value) {
@@ -56,22 +62,6 @@ export const DugnadPage = () => {
     dugnadRef.update({ description });
     setEditingDescription(false);
   };
-  const handleParticipationChange = () => {
-    if (isParticipatingInDugnad) {
-      userRef.update({
-        participatingIn: user?.participatingIn?.filter(id => id !== dugnad.id)
-      });
-      window.scroll({ top: 0, behavior: "smooth" });
-    } else {
-      userRef.update({
-        participatingIn: [...(user?.participatingIn || []), dugnad.id]
-      });
-    }
-  };
-
-  const justCreatedDugnad = search === "?created";
-  const isParticipatingInDugnad = user?.participatingIn?.includes(dugnad.id);
-  const hasLongDescription = (dugnad!.description?.length ?? 0) > 300;
 
   return (
     <Container>
@@ -89,7 +79,7 @@ export const DugnadPage = () => {
           >
             {justCreatedDugnad && (
               <DugnadCreatedCallout
-                isFirstTime={dugnadsForUser.length === 1}
+                isFirstTime={dugnadsForUser.ownedDugnads.length === 1}
                 dugnadId={dugnadId!}
               />
             )}
@@ -126,7 +116,7 @@ export const DugnadPage = () => {
                   variant="solid"
                   variantColor="green"
                   leftIcon={MdCheck}
-                  onClick={handleParticipationChange}
+                  onClick={toggleParticipation}
                 >
                   Bli med å sjaue
                 </Button>
@@ -228,7 +218,7 @@ export const DugnadPage = () => {
               variant="outline"
               variantColor="red"
               leftIcon={MdArrowBack}
-              onClick={handleParticipationChange}
+              onClick={toggleParticipation}
             >
               Forlat sjauen
             </Button>

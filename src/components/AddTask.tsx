@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormFields } from "../hooks/useFormFields";
 import { useDugnadRef } from "../hooks/useDugnad";
-import { useUser, useUserRef } from "../hooks/useUser";
+import { useUser } from "../hooks/useUser";
 import {
   FormControl,
   FormLabel,
@@ -11,6 +11,7 @@ import {
   Stack
 } from "@chakra-ui/core";
 import { useAnalytics } from "reactfire";
+import { useParticipation } from "../hooks/useParticipation";
 
 type AddTaskProps = {
   dugnadId: string;
@@ -24,11 +25,9 @@ export const AddTask: React.FC<AddTaskProps> = ({ dugnadId }) => {
 
   const dugnadRef = useDugnadRef(dugnadId);
   const user = useUser();
-  const userRef = useUserRef();
   const titleRef = React.useRef<HTMLInputElement | null>(null);
   const analytics = useAnalytics();
-
-  const isParticipating = user?.participatingIn?.includes(dugnadId);
+  const { participate } = useParticipation(dugnadId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,11 +38,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ dugnadId }) => {
     resetFormFields();
     titleRef.current?.focus();
 
-    if (!isParticipating) {
-      userRef.update({
-        participatingIn: [...(user?.participatingIn ?? []), dugnadId]
-      });
-    }
+    participate();
   };
   return (
     <form onSubmit={handleSubmit}>

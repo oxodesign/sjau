@@ -12,6 +12,7 @@ export type DugnadType = {
   description?: string;
   startsAt: string;
   endsAt: string;
+  participants?: string[];
   tasks: TaskType[];
 };
 
@@ -67,13 +68,27 @@ export const useTaskRef = (dugnadId?: string, taskId?: string) =>
     .collection("tasks")
     .doc(taskId);
 
-export const useUserDugnads = (userId: string = "") =>
-  useFirestoreCollectionData<DugnadType>(
-    useFirestore()
-      .collection("dugnads")
-      .where("author", "==", userId),
+export const useUserDugnads = (userId: string = "") => {
+  const dugnadsRef = useFirestore().collection("dugnads");
+  const ownedDugnads = useFirestoreCollectionData<DugnadType>(
+    dugnadsRef.where("author", "==", userId),
     { idField: "id" }
   );
+  const participatedDugnads = useFirestoreCollectionData<DugnadType>(
+    dugnadsRef.where("participants", "array-contains", userId),
+    { idField: "id" }
+  ).filter(
+    participatedDugnad =>
+      !ownedDugnads.some(
+        ownedDugnad => ownedDugnad.id === participatedDugnad.id
+      )
+  );
+
+  return {
+    ownedDugnads,
+    participatedDugnads
+  };
+};
 
 export type TaskComment = {
   id?: string;
