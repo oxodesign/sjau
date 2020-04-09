@@ -60,9 +60,15 @@ export const TaskPage: React.FC = () => {
       assignedUsers: []
     });
   };
-  const handleDelete = () => {
-    taskRef.delete();
-    replace(`/dugnad/${dugnadId}`);
+  const handleDelete = async () => {
+    if (
+      window.confirm(
+        "Er du sikker på at du vil slette denne oppgaven?\n\nVi har ikke noen angrefunksjonalitet enda, så du vil ikke kunne gjenopprette hverken oppgaven eller kommentarene."
+      )
+    ) {
+      taskRef.delete();
+      replace(`/dugnad/${dugnadId}`);
+    }
   };
   const handleEditDescription = (description: string) => {
     setEditingDescription(false);
