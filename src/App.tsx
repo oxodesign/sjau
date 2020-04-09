@@ -19,31 +19,29 @@ export const App: React.FC = () => {
   }, [location.pathname]);
   return (
     <>
-      <main>
-        <AnimatePresence>
-          <Switch>
-            <AnimatedRoute exact path="/ny" requiresAuth>
-              <NewDugnadPage />
-            </AnimatedRoute>
-            <AnimatedRoute exact path="/dugnad/:dugnadId/:taskId" requiresAuth>
-              <TaskPage />
-            </AnimatedRoute>
-            <AnimatedRoute exact path="/dugnad/:dugnadId" requiresAuth>
-              <DugnadPage />
-            </AnimatedRoute>
-            <AnimatedRoute exact path="/oversikt" requiresAuth>
-              <OverviewPage />
-            </AnimatedRoute>
-            <AnimatedRoute exact path="/personvern" requiresAuth>
-              <PrivacyPage />
-            </AnimatedRoute>
-            <AnimatedRoute exact path="/">
-              <LandingPage />
-            </AnimatedRoute>
-            <Redirect to="/" />
-          </Switch>
-        </AnimatePresence>
-      </main>
+      <AnimatePresence>
+        <Switch>
+          <AnimatedRoute exact path="/ny" requiresAuth>
+            <NewDugnadPage />
+          </AnimatedRoute>
+          <AnimatedRoute exact path="/dugnad/:dugnadId/:taskId" requiresAuth>
+            <TaskPage />
+          </AnimatedRoute>
+          <AnimatedRoute exact path="/dugnad/:dugnadId" requiresAuth>
+            <DugnadPage />
+          </AnimatedRoute>
+          <AnimatedRoute exact path="/oversikt" requiresAuth>
+            <OverviewPage />
+          </AnimatedRoute>
+          <AnimatedRoute exact path="/personvern" requiresAuth>
+            <PrivacyPage />
+          </AnimatedRoute>
+          <AnimatedRoute exact path="/">
+            <LandingPage />
+          </AnimatedRoute>
+          <Redirect to="/" />
+        </Switch>
+      </AnimatePresence>
     </>
   );
 };
