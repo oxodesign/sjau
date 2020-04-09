@@ -50,7 +50,7 @@ export const NewDugnadPage = () => {
     }
   };
   return (
-    <Container mb={60}>
+    <Container>
       <Stack spacing={6}>
         <Heading as="h1">Lag din helt egne sjau</Heading>
         <Text maxWidth="550px">

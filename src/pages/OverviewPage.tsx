@@ -28,7 +28,7 @@ export const OverviewPage: React.FC = () => {
     to: "/ny"
   };
   return (
-    <Container justifyContent={["flex-start", "flex-start", "center"]}>
+    <Container>
       {!user && <FillOutUserDetails />}
       {user && (
         <Stack spacing={6}>
@@ -39,7 +39,9 @@ export const OverviewPage: React.FC = () => {
           >
             <FadeIn initial="hiddenFromLeft">
               <Stack spacing={6}>
-                <Heading as="h1">Velkommen, {user.name.split(" ")[0]}!</Heading>
+                <Heading as="h1" wordBreak="break-all" maxWidth="100%">
+                  Velkommen, {user.name.split(" ")[0]}!
+                </Heading>
                 <Text>Det er flott at du er med å ta i et tak!</Text>
                 {hasAlreadyMadeDugnad ? (
                   <Text>
@@ -99,6 +101,7 @@ export const OverviewPage: React.FC = () => {
                       as={props => (
                         <Link to={`/dugnad/${dugnad.id}`} {...props} />
                       )}
+                      wordBreak="break-all"
                     >
                       {dugnad.name}
                     </Box>

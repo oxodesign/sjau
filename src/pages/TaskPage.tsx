@@ -83,7 +83,7 @@ export const TaskPage: React.FC = () => {
     });
   };
   return (
-    <Container justifyContent="flex-start" mb={60}>
+    <Container>
       <Flex flexDirection={["column", "column", "row"]}>
         <FadeIn initial="hiddenFromLeft" exit="hiddenFromLeft" flexGrow={1}>
           <Stack spacing={6}>
@@ -95,13 +95,16 @@ export const TaskPage: React.FC = () => {
               </Editable>
             </Heading>
 
-            <Stack isInline>
+            <Stack isInline flexWrap="wrap" overflowX="hidden">
               <FadeIn
                 initial="hiddenFromLeft"
                 exit="hiddenFromRight"
                 delay={0.2}
               >
-                <TaskStatusBadge status={task.status} />
+                <TaskStatusBadge
+                  status={task.status}
+                  assignedUsers={assignedUsers}
+                />
               </FadeIn>
               <FadeIn
                 initial="hiddenFromLeft"
@@ -112,15 +115,8 @@ export const TaskPage: React.FC = () => {
                   Opprettet av {isCreatedBySelf ? "deg" : author!.name}
                 </Badge>
               </FadeIn>
-              {assignedUsers.length > 0 && (
-                <FadeIn initial="hiddenFromLeft" exit="hiddenFromRight">
-                  <Badge>
-                    Tildelt {assignedUsers.map(user => user.name).join(", ")}
-                  </Badge>
-                </FadeIn>
-              )}
             </Stack>
-            <ButtonGroup spacing={4}>
+            <ButtonGroup spacing={[2, 2, 4]} size="sm">
               {(!task.status || task.status === "idle") && !isAssignedToSelf && (
                 <Button
                   type="button"
@@ -128,8 +124,7 @@ export const TaskPage: React.FC = () => {
                   variantColor="green"
                   leftIcon={MdThumbUp}
                   onClick={handleJoinOrLeave}
-                  size="sm"
-                  mb={4}
+                  mb={[2, 2, 4]}
                 >
                   {task.assignedUsers.length > 0 ? "Bli med på" : "Ta"} denne
                   oppgaven
@@ -142,8 +137,7 @@ export const TaskPage: React.FC = () => {
                   variantColor="gray"
                   leftIcon={isAssignedToSelf ? MdArrowBack : MdCheck}
                   onClick={handleJoinOrLeave}
-                  size="sm"
-                  mb={4}
+                  mb={[2, 2, 4]}
                 >
                   {isAssignedToSelf
                     ? "Si fra deg oppgaven"
@@ -157,8 +151,7 @@ export const TaskPage: React.FC = () => {
                   variantColor="green"
                   leftIcon={MdCheck}
                   onClick={handleDone}
-                  size="sm"
-                  mb={4}
+                  mb={[2, 2, 4]}
                 >
                   Ferdigstill
                 </Button>
@@ -170,8 +163,7 @@ export const TaskPage: React.FC = () => {
                   variantColor="red"
                   leftIcon={MdArrowBack}
                   onClick={handleReset}
-                  size="sm"
-                  mb={4}
+                  mb={[2, 2, 4]}
                 >
                   Start oppgaven på nytt
                 </Button>
@@ -183,8 +175,7 @@ export const TaskPage: React.FC = () => {
                   variantColor="red"
                   leftIcon={MdDelete}
                   onClick={handleDelete}
-                  size="sm"
-                  mb={4}
+                  mb={[2, 2, 4]}
                 >
                   Slett
                 </Button>
@@ -194,9 +185,9 @@ export const TaskPage: React.FC = () => {
                   type="button"
                   leftIcon={MdEdit}
                   variant="outline"
-                  variantColor="grey"
+                  variantColor="gray"
                   size="sm"
-                  mb={4}
+                  mb={[2, 2, 4]}
                   onClick={() => setEditingDescription(true)}
                 >
                   Endre beskrivelse

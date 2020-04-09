@@ -132,13 +132,13 @@ export const DugnadPage = () => {
                       size="xs"
                       onClick={() => setDescriptionVisible(prev => !prev)}
                     >
-                      {isDescriptionVisible ? "Skjul" : "Vis mer"}
+                      {isDescriptionVisible ? "Skjul detaljer" : "Vis mer"}
                     </Button>
                   )}
                   <Button
                     leftIcon={MdEdit}
                     variant="outline"
-                    variantColor="grey"
+                    variantColor="gray"
                     size="xs"
                     onClick={() => {
                       setDescriptionVisible(true);
