@@ -1,6 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Box, Text, Stack, RadioGroup, Radio } from "@chakra-ui/core";
+import {
+  Box,
+  Text,
+  Stack,
+  RadioGroup,
+  Radio,
+  SimpleGrid
+} from "@chakra-ui/core";
 import { TaskStatusBadge } from "./TaskStatusBadge";
 import { useTasksForDugnad } from "../hooks/useDugnad";
 import { useUser } from "../hooks/useUser";
@@ -95,28 +102,30 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
         </Text>
       )}
       <motion.div initial="hidden" animate="visible" variants={variants}>
-        {filteredTasks.map(task => (
-          <Box
-            key={task.id}
-            shadow="md"
-            rounded={3}
-            p={6}
-            borderLeftWidth="8px"
-            borderColor={
-              task.assignedUsers.includes(currentUser!.uid)
-                ? "#76a73d"
-                : "white"
-            }
-          >
-            <Link to={`/dugnad/${dugnadId}/${task.id}`}>
-              <Box>
-                <strong>{task.title}</strong>
-                <br />
-                <TaskStatusBadge status={task.status} />
-              </Box>
-            </Link>
-          </Box>
-        ))}
+        <SimpleGrid columns={[1, 2, 3]} gridGap={3}>
+          {filteredTasks.map(task => (
+            <Box
+              key={task.id}
+              shadow="md"
+              rounded={3}
+              p={6}
+              borderLeftWidth="8px"
+              borderColor={
+                task.assignedUsers.includes(currentUser!.uid)
+                  ? "#76a73d"
+                  : "white"
+              }
+            >
+              <Link to={`/dugnad/${dugnadId}/${task.id}`}>
+                <Box>
+                  <strong>{task.title}</strong>
+                  <br />
+                  <TaskStatusBadge status={task.status} />
+                </Box>
+              </Link>
+            </Box>
+          ))}
+        </SimpleGrid>
       </motion.div>
     </Stack>
   );
