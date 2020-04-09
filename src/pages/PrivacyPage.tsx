@@ -14,7 +14,9 @@ const PrivacyPage: React.FC = () => {
             inn minst mulig. Litt må allikevel til, og her kan du lese om det vi
             trenger.
           </Text>
-          <Heading fontSize="xl">Informasjonskapsler</Heading>
+          <Heading fontSize="xl" mt={12}>
+            Informasjonskapsler
+          </Heading>
           <Text>
             Vi bruker informasjonskapsler til to ting - å analysere hvordan du
             bruker siden, og å logge deg inn. For bruksmønsteranalyse bruker vi
@@ -26,7 +28,9 @@ const PrivacyPage: React.FC = () => {
             skrevet og konsumert av tredjeparter.
           </Text>
 
-          <Heading fontSize="xl">Dataen din</Heading>
+          <Heading fontSize="xl" mt={12}>
+            Dataen din
+          </Heading>
           <Text>
             Som skrevet innledningsvis vil vi ikke ha så mye med dataen din å
             gjøre. Vi bruker telefonnummeret ditt for å logge deg inn, og vi ber
@@ -44,7 +48,9 @@ const PrivacyPage: React.FC = () => {
             .
           </Text>
 
-          <Heading fontSize="xl">Spørsmål?</Heading>
+          <Heading fontSize="xl" mt={12}>
+            Spørsmål?
+          </Heading>
           <Text>
             Hvis du har noen spørsmål, så er det selvfølgelig bare å ta kontakt
             på samme epostadresse som over.
