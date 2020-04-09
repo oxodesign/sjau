@@ -9,6 +9,7 @@ const DugnadPage = React.lazy(() => import("./pages/DugnadPage"));
 const OverviewPage = React.lazy(() => import("./pages/OverviewPage"));
 const TaskPage = React.lazy(() => import("./pages/TaskPage"));
 const LandingPage = React.lazy(() => import("./pages/LandingPage"));
+const PrivacyPage = React.lazy(() => import("./pages/PrivacyPage"));
 
 export const App: React.FC = () => {
   useAnalytics();
@@ -32,6 +33,9 @@ export const App: React.FC = () => {
             </AnimatedRoute>
             <AnimatedRoute exact path="/oversikt" requiresAuth>
               <OverviewPage />
+            </AnimatedRoute>
+            <AnimatedRoute exact path="/personvern" requiresAuth>
+              <PrivacyPage />
             </AnimatedRoute>
             <AnimatedRoute exact path="/">
               <LandingPage />
