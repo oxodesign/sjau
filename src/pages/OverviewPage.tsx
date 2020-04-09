@@ -115,3 +115,5 @@ export const OverviewPage: React.FC = () => {
     </Container>
   );
 };
+
+export default OverviewPage;

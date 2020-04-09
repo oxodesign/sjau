@@ -226,3 +226,5 @@ export const TaskPage: React.FC = () => {
     </Container>
   );
 };
+
+export default TaskPage;

@@ -191,3 +191,5 @@ export const NewDugnadPage = () => {
     </Container>
   );
 };
+
+export default NewDugnadPage;

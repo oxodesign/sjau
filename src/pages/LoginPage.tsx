@@ -190,3 +190,5 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     </Container>
   );
 };
+
+export default LoginPage;

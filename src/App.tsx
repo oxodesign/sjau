@@ -1,13 +1,14 @@
 import React from "react";
 import { Switch, Redirect, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { NewDugnadPage } from "./pages/NewDugnadPage";
-import { DugnadPage } from "./pages/DugnadPage";
-import { OverviewPage } from "./pages/OverviewPage";
-import { TaskPage } from "./pages/TaskPage";
 import { AnimatedRoute } from "./components/AnimatedRoute";
-import { LandingPage } from "./pages/LandingPage";
 import { useAnalytics } from "reactfire";
+
+const NewDugnadPage = React.lazy(() => import("./pages/NewDugnadPage"));
+const DugnadPage = React.lazy(() => import("./pages/DugnadPage"));
+const OverviewPage = React.lazy(() => import("./pages/OverviewPage"));
+const TaskPage = React.lazy(() => import("./pages/TaskPage"));
+const LandingPage = React.lazy(() => import("./pages/LandingPage"));
 
 export const App: React.FC = () => {
   useAnalytics();
