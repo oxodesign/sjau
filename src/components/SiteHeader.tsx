@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { MdSettings } from "react-icons/md";
 import { SiteSettings } from "./SiteSettings";
 import { FadeIn } from "./FadeIn";
+import { AuthCheck } from "reactfire";
 
 export const SiteHeader: React.FC = () => {
   const [isSettingsDrawerOpen, setSettingsDrawerOpen] = React.useState(false);
@@ -21,19 +22,21 @@ export const SiteHeader: React.FC = () => {
         <Heading as="h1">
           <Link to="/oversikt">Sjau</Link>
         </Heading>
-        <IconButton
-          icon={MdSettings}
-          aria-label="Flere valg"
-          variant="ghost"
-          position="absolute"
-          right={[3, 3, 6]}
-          size="lg"
-          onClick={() => setSettingsDrawerOpen(prev => !prev)}
-        />
-        <SiteSettings
-          isOpen={isSettingsDrawerOpen}
-          onClose={() => setSettingsDrawerOpen(false)}
-        />
+        <AuthCheck fallback={null}>
+          <IconButton
+            icon={MdSettings}
+            aria-label="Flere valg"
+            variant="ghost"
+            position="absolute"
+            right={[3, 3, 6]}
+            size="lg"
+            onClick={() => setSettingsDrawerOpen(prev => !prev)}
+          />
+          <SiteSettings
+            isOpen={isSettingsDrawerOpen}
+            onClose={() => setSettingsDrawerOpen(false)}
+          />
+        </AuthCheck>
       </Flex>
     </FadeIn>
   );

@@ -136,7 +136,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     <Layout title="Logg inn">
       <Container>
         <Flex
-          minHeight="100vh"
+          minHeight="80vh"
           alignItems="center"
           justifyContent="center"
           flexDirection={["column", "column", "row"]}
