@@ -33,7 +33,7 @@ export const useDugnadRef = (id?: string) =>
     .doc(id);
 
 export const useDugnad = (id?: string): DugnadType =>
-  useFirestoreDocData(useDugnadRef(id));
+  useFirestoreDocData(useDugnadRef(id), { idField: "id" });
 
 // Handle legacy cases where we only supported a single assigned user
 const mapOldTaskToNewTask = ({

@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormFields } from "../hooks/useFormFields";
 import { useDugnadRef } from "../hooks/useDugnad";
-import { useUser } from "../hooks/useUser";
+import { useUser, useUserRef } from "../hooks/useUser";
 import {
   FormControl,
   FormLabel,
@@ -24,8 +24,11 @@ export const AddTask: React.FC<AddTaskProps> = ({ dugnadId }) => {
 
   const dugnadRef = useDugnadRef(dugnadId);
   const user = useUser();
+  const userRef = useUserRef();
   const titleRef = React.useRef<HTMLInputElement | null>(null);
   const analytics = useAnalytics();
+
+  const isParticipating = user?.participatingIn?.includes(dugnadId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +38,12 @@ export const AddTask: React.FC<AddTaskProps> = ({ dugnadId }) => {
     analytics.logEvent("add_task", { dugnadId });
     resetFormFields();
     titleRef.current?.focus();
+
+    if (!isParticipating) {
+      userRef.update({
+        participatingIn: [...(user?.participatingIn ?? []), dugnadId]
+      });
+    }
   };
   return (
     <form onSubmit={handleSubmit}>

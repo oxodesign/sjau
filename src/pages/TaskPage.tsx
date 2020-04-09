@@ -21,7 +21,12 @@ import {
   MdEdit
 } from "react-icons/md";
 import { useTask, useTaskRef } from "../hooks/useDugnad";
-import { useUser, useUserById, useUsersById } from "../hooks/useUser";
+import {
+  useUser,
+  useUserById,
+  useUsersById,
+  useUserRef
+} from "../hooks/useUser";
 import { Container } from "../components/Container";
 import { TaskStatusBadge } from "../components/TaskStatusBadge";
 import { BackLink } from "../components/BackLink";
@@ -38,15 +43,16 @@ export const TaskPage: React.FC = () => {
   const { dugnadId, taskId } = useParams();
   const task = useTask(dugnadId, taskId);
   const taskRef = useTaskRef(dugnadId, taskId);
-  const currentUser = useUser();
+  const user = useUser();
+  const userRef = useUserRef();
   const author = useUserById(task.author);
   const assignedUsers = useUsersById(task.assignedUsers);
   const { replace } = useHistory();
   const [isEditingDescription, setEditingDescription] = React.useState(false);
-  const isAssignedToSelf = assignedUsers.some(
-    user => user.uid === currentUser!.uid
-  );
-  const isCreatedBySelf = currentUser?.uid === author?.uid;
+
+  const isAssignedToSelf = assignedUsers.some(user => user.uid === user!.uid);
+  const isCreatedBySelf = user?.uid === author?.uid;
+  const isParticipating = user?.participatingIn?.includes(dugnadId!);
 
   const handleDone = () => {
     taskRef.update({
@@ -72,15 +78,19 @@ export const TaskPage: React.FC = () => {
   };
   const handleJoinOrLeave = () => {
     const assignedUsers = isAssignedToSelf
-      ? task.assignedUsers.filter(
-          assignedUser => assignedUser !== currentUser!.uid
-        )
-      : [...task.assignedUsers, currentUser!.uid];
+      ? task.assignedUsers.filter(assignedUser => assignedUser !== user!.uid)
+      : [...task.assignedUsers, user!.uid];
 
     taskRef.update({
       assignedUsers,
       status: assignedUsers.length === 0 ? "idle" : "in progress"
     });
+    // If you weren't participating in the dugnad, you are now!
+    if (!isParticipating) {
+      userRef.update({
+        participatingIn: [...(user?.participatingIn ?? []), dugnadId]
+      });
+    }
   };
   return (
     <Container>
@@ -88,7 +98,7 @@ export const TaskPage: React.FC = () => {
         <FadeIn initial="hiddenFromLeft" exit="hiddenFromLeft" flexGrow={1}>
           <Stack spacing={6}>
             <BackLink to={`/dugnad/${dugnadId}`}>Tilbake til dugnaden</BackLink>
-            <Heading as="h1">
+            <Heading as="h1" wordBreak="break-word">
               <Editable defaultValue={task.title} onSubmit={handleEditTitle}>
                 <EditableInput />
                 <EditablePreview />

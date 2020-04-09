@@ -1,30 +1,30 @@
 import {
-  useUser as useFirebaseUser,
   useFirestoreDocData,
   useFirestore,
-  useFirestoreCollectionData
+  useFirestoreCollectionData,
+  useAuth
 } from "reactfire";
 
 export type UserType = {
   name: string;
   uid: string;
+  participatingIn?: string[];
 };
 
 type DbUserType = UserType & {
   filledOut: boolean;
 };
 
-export const useUser = (): UserType | null => {
-  const authUser = useFirebaseUser<{ uid: string }>() || {};
-  const userRef = useFirestore()
+export const useUserRef = () => {
+  const authUser = useAuth().currentUser?.uid;
+  return useFirestore()
     .collection("users")
-    .doc(authUser.uid);
+    .doc(authUser);
+};
+
+export const useUser = (): UserType | null => {
+  const userRef = useUserRef();
   const { filledOut, ...dbUser } = useFirestoreDocData<DbUserType>(userRef);
-  if (!authUser) {
-    throw Error(
-      "useUser can only be used inside a context where the user is present"
-    );
-  }
   return filledOut ? dbUser : null;
 };
 

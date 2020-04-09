@@ -21,11 +21,11 @@ import { useDugnad, useUserDugnads, useDugnadRef } from "../hooks/useDugnad";
 import { BackLink } from "../components/BackLink";
 import washingSrc from "../images/washing.jpg";
 import { FadeIn } from "../components/FadeIn";
-import { useAuth } from "reactfire";
 import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdCheck, MdArrowBack } from "react-icons/md";
 import { EditableDescription } from "../components/EditableDescription";
 import { DugnadTiming } from "../components/DugnadTiming";
+import { useUser, useUserRef } from "../hooks/useUser";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -35,13 +35,16 @@ export const DugnadPage = () => {
   const { dugnadId } = useParams();
   const dugnad = useDugnad(dugnadId);
   const dugnadRef = useDugnadRef(dugnadId);
-  const auth = useAuth();
+  const user = useUser();
+  const userRef = useUserRef();
   const { search } = useLocation();
-  const dugnadsForUser = useUserDugnads(auth.currentUser?.uid);
+  const dugnadsForUser = useUserDugnads(user?.uid);
   const [isDescriptionVisible, setDescriptionVisible] = React.useState(true);
   const [isEditingDescription, setEditingDescription] = React.useState(false);
 
-  const justCreatedDugnad = search === "?created";
+  if (!dugnad) {
+    return <Text>Fant ikke den sjauen!</Text>;
+  }
 
   const handleNameSubmit = (value: string) => {
     if (!value) {
@@ -53,11 +56,21 @@ export const DugnadPage = () => {
     dugnadRef.update({ description });
     setEditingDescription(false);
   };
+  const handleParticipationChange = () => {
+    if (isParticipatingInDugnad) {
+      userRef.update({
+        participatingIn: user?.participatingIn?.filter(id => id !== dugnad.id)
+      });
+      window.scroll({ top: 0, behavior: "smooth" });
+    } else {
+      userRef.update({
+        participatingIn: [...(user?.participatingIn || []), dugnad.id]
+      });
+    }
+  };
 
-  if (!dugnad) {
-    return <Text>Fant ikke den sjauen!</Text>;
-  }
-
+  const justCreatedDugnad = search === "?created";
+  const isParticipatingInDugnad = user?.participatingIn?.includes(dugnad.id);
   const hasLongDescription = (dugnad!.description?.length ?? 0) > 300;
 
   return (
@@ -91,6 +104,34 @@ export const DugnadPage = () => {
               startsAt={dugnad.startsAt}
               endsAt={dugnad.endsAt}
             />
+            <Box my={3}>
+              {isParticipatingInDugnad ? (
+                <Box
+                  bg="green.100"
+                  borderColor="green.500"
+                  borderWidth="1px"
+                  rounded="md"
+                  shadow="md"
+                  textAlign="center"
+                  p={3}
+                >
+                  Denne sjauen er du med på!{" "}
+                  <span role="img" aria-label="Hurra for deg">
+                    🎉
+                  </span>
+                </Box>
+              ) : (
+                <Button
+                  size="lg"
+                  variant="solid"
+                  variantColor="green"
+                  leftIcon={MdCheck}
+                  onClick={handleParticipationChange}
+                >
+                  Bli med å sjaue
+                </Button>
+              )}
+            </Box>
             <React.Suspense
               fallback={
                 <Text textAlign="center" my={6}>
@@ -180,6 +221,19 @@ export const DugnadPage = () => {
             <TaskList dugnadId={dugnadId!!} />
           </FadeIn>
         </Box>
+        {isParticipatingInDugnad && (
+          <ButtonGroup>
+            <Button
+              size="md"
+              variant="outline"
+              variantColor="red"
+              leftIcon={MdArrowBack}
+              onClick={handleParticipationChange}
+            >
+              Forlat sjauen
+            </Button>
+          </ButtonGroup>
+        )}
       </Stack>
     </Container>
   );
