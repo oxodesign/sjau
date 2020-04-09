@@ -8,7 +8,6 @@ type DugnadListProps = {
   dugnads: DugnadType[];
 };
 export const DugnadList: React.FC<DugnadListProps> = ({ title, dugnads }) => {
-  console.log(dugnads);
   return (
     <Stack my={6} spacing={6}>
       <Heading as="h2" fontSize="xl">
