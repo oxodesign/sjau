@@ -3,7 +3,6 @@ import { RouteProps, Route } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AuthCheck } from "reactfire";
 import { LoginPage } from "../pages/LoginPage";
-import { SiteHeader } from "./SiteHeader";
 
 type AnimatedRouteProps = RouteProps & {
   requiresAuth?: boolean;
@@ -22,10 +21,7 @@ export const AnimatedRoute: React.FC<AnimatedRouteProps> = ({
         key={rest.path as string}
       >
         {requiresAuth ? (
-          <AuthCheck fallback={<LoginPage />}>
-            <SiteHeader />
-            {children}
-          </AuthCheck>
+          <AuthCheck fallback={<LoginPage />}>{children}</AuthCheck>
         ) : (
           children
         )}

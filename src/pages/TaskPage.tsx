@@ -30,6 +30,7 @@ import { FadeIn } from "../components/FadeIn";
 import { CommentSection } from "../components/CommentSection";
 import { EditableDescription } from "../components/EditableDescription";
 import { useParticipation } from "../hooks/useParticipation";
+import { Layout } from "../components/Layout";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -89,147 +90,151 @@ export const TaskPage: React.FC = () => {
     participate();
   };
   return (
-    <Container>
-      <Flex flexDirection={["column", "column", "row"]}>
-        <FadeIn initial="hiddenFromLeft" exit="hiddenFromLeft" flexGrow={1}>
-          <Stack spacing={6}>
-            <BackLink to={`/dugnad/${dugnadId}`}>Tilbake til dugnaden</BackLink>
-            <Heading as="h1" wordBreak="break-word">
-              <Editable defaultValue={task.title} onSubmit={handleEditTitle}>
-                <EditableInput />
-                <EditablePreview />
-              </Editable>
-            </Heading>
+    <Layout title={task.title} description={task.description}>
+      <Container>
+        <Flex flexDirection={["column", "column", "row"]}>
+          <FadeIn initial="hiddenFromLeft" exit="hiddenFromLeft" flexGrow={1}>
+            <Stack spacing={6}>
+              <BackLink to={`/dugnad/${dugnadId}`}>
+                Tilbake til dugnaden
+              </BackLink>
+              <Heading as="h1" wordBreak="break-word">
+                <Editable defaultValue={task.title} onSubmit={handleEditTitle}>
+                  <EditableInput />
+                  <EditablePreview />
+                </Editable>
+              </Heading>
 
-            <Stack isInline flexWrap="wrap" overflowX="hidden">
-              <FadeIn
-                initial="hiddenFromLeft"
-                exit="hiddenFromRight"
-                delay={0.2}
+              <Stack isInline flexWrap="wrap" overflowX="hidden">
+                <FadeIn
+                  initial="hiddenFromLeft"
+                  exit="hiddenFromRight"
+                  delay={0.2}
+                >
+                  <TaskStatusBadge
+                    status={task.status}
+                    assignedUsers={assignedUsers}
+                  />
+                </FadeIn>
+                <FadeIn
+                  initial="hiddenFromLeft"
+                  exit="hiddenFromRight"
+                  delay={0.1}
+                >
+                  <Badge>
+                    Opprettet av {isCreatedBySelf ? "deg" : author!.name}
+                  </Badge>
+                </FadeIn>
+              </Stack>
+              <ButtonGroup spacing={[2, 2, 4]} size="sm">
+                {(!task.status || task.status === "idle") && !isAssignedToSelf && (
+                  <Button
+                    type="button"
+                    variant="solid"
+                    variantColor="green"
+                    leftIcon={MdThumbUp}
+                    onClick={handleJoinOrLeave}
+                    mb={[2, 2, 4]}
+                  >
+                    {task.assignedUsers.length > 0 ? "Bli med på" : "Ta"} denne
+                    oppgaven
+                  </Button>
+                )}
+                {task.status === "in progress" && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    variantColor="gray"
+                    leftIcon={isAssignedToSelf ? MdArrowBack : MdCheck}
+                    onClick={handleJoinOrLeave}
+                    mb={[2, 2, 4]}
+                  >
+                    {isAssignedToSelf
+                      ? "Si fra deg oppgaven"
+                      : "Bli med på oppgaven"}
+                  </Button>
+                )}
+                {task.status === "in progress" && (
+                  <Button
+                    type="button"
+                    variant="solid"
+                    variantColor="green"
+                    leftIcon={MdCheck}
+                    onClick={handleDone}
+                    mb={[2, 2, 4]}
+                  >
+                    Ferdigstill
+                  </Button>
+                )}
+                {task.status === "done" && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    variantColor="red"
+                    leftIcon={MdArrowBack}
+                    onClick={handleReset}
+                    mb={[2, 2, 4]}
+                  >
+                    Start oppgaven på nytt
+                  </Button>
+                )}
+                {isCreatedBySelf && (
+                  <Button
+                    type="button"
+                    variant="solid"
+                    variantColor="red"
+                    leftIcon={MdDelete}
+                    onClick={handleDelete}
+                    mb={[2, 2, 4]}
+                  >
+                    Slett
+                  </Button>
+                )}
+                {!isEditingDescription && (
+                  <Button
+                    type="button"
+                    leftIcon={MdEdit}
+                    variant="outline"
+                    variantColor="gray"
+                    size="sm"
+                    mb={[2, 2, 4]}
+                    onClick={() => setEditingDescription(true)}
+                  >
+                    Endre beskrivelse
+                  </Button>
+                )}
+              </ButtonGroup>
+
+              <React.Suspense
+                fallback={
+                  <Text textAlign="center" my={6}>
+                    Henter beskrivelse
+                  </Text>
+                }
               >
-                <TaskStatusBadge
-                  status={task.status}
-                  assignedUsers={assignedUsers}
-                />
-              </FadeIn>
-              <FadeIn
-                initial="hiddenFromLeft"
-                exit="hiddenFromRight"
-                delay={0.1}
-              >
-                <Badge>
-                  Opprettet av {isCreatedBySelf ? "deg" : author!.name}
-                </Badge>
-              </FadeIn>
+                <EditableDescription
+                  isEditing={isEditingDescription}
+                  onSubmit={handleEditDescription}
+                  defaultValue={task.description}
+                >
+                  <SanitizedMarkdown>{task.description}</SanitizedMarkdown>
+                </EditableDescription>
+              </React.Suspense>
             </Stack>
-            <ButtonGroup spacing={[2, 2, 4]} size="sm">
-              {(!task.status || task.status === "idle") && !isAssignedToSelf && (
-                <Button
-                  type="button"
-                  variant="solid"
-                  variantColor="green"
-                  leftIcon={MdThumbUp}
-                  onClick={handleJoinOrLeave}
-                  mb={[2, 2, 4]}
-                >
-                  {task.assignedUsers.length > 0 ? "Bli med på" : "Ta"} denne
-                  oppgaven
-                </Button>
-              )}
-              {task.status === "in progress" && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  variantColor="gray"
-                  leftIcon={isAssignedToSelf ? MdArrowBack : MdCheck}
-                  onClick={handleJoinOrLeave}
-                  mb={[2, 2, 4]}
-                >
-                  {isAssignedToSelf
-                    ? "Si fra deg oppgaven"
-                    : "Bli med på oppgaven"}
-                </Button>
-              )}
-              {task.status === "in progress" && (
-                <Button
-                  type="button"
-                  variant="solid"
-                  variantColor="green"
-                  leftIcon={MdCheck}
-                  onClick={handleDone}
-                  mb={[2, 2, 4]}
-                >
-                  Ferdigstill
-                </Button>
-              )}
-              {task.status === "done" && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  variantColor="red"
-                  leftIcon={MdArrowBack}
-                  onClick={handleReset}
-                  mb={[2, 2, 4]}
-                >
-                  Start oppgaven på nytt
-                </Button>
-              )}
-              {isCreatedBySelf && (
-                <Button
-                  type="button"
-                  variant="solid"
-                  variantColor="red"
-                  leftIcon={MdDelete}
-                  onClick={handleDelete}
-                  mb={[2, 2, 4]}
-                >
-                  Slett
-                </Button>
-              )}
-              {!isEditingDescription && (
-                <Button
-                  type="button"
-                  leftIcon={MdEdit}
-                  variant="outline"
-                  variantColor="gray"
-                  size="sm"
-                  mb={[2, 2, 4]}
-                  onClick={() => setEditingDescription(true)}
-                >
-                  Endre beskrivelse
-                </Button>
-              )}
-            </ButtonGroup>
-
-            <React.Suspense
-              fallback={
-                <Text textAlign="center" my={6}>
-                  Henter beskrivelse
-                </Text>
-              }
-            >
-              <EditableDescription
-                isEditing={isEditingDescription}
-                onSubmit={handleEditDescription}
-                defaultValue={task.description}
-              >
-                <SanitizedMarkdown>{task.description}</SanitizedMarkdown>
-              </EditableDescription>
-            </React.Suspense>
-          </Stack>
-        </FadeIn>
-        <FadeIn initial="hiddenFromRight" exit="hiddenFromRight" delay={0.2}>
-          <Image
-            src={leavesSrc}
-            alt="En kvinne som raker løv"
-            width="200px"
-            my={6}
-            mx={["auto", "auto", 6, 6]}
-          />
-        </FadeIn>
-      </Flex>
-      <CommentSection />
-    </Container>
+          </FadeIn>
+          <FadeIn initial="hiddenFromRight" exit="hiddenFromRight" delay={0.2}>
+            <Image
+              src={leavesSrc}
+              alt="En kvinne som raker løv"
+              width="200px"
+              my={6}
+              mx={["auto", "auto", 6, 6]}
+            />
+          </FadeIn>
+        </Flex>
+        <CommentSection />
+      </Container>
+    </Layout>
   );
 };
 

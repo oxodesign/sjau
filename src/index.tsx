@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { FirebaseAppProvider, SuspenseWithPerf } from "reactfire";
 import { ThemeProvider, CSSReset } from "@chakra-ui/core";
 import { theme } from "./utils/theme";
@@ -22,15 +23,17 @@ const rootEl = document.getElementById("root") as HTMLElement;
 
 ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
-    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-      <ThemeProvider theme={theme}>
-        <CSSReset />
-        <SuspenseWithPerf fallback={<StandaloneSpinner />} traceId="root-app">
-          <Router>
-            <App />
-          </Router>
-        </SuspenseWithPerf>
-      </ThemeProvider>
-    </FirebaseAppProvider>
+    <HelmetProvider>
+      <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+        <ThemeProvider theme={theme}>
+          <CSSReset />
+          <SuspenseWithPerf fallback={<StandaloneSpinner />} traceId="root-app">
+            <Router>
+              <App />
+            </Router>
+          </SuspenseWithPerf>
+        </ThemeProvider>
+      </FirebaseAppProvider>
+    </HelmetProvider>
   </React.StrictMode>
 );

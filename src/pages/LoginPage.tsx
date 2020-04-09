@@ -7,6 +7,7 @@ import { Heading, Stack, Box, Image, Flex } from "@chakra-ui/core";
 import plantingFlowersSrc from "../images/planting-flowers.jpg";
 import { FadeIn } from "../components/FadeIn";
 import { Container } from "../components/Container";
+import { Layout } from "../components/Layout";
 
 type LoginPageProps = {};
 
@@ -132,62 +133,64 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
   ].includes(loginState);
 
   return (
-    <Container>
-      <Flex
-        minHeight="100vh"
-        alignItems="center"
-        justifyContent="center"
-        flexDirection={["column", "column", "row"]}
-      >
-        <FadeIn
-          flex="0 0 33%"
-          initial="hiddenFromLeft"
-          exit="hiddenFromLeft"
-          delay={0.3}
+    <Layout title="Logg inn">
+      <Container>
+        <Flex
+          minHeight="100vh"
+          alignItems="center"
+          justifyContent="center"
+          flexDirection={["column", "column", "row"]}
         >
-          <Image
-            width="300px"
-            src={plantingFlowersSrc}
-            alt="En mann som planter blomster"
-          />
-        </FadeIn>
-        <Box flex="0 0 67%" p={6}>
-          <Box p={6}>
-            <Stack spacing={6}>
-              <Heading as="h1" mt={6}>
-                Først må vi logge deg inn
-              </Heading>
-              {hasError && (
-                <Box
-                  bg="red.100"
-                  rounded="md"
-                  borderWidth="2px"
-                  borderColor="red.500"
-                  maxWidth="400px"
-                  my={6}
-                  p={6}
-                >
-                  {getErrorText(loginState)}
-                </Box>
-              )}
-              {showVerificationForm ? (
-                <VerificationCodeForm
-                  onSubmit={handleVerificationCodeSubmitted}
-                  key="verification-code-form"
-                  isLoading={loginState === "verifying code"}
-                />
-              ) : (
-                <PhoneNumberForm
-                  onSubmit={handlePhoneNumberSubmitted}
-                  isLoading={loginState === "verification code requested"}
-                  key="phone-number-form"
-                />
-              )}
-            </Stack>
+          <FadeIn
+            flex="0 0 33%"
+            initial="hiddenFromLeft"
+            exit="hiddenFromLeft"
+            delay={0.3}
+          >
+            <Image
+              width="300px"
+              src={plantingFlowersSrc}
+              alt="En mann som planter blomster"
+            />
+          </FadeIn>
+          <Box flex="0 0 67%" p={6}>
+            <Box p={6}>
+              <Stack spacing={6}>
+                <Heading as="h1" mt={6}>
+                  Først må vi logge deg inn
+                </Heading>
+                {hasError && (
+                  <Box
+                    bg="red.100"
+                    rounded="md"
+                    borderWidth="2px"
+                    borderColor="red.500"
+                    maxWidth="400px"
+                    my={6}
+                    p={6}
+                  >
+                    {getErrorText(loginState)}
+                  </Box>
+                )}
+                {showVerificationForm ? (
+                  <VerificationCodeForm
+                    onSubmit={handleVerificationCodeSubmitted}
+                    key="verification-code-form"
+                    isLoading={loginState === "verifying code"}
+                  />
+                ) : (
+                  <PhoneNumberForm
+                    onSubmit={handlePhoneNumberSubmitted}
+                    isLoading={loginState === "verification code requested"}
+                    key="phone-number-form"
+                  />
+                )}
+              </Stack>
+            </Box>
           </Box>
-        </Box>
-      </Flex>
-    </Container>
+        </Flex>
+      </Container>
+    </Layout>
   );
 };
 

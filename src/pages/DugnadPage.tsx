@@ -27,6 +27,7 @@ import { EditableDescription } from "../components/EditableDescription";
 import { DugnadTiming } from "../components/DugnadTiming";
 import { useUser } from "../hooks/useUser";
 import { useParticipation } from "../hooks/useParticipation";
+import { Layout } from "../components/Layout";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -76,179 +77,195 @@ export const DugnadPage = () => {
   };
 
   return (
-    <Container>
-      <Stack spacing={6}>
-        <FadeIn initial="hiddenFromLeft" exit="hiddenFromLeft" key="back-block">
-          <BackLink to="/oversikt">Tilbake til oversikten</BackLink>
-        </FadeIn>
-        <Flex>
+    <Layout
+      title={dugnad.name}
+      description={`Denne sjauen har ${
+        dugnad.participants?.length === 1 ? "deltaker" : "deltakere"
+      } og ${
+        dugnad.tasks?.length === 1 ? "oppgave" : "oppgaver"
+      } så langt. Bli med du også!`}
+    >
+      <Container>
+        <Stack spacing={6}>
           <FadeIn
-            initial="hiddenFromBottom"
-            exit="hiddenFromBottom"
-            delay={0.2}
-            flex={["1 0 auto", "1 0 auto", "0 0 67%"]}
-            maxWidth="100%"
+            initial="hiddenFromLeft"
+            exit="hiddenFromLeft"
+            key="back-block"
           >
-            {justCreatedDugnad && (
-              <DugnadCreatedCallout
-                isFirstTime={dugnadsForUser.ownedDugnads.length === 1}
-                dugnadId={dugnadId!}
-              />
-            )}
-            <Heading as="h1">
-              <Editable onSubmit={handleNameSubmit} defaultValue={dugnad.name}>
-                <EditableInput />
-                <EditablePreview />
-              </Editable>
-            </Heading>
-            <DugnadTiming
-              dugnadId={dugnadId!}
-              startsAt={dugnad.startsAt}
-              endsAt={dugnad.endsAt}
-            />
-            <Box my={3}>
-              {isParticipatingInDugnad ? (
-                <Box
-                  bg="green.100"
-                  borderColor="green.500"
-                  borderWidth="1px"
-                  rounded="md"
-                  shadow="md"
-                  textAlign="center"
-                  p={3}
-                >
-                  Denne sjauen er du med på!{" "}
-                  <span role="img" aria-label="Hurra for deg">
-                    🎉
-                  </span>
-                </Box>
-              ) : (
-                <Button
-                  size="lg"
-                  variant="solid"
-                  variantColor="green"
-                  leftIcon={MdCheck}
-                  onClick={toggleParticipation}
-                >
-                  Bli med å sjaue
-                </Button>
-              )}
-            </Box>
-            <React.Suspense
-              fallback={
-                <Text textAlign="center" my={6}>
-                  Henter beskrivelse
-                </Text>
-              }
+            <BackLink to="/oversikt">Tilbake til oversikten</BackLink>
+          </FadeIn>
+          <Flex>
+            <FadeIn
+              initial="hiddenFromBottom"
+              exit="hiddenFromBottom"
+              delay={0.2}
+              flex={["1 0 auto", "1 0 auto", "0 0 67%"]}
+              maxWidth="100%"
             >
-              <EditableDescription
-                onSubmit={handleDescriptionSubmit}
-                defaultValue={dugnad.description}
-                isEditing={isEditingDescription}
-                mb={3}
-              >
-                <Collapse
-                  isOpen={isDescriptionVisible}
-                  startingHeight={hasLongDescription ? 100 : 25}
-                  position="relative"
-                  aria-hidden={!isDescriptionVisible}
+              {justCreatedDugnad && (
+                <DugnadCreatedCallout
+                  isFirstTime={dugnadsForUser.ownedDugnads.length === 1}
+                  dugnadId={dugnadId!}
+                />
+              )}
+              <Heading as="h1">
+                <Editable
+                  onSubmit={handleNameSubmit}
+                  defaultValue={dugnad.name}
                 >
-                  {!isDescriptionVisible && (
-                    <Box
-                      bgImage="linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0))"
-                      position="absolute"
-                      top={0}
-                      pointerEvents="none"
-                      height={100}
-                      width="100%"
-                    />
-                  )}
-                  <SanitizedMarkdown>{dugnad.description}</SanitizedMarkdown>
-                </Collapse>
-              </EditableDescription>
-              {!isEditingDescription && (
-                <ButtonGroup my={3} spacing={3}>
-                  {hasLongDescription && (
+                  <EditableInput />
+                  <EditablePreview />
+                </Editable>
+              </Heading>
+              <DugnadTiming
+                dugnadId={dugnadId!}
+                startsAt={dugnad.startsAt}
+                endsAt={dugnad.endsAt}
+              />
+              <Box my={3}>
+                {isParticipatingInDugnad ? (
+                  <Box
+                    bg="green.100"
+                    borderColor="green.500"
+                    borderWidth="1px"
+                    rounded="md"
+                    shadow="md"
+                    textAlign="center"
+                    p={3}
+                  >
+                    Denne sjauen er du med på!{" "}
+                    <span role="img" aria-label="Hurra for deg">
+                      🎉
+                    </span>
+                  </Box>
+                ) : (
+                  <Button
+                    size="lg"
+                    variant="solid"
+                    variantColor="green"
+                    leftIcon={MdCheck}
+                    onClick={toggleParticipation}
+                  >
+                    Bli med å sjaue
+                  </Button>
+                )}
+              </Box>
+              <React.Suspense
+                fallback={
+                  <Text textAlign="center" my={6}>
+                    Henter beskrivelse
+                  </Text>
+                }
+              >
+                <EditableDescription
+                  onSubmit={handleDescriptionSubmit}
+                  defaultValue={dugnad.description}
+                  isEditing={isEditingDescription}
+                  mb={3}
+                >
+                  <Collapse
+                    isOpen={isDescriptionVisible}
+                    startingHeight={hasLongDescription ? 100 : 25}
+                    position="relative"
+                    aria-hidden={!isDescriptionVisible}
+                  >
+                    {!isDescriptionVisible && (
+                      <Box
+                        bgImage="linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0))"
+                        position="absolute"
+                        top={0}
+                        pointerEvents="none"
+                        height={100}
+                        width="100%"
+                      />
+                    )}
+                    <SanitizedMarkdown>{dugnad.description}</SanitizedMarkdown>
+                  </Collapse>
+                </EditableDescription>
+                {!isEditingDescription && (
+                  <ButtonGroup my={3} spacing={3}>
+                    {hasLongDescription && (
+                      <Button
+                        variant="solid"
+                        variantColor="gray"
+                        size="xs"
+                        onClick={() => setDescriptionVisible(prev => !prev)}
+                      >
+                        {isDescriptionVisible ? "Skjul detaljer" : "Vis mer"}
+                      </Button>
+                    )}
                     <Button
-                      variant="solid"
+                      leftIcon={MdEdit}
+                      variant="outline"
                       variantColor="gray"
                       size="xs"
-                      onClick={() => setDescriptionVisible(prev => !prev)}
+                      onClick={() => {
+                        setDescriptionVisible(true);
+                        setEditingDescription(true);
+                      }}
                     >
-                      {isDescriptionVisible ? "Skjul detaljer" : "Vis mer"}
+                      Endre beskrivelse
                     </Button>
-                  )}
-                  <Button
-                    leftIcon={MdEdit}
-                    variant="outline"
-                    variantColor="gray"
-                    size="xs"
-                    onClick={() => {
-                      setDescriptionVisible(true);
-                      setEditingDescription(true);
-                    }}
-                  >
-                    Endre beskrivelse
-                  </Button>
-                </ButtonGroup>
-              )}
-            </React.Suspense>
-            <Box shadow="md" borderWidth="1px" p={5}>
-              <AddTask dugnadId={dugnadId!!} />
-            </Box>
-          </FadeIn>
+                  </ButtonGroup>
+                )}
+              </React.Suspense>
+              <Box shadow="md" borderWidth="1px" p={5}>
+                <AddTask dugnadId={dugnadId!!} />
+              </Box>
+            </FadeIn>
 
-          <Box
-            flex="0 0 33%"
-            alignSelf="flex-start"
-            ml={30}
-            mt={30}
-            display={["none", "none", "block"]}
-          >
-            <FadeIn
-              initial="hiddenFromRight"
-              exit="hiddenFromRight"
-              delay={0.3}
+            <Box
+              flex="0 0 33%"
+              alignSelf="flex-start"
+              ml={30}
+              mt={30}
+              display={["none", "none", "block"]}
             >
-              <Image src={washingSrc} alt="En mann med vaskebøtte og svamp" />
+              <FadeIn
+                initial="hiddenFromRight"
+                exit="hiddenFromRight"
+                delay={0.3}
+              >
+                <Image src={washingSrc} alt="En mann med vaskebøtte og svamp" />
+              </FadeIn>
+            </Box>
+          </Flex>
+          <Box pb={30}>
+            <FadeIn
+              initial="hiddenFromBottom"
+              exit="hiddenFromBottom"
+              delay={0.4}
+            >
+              <TaskList dugnadId={dugnadId!!} />
             </FadeIn>
           </Box>
-        </Flex>
-        <Box pb={30}>
-          <FadeIn
-            initial="hiddenFromBottom"
-            exit="hiddenFromBottom"
-            delay={0.4}
-          >
-            <TaskList dugnadId={dugnadId!!} />
-          </FadeIn>
-        </Box>
-        {isParticipatingInDugnad && (
-          <ButtonGroup>
-            <Button
-              size="md"
-              variant="outline"
-              variantColor="red"
-              leftIcon={MdArrowBack}
-              onClick={toggleParticipation}
-            >
-              Forlat sjauen
-            </Button>
-            {ownsDugnad && (
+          {isParticipatingInDugnad && (
+            <ButtonGroup>
               <Button
                 size="md"
-                variant="solid"
+                variant="outline"
                 variantColor="red"
-                leftIcon={MdDeleteForever}
-                onClick={handleDeleteDugnad}
+                leftIcon={MdArrowBack}
+                onClick={toggleParticipation}
               >
-                Slett sjauen
+                Forlat sjauen
               </Button>
-            )}
-          </ButtonGroup>
-        )}
-      </Stack>
-    </Container>
+              {ownsDugnad && (
+                <Button
+                  size="md"
+                  variant="solid"
+                  variantColor="red"
+                  leftIcon={MdDeleteForever}
+                  onClick={handleDeleteDugnad}
+                >
+                  Slett sjauen
+                </Button>
+              )}
+            </ButtonGroup>
+          )}
+        </Stack>
+      </Container>
+    </Layout>
   );
 };
 
