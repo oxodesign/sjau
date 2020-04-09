@@ -22,7 +22,7 @@ import { BackLink } from "../components/BackLink";
 import washingSrc from "../images/washing.jpg";
 import { FadeIn } from "../components/FadeIn";
 import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
-import { MdEdit, MdCheck, MdArrowBack } from "react-icons/md";
+import { MdEdit, MdCheck, MdArrowBack, MdDeleteForever } from "react-icons/md";
 import { EditableDescription } from "../components/EditableDescription";
 import { DugnadTiming } from "../components/DugnadTiming";
 import { useUser } from "../hooks/useUser";
@@ -239,7 +239,7 @@ export const DugnadPage = () => {
                 size="md"
                 variant="solid"
                 variantColor="red"
-                leftIcon={MdArrowBack}
+                leftIcon={MdDeleteForever}
                 onClick={handleDeleteDugnad}
               >
                 Slett sjauen
