@@ -12,7 +12,8 @@ import {
   DrawerFooter,
   FormControl,
   FormLabel,
-  Input
+  Input,
+  Box
 } from "@chakra-ui/core";
 import { useAuth, useFirestore } from "reactfire";
 import { useFormFields } from "../hooks/useFormFields";
@@ -49,7 +50,20 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
     await auth.signOut();
     push("/?kthx=bye");
   };
-
+  const handleDeleteUser = async () => {
+    if (
+      window.confirm(
+        'Er du helt sikker på at du vil slette brukeren din?\n\nSjauene du har opprettet blir ikke slettet, men du vil bli fjernet som "eier".'
+      )
+    ) {
+      try {
+        await userRef.delete();
+        await auth.currentUser?.delete();
+      } finally {
+        push("/?kthx=bye");
+      }
+    }
+  };
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
       <DrawerOverlay />
@@ -58,7 +72,7 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
         <DrawerHeader>Innstillinger</DrawerHeader>
         <DrawerBody>
           <Stack spacing={6}>
-            <form onSubmit={handleSubmit}>
+            <Box as="form" onSubmit={handleSubmit}>
               <FormControl>
                 <FormLabel id="name">Hva heter du?</FormLabel>
                 <Input
@@ -68,12 +82,27 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
                   onBlur={updateUser}
                 />
               </FormControl>
-            </form>
+            </Box>
+            <ButtonGroup>
+              <Button
+                variant="outline"
+                variantColor="red"
+                onClick={handleLogout}
+              >
+                Logg ut
+              </Button>
+            </ButtonGroup>
           </Stack>
         </DrawerBody>
-        <DrawerFooter borderTop="1px">
+        <DrawerFooter>
           <ButtonGroup>
-            <Button onClick={handleLogout}>Logg ut</Button>
+            <Button
+              variant="solid"
+              variantColor="red"
+              onClick={handleDeleteUser}
+            >
+              Slett bruker!
+            </Button>
           </ButtonGroup>
         </DrawerFooter>
       </DrawerContent>
