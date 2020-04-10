@@ -11,7 +11,9 @@ const loadingTexts = [
   "Er det pølser snart?",
   "På tide å brette opp ermene!",
   "Gjør meg klar for å ta i et tak",
-  "Kommer ut om noen minutter!"
+  "Kommer ut om noen minutter!",
+  "Setter løker til neste vår",
+  "Har du vasket henda dine i 20 sekunder nå? Hm?"
 ];
 const getRandomLoadingText = () =>
   loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
