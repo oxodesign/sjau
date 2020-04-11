@@ -11,7 +11,8 @@ import {
   Editable,
   EditableInput,
   EditablePreview,
-  ButtonGroup
+  ButtonGroup,
+  useClipboard
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
 import { AddTask } from "../components/AddTask";
@@ -39,7 +40,7 @@ export const DugnadPage = () => {
   const dugnad = useDugnad(dugnadId);
   const dugnadRef = useDugnadRef(dugnadId);
   const user = useUser();
-  const { search } = useLocation();
+  const { search, pathname } = useLocation();
   const { replace } = useHistory();
   const dugnadsForUser = useUserDugnads(user?.uid);
   const [isDescriptionVisible, setDescriptionVisible] = React.useState(true);
@@ -47,6 +48,7 @@ export const DugnadPage = () => {
   const { isParticipatingInDugnad, toggleParticipation } = useParticipation(
     dugnadId!
   );
+  const { onCopy, hasCopied } = useClipboard(`https://sjau.no${pathname}`);
 
   if (!dugnad) {
     return <Text>Fant ikke den sjauen!</Text>;
@@ -125,20 +127,30 @@ export const DugnadPage = () => {
               />
               <Box my={3}>
                 {isParticipatingInDugnad ? (
-                  <Box
+                  <Flex
                     bg="green.100"
                     borderColor="green.500"
                     borderWidth="1px"
                     rounded="md"
                     shadow="md"
-                    textAlign="center"
+                    alignItems="center"
+                    justifyContent="center"
                     p={3}
                   >
-                    Denne sjauen er du med på!{" "}
-                    <span role="img" aria-label="Hurra for deg">
-                      🎉
-                    </span>
-                  </Box>
+                    <Box>
+                      Denne sjauen er du med på!{" "}
+                      <span role="img" aria-label="Hurra for deg">
+                        🎉
+                      </span>
+                    </Box>
+                    <Button
+                      variant="ghost"
+                      variantColor="transparent"
+                      onClick={onCopy}
+                    >
+                      {hasCopied ? "Kopiert!" : "Del sjauen!"}
+                    </Button>
+                  </Flex>
                 ) : (
                   <Button
                     size="lg"
