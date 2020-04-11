@@ -24,10 +24,10 @@ export const App: React.FC = () => {
           <AnimatedRoute exact path="/ny" requiresAuth>
             <NewDugnadPage />
           </AnimatedRoute>
-          <AnimatedRoute exact path="/dugnad/:dugnadId/:taskId" requiresAuth>
+          <AnimatedRoute exact path="/sjau/:dugnadId/:taskId" requiresAuth>
             <TaskPage />
           </AnimatedRoute>
-          <AnimatedRoute exact path="/dugnad/:dugnadId" requiresAuth>
+          <AnimatedRoute exact path="/sjau/:dugnadId" requiresAuth>
             <DugnadPage />
           </AnimatedRoute>
           <AnimatedRoute exact path="/oversikt" requiresAuth>
@@ -39,6 +39,7 @@ export const App: React.FC = () => {
           <AnimatedRoute exact path="/">
             <LandingPage />
           </AnimatedRoute>
+          <Redirect from="/dugnad/*" to="/sjau/*" />
           <Redirect to="/" />
         </Switch>
       </AnimatePresence>
