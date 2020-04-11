@@ -25,7 +25,7 @@ export const DugnadCreatedCallout: React.FC<DugnadCreatedCalloutProps> = ({
   dugnadId,
   isFirstTime
 }) => {
-  const url = `https://sjau.no/dugnad/${dugnadId}`;
+  const url = `https://sjau.no/sjau/${dugnadId}`;
   const { onCopy, hasCopied } = useClipboard(url);
   const [isClosed, setClosed] = React.useState(false);
   if (isClosed) {

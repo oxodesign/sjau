@@ -21,7 +21,7 @@ export const DugnadList: React.FC<DugnadListProps> = ({ title, dugnads }) => {
             shadow="md"
             rounded="md"
             borderWidth="1px"
-            as={props => <Link to={`/dugnad/${dugnad.id}`} {...props} />}
+            as={props => <Link to={`/sjau/${dugnad.id}`} {...props} />}
             wordBreak="break-all"
           >
             {dugnad.name}

@@ -50,7 +50,7 @@ export const NewDugnadPage = () => {
         participants: [user!.uid]
       });
       analytics.logEvent("create_sjau");
-      push(`/dugnad/${result.id}?created`);
+      push(`/sjau/${result.id}?created`);
     } catch (e) {
       console.error("Kunne ikke opprette ting", e);
     }

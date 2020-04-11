@@ -70,7 +70,7 @@ export const TaskPage: React.FC = () => {
       )
     ) {
       taskRef.delete();
-      replace(`/dugnad/${dugnadId}`);
+      replace(`/sjau/${dugnadId}`);
     }
   };
   const handleEditDescription = (description: string) => {
@@ -97,9 +97,7 @@ export const TaskPage: React.FC = () => {
         <Flex flexDirection={["column", "column", "row"]}>
           <FadeIn initial="hiddenFromLeft" exit="hiddenFromLeft" flexGrow={1}>
             <Stack spacing={6}>
-              <BackLink to={`/dugnad/${dugnadId}`}>
-                Tilbake til dugnaden
-              </BackLink>
+              <BackLink to={`/sjau/${dugnadId}`}>Tilbake til dugnaden</BackLink>
               <Heading as="h1" wordBreak="break-word">
                 <Editable defaultValue={task.title} onSubmit={handleEditTitle}>
                   <EditableInput />
