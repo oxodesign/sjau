@@ -7,11 +7,11 @@ import {
   Badge,
   ButtonGroup,
   Stack,
-  Image,
   Flex,
   Editable,
   EditableInput,
-  EditablePreview
+  EditablePreview,
+  Box
 } from "@chakra-ui/core";
 import {
   MdCheck,
@@ -25,7 +25,6 @@ import { useUser, useUserById, useUsersById } from "../hooks/useUser";
 import { Container } from "../components/Container";
 import { TaskStatusBadge } from "../components/TaskStatusBadge";
 import { BackLink } from "../components/BackLink";
-import leavesSrc from "../images/leaves.jpg";
 import { FadeIn } from "../components/FadeIn";
 import { CommentSection } from "../components/CommentSection";
 import { EditableDescription } from "../components/EditableDescription";
@@ -34,6 +33,9 @@ import { Layout } from "../components/Layout";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
+);
+const WomanWinning = React.lazy(() =>
+  import("../components/illustrations/WomanWinning")
 );
 
 export const TaskPage: React.FC = () => {
@@ -223,13 +225,9 @@ export const TaskPage: React.FC = () => {
             </Stack>
           </FadeIn>
           <FadeIn initial="hiddenFromRight" exit="hiddenFromRight" delay={0.2}>
-            <Image
-              src={leavesSrc}
-              alt="En kvinne som raker løv"
-              width="200px"
-              my={6}
-              mx={["auto", "auto", 6, 6]}
-            />
+            <Box width="200px" my={6} mx={["auto", "auto", 6, 6]}>
+              <WomanWinning />
+            </Box>
           </FadeIn>
         </Flex>
         <CommentSection />

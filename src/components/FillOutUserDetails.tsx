@@ -9,11 +9,13 @@ import {
   Stack,
   Heading,
   Text,
-  Flex,
-  Image
+  Flex
 } from "@chakra-ui/core";
-import wateringFlowersSrc from "../images/watering-flowers.jpg";
 import { FadeIn } from "./FadeIn";
+
+const WateringFlowers = React.lazy(() =>
+  import("./illustrations/WateringFlowers")
+);
 
 type FillOutUserDetailsProps = {
   name?: string;
@@ -40,11 +42,7 @@ export const FillOutUserDetails: React.FC<FillOutUserDetailsProps> = ({
         alignItems="center"
       >
         <FadeIn initial="hiddenFromLeft" delay={0.3}>
-          <Image
-            src={wateringFlowersSrc}
-            alt="En kvinne som vanner en ampel"
-            width="300px"
-          />
+          <WateringFlowers width="300px" />
         </FadeIn>
         <FadeIn initial="hiddenFromRight" ml={[0, 0, 6]}>
           <Stack spacing={6}>

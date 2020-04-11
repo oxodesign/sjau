@@ -3,11 +3,14 @@ import { useAuth } from "reactfire";
 import * as firebase from "firebase";
 import { VerificationCodeForm } from "../components/VerificationCodeForm";
 import { PhoneNumberForm } from "../components/PhoneNumberForm";
-import { Heading, Stack, Box, Image, Flex } from "@chakra-ui/core";
-import plantingFlowersSrc from "../images/planting-flowers.jpg";
+import { Heading, Stack, Box, Flex } from "@chakra-ui/core";
 import { FadeIn } from "../components/FadeIn";
 import { Container } from "../components/Container";
 import { Layout } from "../components/Layout";
+
+const ManGardening = React.lazy(() =>
+  import("../components/illustrations/ManGardening")
+);
 
 type LoginPageProps = {};
 
@@ -147,11 +150,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
             exit="hiddenFromLeft"
             delay={0.3}
           >
-            <Image
-              width="300px"
-              src={plantingFlowersSrc}
-              alt="En mann som planter blomster"
-            />
+            <ManGardening width="300px" />
           </FadeIn>
           <Box flex="0 0 67%" p={6}>
             <Box p={6}>

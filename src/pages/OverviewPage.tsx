@@ -10,13 +10,16 @@ import {
   Stack,
   Text,
   Flex,
-  Image
+  Box
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
-import broomingSrc from "../images/brooming.jpg";
 import { FadeIn } from "../components/FadeIn";
 import { DugnadList } from "../components/DugnadList";
 import { Layout } from "../components/Layout";
+
+const WomanBrooming = React.lazy(() =>
+  import("../components/illustrations/WomanBrooming")
+);
 
 export const OverviewPage: React.FC = () => {
   const user = useUser();
@@ -76,13 +79,9 @@ export const OverviewPage: React.FC = () => {
                 exit="hiddenFromRight"
                 delay={0.1}
               >
-                <Image
-                  mx="auto"
-                  my={6}
-                  src={broomingSrc}
-                  alt="Mor og barn som koster"
-                  width={["150px", "150px", "200px"]}
-                />
+                <Box mx="auto" my={6} width={["150px", "150px", "200px"]}>
+                  <WomanBrooming />
+                </Box>
               </FadeIn>
             </Flex>
             {hasMadeOrParticipatedInDugnad && (

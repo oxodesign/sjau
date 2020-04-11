@@ -6,7 +6,6 @@ import {
   Text,
   Stack,
   Flex,
-  Image,
   Collapse,
   Button,
   Editable,
@@ -19,7 +18,6 @@ import { AddTask } from "../components/AddTask";
 import { TaskList } from "../components/TaskList";
 import { useDugnad, useUserDugnads, useDugnadRef } from "../hooks/useDugnad";
 import { BackLink } from "../components/BackLink";
-import washingSrc from "../images/washing.jpg";
 import { FadeIn } from "../components/FadeIn";
 import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
 import { MdEdit, MdCheck, MdArrowBack, MdDeleteForever } from "react-icons/md";
@@ -31,6 +29,9 @@ import { Layout } from "../components/Layout";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
+);
+const ManCleaning = React.lazy(() =>
+  import("../components/illustrations/ManCleaning")
 );
 
 export const DugnadPage = () => {
@@ -226,7 +227,7 @@ export const DugnadPage = () => {
                 exit="hiddenFromRight"
                 delay={0.3}
               >
-                <Image src={washingSrc} alt="En mann med vaskebøtte og svamp" />
+                <ManCleaning />
               </FadeIn>
             </Box>
           </Flex>

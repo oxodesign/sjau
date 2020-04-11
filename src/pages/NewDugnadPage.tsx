@@ -15,13 +15,16 @@ import {
   FormHelperText,
   Button,
   ButtonGroup,
-  Image,
-  Text
+  Text,
+  Box
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
-import leavesSrc from "../images/leaves.jpg";
 import { FadeIn } from "../components/FadeIn";
 import { Layout } from "../components/Layout";
+
+const WomanWinning = React.lazy(() =>
+  import("../components/illustrations/WomanWinning")
+);
 
 const Datepicker = React.lazy(() => import("../components/Datepicker"));
 
@@ -180,13 +183,9 @@ export const NewDugnadPage = () => {
               exit="hiddenFromRight"
               delay={0.5}
             >
-              <Image
-                src={leavesSrc}
-                alt="En kvinne som raker løv"
-                width={["60%", "60%", "300px"]}
-                mx="auto"
-                my={6}
-              />
+              <Box width={["60%", "60%", "300px"]} mx="auto" my={6}>
+                <WomanWinning />
+              </Box>
             </FadeIn>
           </Flex>
         </Stack>
