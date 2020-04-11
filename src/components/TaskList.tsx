@@ -6,12 +6,15 @@ import {
   Stack,
   RadioGroup,
   Radio,
-  SimpleGrid
+  SimpleGrid,
+  Heading,
+  Flex
 } from "@chakra-ui/core";
 import { TaskStatusBadge } from "./TaskStatusBadge";
 import { useTasksForDugnad } from "../hooks/useDugnad";
 import { useUser } from "../hooks/useUser";
 import { motion } from "framer-motion";
+import WomanWinning from "./illustrations/WomanWinning";
 
 type TaskListProps = {
   dugnadId: string;
@@ -55,6 +58,34 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
           🤷‍♂️
         </span>
       </Text>
+    );
+  }
+  if (tasks.every(task => task.status === "done")) {
+    return (
+      <Box bg="green.100" shadow="md" rounded="md" my={6} p={6}>
+        <Flex
+          flexDirection={["column-reverse", "column-reverse", "row"]}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Box
+            flexGrow={0}
+            flexBasis={["60%", "60%", "20%"]}
+            width={["60%", "60%", "100%"]}
+            mt={[6, 6, 0]}
+          >
+            <WomanWinning />
+          </Box>
+          <Box flexGrow={0} flexBasis={["100%", "100%", "70%"]}>
+            <Heading mb={6}>Helt ferdig!</Heading>
+            <Text>
+              Grattis! Dere har gjennomført en perfekt sjau! Alt som skulle
+              gjøres har blitt gjort. Alle som skulle bidra har bidratt. Og
+              verden er et fredfullt sted. Sees igjen neste sjau!
+            </Text>
+          </Box>
+        </Flex>
+      </Box>
     );
   }
 
