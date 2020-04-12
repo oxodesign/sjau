@@ -1,8 +1,24 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Heading, Text, Button, Stack, Box } from "@chakra-ui/core";
-import { Splash } from "../components/Splash";
+import {
+  Heading,
+  Text,
+  Button,
+  Stack,
+  Image,
+  Box,
+  Flex,
+  List,
+  ListItem
+} from "@chakra-ui/core";
 import { AuthCheck } from "reactfire";
+import { Splash } from "../components/Splash";
+import PotPlants from "../components/illustrations/PotPlants";
+import step1Src from "../images/steg-1.png";
+import step2Src from "../images/steg-2.png";
+import step3Src from "../images/steg-3.png";
+import { SiteFooter } from "../components/SiteFooter";
+import WomanWinning from "../components/illustrations/WomanWinning";
 
 const splashImages = [
   "https://images.unsplash.com/photo-1549448046-b89e7214060d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1800&q=80",
@@ -71,6 +87,197 @@ export const LandingPage = () => {
           )}
         </Stack>
       </Splash>
+      <Flex
+        minHeight={["100vh", "100vh", "67vh"]}
+        bg="blue.100"
+        color="gray.900"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Box maxWidth="600px" p={6} textAlign="center">
+          <Stack spacing={6}>
+            <Heading as="h2" fontSize="5xl">
+              Sjau?
+            </Heading>
+            <Text fontSize="xl">
+              Sjau lar deg gjennomføre dugnader over en{" "}
+              <strong>litt lenger periode</strong>, uten å miste dugnadsånden.
+              Det gir <strong>flere folk</strong> muligheten til å{" "}
+              <strong>bli med</strong>, samtidig som man kan holde god avstand
+              til basiluskene!
+            </Text>
+            <Text fontSize="xl">
+              Dette er perfekt for borettslag, idrettslag og hyttelag, og
+              sikkert andre slags lag.{" "}
+              <strong>Og helt gratis denne våren!</strong>
+            </Text>
+            <Box width="100%" maxWidth="300px" mx="auto">
+              <PotPlants />
+            </Box>
+          </Stack>
+        </Box>
+      </Flex>
+      <Flex
+        bg="gray.100"
+        color="gray.900"
+        minHeight="50vh"
+        justifyContent="center"
+        alignItems="center"
+        px={[6, 6, 0]}
+      >
+        <Stack spacing={6} my={12}>
+          <Heading as="h2" fontSize="5xl" textAlign="center">
+            Kom i gang på
+            <br />
+            1-2-3!
+          </Heading>
+          <Box maxWidth="700px">
+            <List>
+              <ListItem mb={6}>
+                <Flex
+                  justifyContent="space-between"
+                  flexDirection={["column", "column", "row"]}
+                  alignItems="center"
+                >
+                  <Box flex="0 0 25%" maxWidth="50%">
+                    <Image
+                      src={step1Src}
+                      alt="Steg 1: Lag en sjau"
+                      width="100%"
+                    />
+                  </Box>
+                  <Flex
+                    flex="0 0 70%"
+                    flexDirection="column"
+                    justifyContent="center"
+                    textAlign={["center", "center", "left"]}
+                  >
+                    <Heading as="h3" fontSize="2xl">
+                      Lag en sjau
+                    </Heading>
+                    <Text fontSize="lg">
+                      Finn ut når det skal sjaues, og sett av noen datoer som
+                      passer. Og ikke minst - lag en liste over alt som skal
+                      gjøres!
+                    </Text>
+                  </Flex>
+                </Flex>
+              </ListItem>
+              <ListItem mb={6}>
+                <Flex
+                  justifyContent="space-between"
+                  flexDirection={["column", "column", "row-reverse"]}
+                  alignItems="center"
+                >
+                  <Box flex="0 0 25%" maxWidth="50%">
+                    <Image
+                      src={step2Src}
+                      alt="Steg 2: Inviter sjauere"
+                      width="100%"
+                    />
+                  </Box>
+                  <Flex
+                    flex="0 0 70%"
+                    flexDirection="column"
+                    justifyContent="center"
+                    textAlign={["center", "center", "right"]}
+                  >
+                    <Heading as="h3" fontSize="2xl">
+                      Inviter sjauere
+                    </Heading>
+                    <Text fontSize="lg">
+                      En sjau går raskere når man jobber sammen - selvom man
+                      ikke jobber samtidig. Inviter naboer, klubbmedlemmer eller
+                      kollegas til å bli med!
+                    </Text>
+                  </Flex>
+                </Flex>
+              </ListItem>
+              <ListItem>
+                <Flex
+                  justifyContent="space-between"
+                  alignItems="center"
+                  flexDirection={["column", "column", "row"]}
+                >
+                  <Box flex="0 0 25%" maxWidth="50%">
+                    <Image
+                      src={step3Src}
+                      alt="Steg 3: Sjau i vei"
+                      width="100%"
+                    />
+                  </Box>
+                  <Flex
+                    flex="0 0 70%"
+                    flexDirection="column"
+                    justifyContent="center"
+                    textAlign={["center", "center", "left"]}
+                  >
+                    <Heading as="h3" fontSize="2xl">
+                      Sjau i vei
+                    </Heading>
+                    <Text fontSize="lg">
+                      Ingenting blir gjort før man tar på støvla, sa bestefar.
+                      Vask deg på henda, kom deg ut og få jobben gjort!
+                    </Text>
+                  </Flex>
+                </Flex>
+              </ListItem>
+            </List>
+          </Box>
+        </Stack>
+      </Flex>
+      <Flex
+        color="gray.900"
+        minHeight="50vh"
+        justifyContent="center"
+        alignItems="center"
+        px={[6, 6, 0]}
+      >
+        <Stack spacing={6} my={12}>
+          <Heading as="h2" fontSize="5xl" textAlign="center">
+            Fortell meg litt om prosjektet!
+          </Heading>
+          <Box maxWidth="700px">
+            <Flex
+              flexDirection={["column-reverse", "column-reverse", "row"]}
+              justifyContent="space-between"
+            >
+              <Box flex="0 0 30%">
+                <WomanWinning />
+              </Box>
+              <Box flex="0 0 60%">
+                <Stack spacing={6}>
+                  <Text fontSize="lg">
+                    Sjau ble laget for å løse et <strong>reelt problem</strong>{" "}
+                    - hvordan kunne gjennomføre dugnad i bygården under en
+                    pandemi?
+                  </Text>
+
+                  <Text fontSize="lg">
+                    Vi satt oss ned for å tenke, kode og tegne litt, og
+                    plutselig hadde vi noe skikkelig kult. Marthe Dahlin har
+                    laget alle illustrasjonene, og Kristofer Giltvedt Selbekk
+                    har kodet litt. Erik Mathisen kom på navnet, men det er bare
+                    fordi han er utrolig flink med ord og sånn.
+                  </Text>
+
+                  <Heading fontSize="xl">Fortell oss hva du synes!</Heading>
+
+                  <Text fontSize="lg">
+                    Sjau er kult allerede, men vi er på langt nær ferdig. Vi
+                    trenger hjelp for å komme på ideer, finne bugs og forbedre
+                    designet.
+                  </Text>
+                  <Text fontSize="lg">
+                    Send oss en melding på Twitter, eller en e-post, om du vil.
+                  </Text>
+                </Stack>
+              </Box>
+            </Flex>
+          </Box>
+        </Stack>
+      </Flex>
+      <SiteFooter />
     </Box>
   );
 };
