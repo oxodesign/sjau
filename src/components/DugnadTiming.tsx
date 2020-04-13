@@ -36,13 +36,22 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
     endsAt
   });
   const editButtonRef = React.useRef<HTMLButtonElement>();
-  const handleUpdate = () => {
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // ghetto validation
+    if (new Date(formState.startsAt) > new Date(formState.endsAt)) {
+      alert("Sjauen må starte før den er over, da!");
+      return;
+    }
     setEditing(false);
     editButtonRef.current?.focus();
     dugnadRef.update(formState);
   };
+
   const startsAtDate = new Date(startsAt);
   const endsAtDate = new Date(endsAt);
+
   return (
     <>
       <Stack isInline my={3}>
@@ -91,42 +100,36 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
         )}
       </Stack>
       {isEditing && (
-        <Box my={6}>
+        <Box as="form" onSubmit={handleSubmit} my={6}>
           <Stack isInline spacing={3}>
             <FormControl>
               <FormLabel htmlFor="startsAt">Starter</FormLabel>
               <Datepicker
+                size="sm"
                 id="startsAt"
-                value={formState.startsAt}
+                selected={new Date(formState.startsAt)}
                 onChange={createUpdater("startsAt")}
-                onBlur={handleUpdate}
-                onKeyDown={(e: React.KeyboardEvent) =>
-                  e.key === "Enter" && handleUpdate()
-                }
                 autoFocus
               />
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="endsAt">Slutter</FormLabel>
               <Datepicker
+                size="sm"
                 id="endsAt"
-                value={formState.endsAt}
+                selected={new Date(formState.endsAt)}
                 onChange={createUpdater("endsAt")}
-                onBlur={handleUpdate}
-                onKeyDown={(e: React.KeyboardEvent) =>
-                  e.key === "Enter" && handleUpdate()
-                }
                 minDate={new Date(formState.startsAt)}
               />
             </FormControl>
             <IconButton
+              type="submit"
               icon={MdCheck}
               variant="solid"
               variantColor="green"
               aria-label="Lagre"
-              size="md"
+              size="sm"
               mt="28px"
-              onClick={() => setEditing(false)}
             />
           </Stack>
         </Box>

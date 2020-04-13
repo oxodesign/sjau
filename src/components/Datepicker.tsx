@@ -11,10 +11,12 @@ type DatepickerProps = Overwrite<
   ReactDatePickerProps,
   {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    size?: "sm" | "md" | "lg";
   }
 >;
 export const Datepicker: React.FC<DatepickerProps> = ({
   onChange,
+  size,
   ...rest
 }) => {
   React.useEffect(() => {
@@ -25,7 +27,7 @@ export const Datepicker: React.FC<DatepickerProps> = ({
   return (
     <Box>
       <ReactDatepicker
-        customInput={<Input width="xs" />}
+        customInput={<Input size={size} width="xs" />}
         onChange={handleChange}
         locale="nb"
         {...rest}
