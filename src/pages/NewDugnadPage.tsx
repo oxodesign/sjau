@@ -120,11 +120,7 @@ export const NewDugnadPage = () => {
                   </FormControl>
                 </FadeIn>
 
-                <FadeIn
-                  initial="hiddenFromLeft"
-                  exit="hiddenFromRight"
-                  delay={0.2}
-                >
+                <Box>
                   <FormControl isRequired>
                     <FormLabel htmlFor="startsAt" fontWeight="600">
                       Når starter sjauen?
@@ -136,12 +132,8 @@ export const NewDugnadPage = () => {
                       minDate={addWeeks(new Date(), 1)}
                     />
                   </FormControl>
-                </FadeIn>
-                <FadeIn
-                  initial="hiddenFromLeft"
-                  exit="hiddenFromRight"
-                  delay={0.3}
-                >
+                </Box>
+                <Box>
                   <FormControl isRequired>
                     <FormLabel htmlFor="endsAt" fontWeight="600">
                       Når slutter sjauen?
@@ -158,7 +150,7 @@ export const NewDugnadPage = () => {
                       lengre periode å bidra på. En uke, for eksempel? Eller to?
                     </FormHelperText>
                   </FormControl>
-                </FadeIn>
+                </Box>
                 <FadeIn
                   initial="hiddenFromLeft"
                   exit="hiddenFromRight"
