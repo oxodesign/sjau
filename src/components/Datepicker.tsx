@@ -6,6 +6,13 @@ import ReactDatepicker, {
 } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Input, Box } from "@chakra-ui/core";
+import styled from "@emotion/styled";
+
+const DatepickerZIndexFixer = styled.div`
+  .react-datepicker-popper {
+    z-index: 3;
+  }
+`;
 
 type DatepickerProps = Overwrite<
   ReactDatePickerProps,
@@ -24,11 +31,13 @@ export const Datepicker: React.FC<DatepickerProps> = ({
     onChange({ target: { value: date.toLocaleDateString("fr-CA") } } as any);
   return (
     <Box>
-      <ReactDatepicker
-        customInput={<Input width="xs" />}
-        onChange={handleChange}
-        {...rest}
-      />
+      <DatepickerZIndexFixer>
+        <ReactDatepicker
+          customInput={<Input width="xs" />}
+          onChange={handleChange}
+          {...rest}
+        />
+      </DatepickerZIndexFixer>
     </Box>
   );
 };
