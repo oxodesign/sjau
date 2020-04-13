@@ -252,6 +252,9 @@ export const DugnadPage = () => {
               exit="hiddenFromBottom"
               delay={0.4}
             >
+              <Heading mt={12} mb={3}>
+                Oppgaver
+              </Heading>
               <TaskList dugnadId={dugnadId!!} />
             </FadeIn>
           </Box>
