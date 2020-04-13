@@ -5,7 +5,7 @@ import { TextLink } from "./TextLink";
 export const SiteFooter: React.FC = () => {
   return (
     <Box as="footer" mt={6}>
-      <svg viewBox="0 0 400 100">
+      <svg viewBox="0 0 400 80">
         <circle r="650" fill="#4c6b27" cx="400" cy="685" />
         <circle r="650" fill="#76a73d" cx="100" cy="655" />
       </svg>

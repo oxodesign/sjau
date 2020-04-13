@@ -53,7 +53,7 @@ export const LandingPage = () => {
               "Håper vi ser deg igjen snart!"
             ) : (
               <>
-                Et verktøy for å avholde dugnader over tid. <br />
+                Et verktøy for å gjennomføre dugnader over tid. <br />
                 Når det passer.
               </>
             )}
@@ -189,7 +189,7 @@ export const LandingPage = () => {
                       Inviter sjauere
                     </Heading>
                     <Text fontSize="lg">
-                      En sjau går raskere når man jobber sammen - selvom man
+                      En sjau går raskere når man jobber sammen - selv om man
                       ikke jobber samtidig. Inviter naboer, klubbmedlemmer eller
                       kollegas til å bli med!
                     </Text>
@@ -294,7 +294,7 @@ export const LandingPage = () => {
                     <TextLink href="https://twitter.com/selbekk">
                       Twitter
                     </TextLink>
-                    , eller en
+                    , eller en{" "}
                     <TextLink href="mailto:kristofer@selbekk.no">
                       e-post
                     </TextLink>
