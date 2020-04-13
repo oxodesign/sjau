@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Text, Link } from "@chakra-ui/core";
+import { Box, Text } from "@chakra-ui/core";
+import { TextLink } from "./TextLink";
 
 export const SiteFooter: React.FC = () => {
   return (
@@ -15,19 +16,19 @@ export const SiteFooter: React.FC = () => {
             <span role="img" aria-label="Norsk flagg">
               🇳🇴
             </span>{" "}
-            av <a href="https://selbekk.io">Kristofer Giltvedt Selbekk</a>.
+            av{" "}
+            <TextLink href="https://selbekk.io">
+              Kristofer Giltvedt Selbekk
+            </TextLink>
+            .
           </Text>
           <Text fontSize="sm">
             Vi bruker informasjonskapsler for å skjønne hvordan du bruker
             Sjau.no. Ved å bruke tjenesten godtar du denne bruken. Les mer om
             hvordan vi bruker og lagrer dataen din{" "}
-            <Link
-              href="/personvern"
-              textDecoration="underline"
-              fontWeight="600"
-            >
+            <TextLink href="/personvern" fontWeight="600">
               her
-            </Link>
+            </TextLink>
           </Text>
         </Box>
       </Box>

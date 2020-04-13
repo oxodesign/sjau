@@ -1,7 +1,8 @@
 import React from "react";
-import { Heading, Text, Code, Link, Stack } from "@chakra-ui/core";
+import { Heading, Text, Code, Stack } from "@chakra-ui/core";
 import { Layout } from "../components/Layout";
 import { Container } from "../components/Container";
+import { TextLink } from "../components/TextLink";
 
 const PrivacyPage: React.FC = () => {
   return (
@@ -42,9 +43,16 @@ const PrivacyPage: React.FC = () => {
             igjen.
           </Text>
           <Text>
+            Det skal også nevnes at Google lagrer telefonnummeret ditt, og
+            bruker det i arbeidet sitt mot anti-spam. Det er et vilkår du må
+            godta for å bruke tjenesten vår.
+          </Text>
+          <Text>
             Du kan få utlevert all dataen vi har på deg om du vil, bare send oss
             en mail på{" "}
-            <Link href="mailto:kristofer@selbekk.io">kristofer@selbekk.io</Link>
+            <TextLink href="mailto:kristofer@selbekk.io">
+              kristofer@selbekk.io
+            </TextLink>
             .
           </Text>
 
@@ -53,7 +61,11 @@ const PrivacyPage: React.FC = () => {
           </Heading>
           <Text>
             Hvis du har noen spørsmål, så er det selvfølgelig bare å ta kontakt
-            på samme epostadresse som over.
+            på{" "}
+            <TextLink href="mailto:kristofer@selbekk.io">
+              kristofer@selbekk.io
+            </TextLink>
+            .
           </Text>
         </Stack>
       </Container>

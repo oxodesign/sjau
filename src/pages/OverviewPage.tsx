@@ -94,7 +94,7 @@ export const OverviewPage: React.FC = () => {
                     as={Link}
                     {...linkProps}
                   >
-                    Lag en sjau
+                    Lag en ny sjau
                   </Button>
                 </ButtonGroup>
                 {ownedDugnads.length > 0 && (

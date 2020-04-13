@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, Link } from "@chakra-ui/core";
-import { Link as InternalLink } from "react-router-dom";
+import { Text } from "@chakra-ui/core";
 import { MdArrowBack } from "react-icons/md";
+import { TextLink } from "./TextLink";
 
 type BackLinkProps = {
   to: string;
@@ -9,10 +9,8 @@ type BackLinkProps = {
 };
 export const BackLink: React.FC<BackLinkProps> = ({ to, children }) => (
   <Text my={6}>
-    {/*
-      // @ts-ignore */}
-    <Link as={InternalLink} to={to}>
+    <TextLink href={to}>
       <MdArrowBack style={{ display: "inline-block" }} /> {children}
-    </Link>
+    </TextLink>
   </Text>
 );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link as InternalLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   Heading,
   Text,
@@ -10,9 +10,9 @@ import {
   Flex,
   List,
   ListItem,
-  Link,
   ButtonGroup
 } from "@chakra-ui/core";
+import { Link as InternalLink } from "react-router-dom";
 import { AuthCheck } from "reactfire";
 import { Splash } from "../components/Splash";
 import PotPlants from "../components/illustrations/PotPlants";
@@ -21,6 +21,7 @@ import step2Src from "../images/steg-2.png";
 import step3Src from "../images/steg-3.png";
 import { SiteFooter } from "../components/SiteFooter";
 import WomanWinning from "../components/illustrations/WomanWinning";
+import { TextLink } from "../components/TextLink";
 
 const splashImages = [
   "https://images.unsplash.com/photo-1549448046-b89e7214060d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1800&q=80",
@@ -266,10 +267,19 @@ export const LandingPage = () => {
 
                   <Text fontSize="lg">
                     Vi satt oss ned for å tenke, kode og tegne litt, og
-                    plutselig hadde vi noe skikkelig kult. Marthe Dahlin har
-                    laget alle illustrasjonene, og Kristofer Giltvedt Selbekk
-                    har kodet litt. Erik Mathisen kom på navnet, men det er bare
-                    fordi han er utrolig flink med ord og sånn.
+                    plutselig hadde vi noe skikkelig kult.{" "}
+                    <TextLink href="https://www.instagram.com/marthemakes/">
+                      Marthe Dahlin
+                    </TextLink>{" "}
+                    har laget alle illustrasjonene, og{" "}
+                    <TextLink href="https://medium.com/@erik.mathisen">
+                      Erik Mathisen
+                    </TextLink>{" "}
+                    var mannen bak navnet.{" "}
+                    <TextLink href="https://selbekk.io">
+                      Kristofer Giltvedt Selbekk
+                    </TextLink>{" "}
+                    kom på konsept og kodet det hele.
                   </Text>
 
                   <Heading fontSize="xl">Fortell oss hva du synes!</Heading>
@@ -281,10 +291,14 @@ export const LandingPage = () => {
                   </Text>
                   <Text fontSize="lg">
                     Send oss en melding på{" "}
-                    <Link href="https://twitter.com/selbekk">Twitter</Link>,
-                    eller en
-                    <Link href="mailto:kristofer@selbekk.no">e-post</Link>, om
-                    du vil.
+                    <TextLink href="https://twitter.com/selbekk">
+                      Twitter
+                    </TextLink>
+                    , eller en
+                    <TextLink href="mailto:kristofer@selbekk.no">
+                      e-post
+                    </TextLink>
+                    , om du vil.
                   </Text>
                 </Stack>
               </Box>
