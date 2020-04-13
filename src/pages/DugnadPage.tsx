@@ -21,7 +21,13 @@ import { useDugnad, useUserDugnads, useDugnadRef } from "../hooks/useDugnad";
 import { BackLink } from "../components/BackLink";
 import { FadeIn } from "../components/FadeIn";
 import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
-import { MdEdit, MdCheck, MdDeleteForever, MdExitToApp } from "react-icons/md";
+import {
+  MdEdit,
+  MdCheck,
+  MdDeleteForever,
+  MdExitToApp,
+  MdContentCopy
+} from "react-icons/md";
 import { EditableDescription } from "../components/EditableDescription";
 import { DugnadTiming } from "../components/DugnadTiming";
 import { useUser } from "../hooks/useUser";
@@ -145,7 +151,7 @@ export const DugnadPage = () => {
                     px={6}
                   >
                     <Box>
-                      Denne sjauen er du med på!{" "}
+                      Du er med på denne sjauen!{" "}
                       <span role="img" aria-label="Hurra for deg">
                         🎉
                       </span>
@@ -153,10 +159,12 @@ export const DugnadPage = () => {
                     <Button
                       variant="solid"
                       variantColor="green"
+                      size="sm"
+                      rightIcon={hasCopied ? MdCheck : MdContentCopy}
                       onClick={onCopy}
                       m={[3, 3, 0]}
                     >
-                      {hasCopied ? "Kopiert!" : "Del sjauen!"}
+                      {hasCopied ? "Kopiert!" : "Inviter flere til å delta"}
                     </Button>
                   </Flex>
                 ) : (
