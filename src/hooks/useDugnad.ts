@@ -123,14 +123,18 @@ export const useTaskComments = (dugnadId: string, taskId: string) => {
       .where("uid", "in", authors)
   );
 
-  return dbComments.map(dbComment => {
-    const author = dbAuthors.find(
-      dbAuthor => dbAuthor.uid === dbComment.author
-    );
-    return {
-      ...dbComment,
-      author: author?.name ?? "Ukjent bruker",
-      authorId: author?.uid
-    };
-  });
+  return dbComments
+    .map(dbComment => {
+      const author = dbAuthors.find(
+        dbAuthor => dbAuthor.uid === dbComment.author
+      );
+      return {
+        ...dbComment,
+        author: author?.name ?? "Ukjent bruker",
+        authorId: author?.uid
+      };
+    })
+    .sort((a, b) => {
+      return a.timestamp - b.timestamp;
+    });
 };

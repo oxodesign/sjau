@@ -10,6 +10,9 @@ type SanitizedMarkdownProps = {
 const MarkdownStyler = styled.div`
   p {
     margin-bottom: 1em;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
   a  {
     text-decoration: underline;
