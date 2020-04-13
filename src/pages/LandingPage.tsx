@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link as InternalLink, useLocation } from "react-router-dom";
 import {
   Heading,
   Text,
@@ -9,7 +9,9 @@ import {
   Box,
   Flex,
   List,
-  ListItem
+  ListItem,
+  Link,
+  ButtonGroup
 } from "@chakra-ui/core";
 import { AuthCheck } from "reactfire";
 import { Splash } from "../components/Splash";
@@ -56,7 +58,7 @@ export const LandingPage = () => {
             )}
           </Text>
           <Button
-            as={props => <Link to="/oversikt" {...props} />}
+            as={props => <InternalLink to="/oversikt" {...props} />}
             variant="solid"
             variantColor="green"
             size="lg"
@@ -224,6 +226,15 @@ export const LandingPage = () => {
               </ListItem>
             </List>
           </Box>
+          <ButtonGroup textAlign="center">
+            <Button
+              variant="solid"
+              variantColor="blue"
+              as={props => <InternalLink to="/ny" {...props} />}
+            >
+              Lag en sjau!
+            </Button>
+          </ButtonGroup>
         </Stack>
       </Flex>
       <Flex
@@ -269,7 +280,11 @@ export const LandingPage = () => {
                     designet.
                   </Text>
                   <Text fontSize="lg">
-                    Send oss en melding på Twitter, eller en e-post, om du vil.
+                    Send oss en melding på{" "}
+                    <Link href="https://twitter.com/selbekk">Twitter</Link>,
+                    eller en
+                    <Link href="mailto:kristofer@selbekk.no">e-post</Link>, om
+                    du vil.
                   </Text>
                 </Stack>
               </Box>

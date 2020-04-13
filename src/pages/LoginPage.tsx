@@ -58,7 +58,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
       ? phoneNumber
       : `+47${phoneNumber}`;
     // next, remove any non-numeric characters
-    normalizedPhoneNumber = normalizedPhoneNumber.split(/[ \-()]/).join("");
+    normalizedPhoneNumber = normalizedPhoneNumber.replace(/[\s\-()]/g, "");
     try {
       setLoginState("verification code requested");
       confirmationResultRef.current = await auth.signInWithPhoneNumber(
@@ -149,14 +149,15 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
             initial="hiddenFromLeft"
             exit="hiddenFromLeft"
             delay={0.3}
+            maxWidth={["50%", "50%", "100%"]}
           >
-            <ManGardening width="300px" />
+            <ManGardening width="100%" />
           </FadeIn>
-          <Box flex="0 0 67%" p={6}>
-            <Box p={6}>
+          <Box flex="1 0 67%" p={[0, 0, 6]} width="100%">
+            <Box p={[0, 0, 6]}>
               <Stack spacing={6}>
                 <Heading as="h1" mt={6}>
-                  Først må vi logge deg inn
+                  På tide å logge inn!
                 </Heading>
                 {hasError && (
                   <Box

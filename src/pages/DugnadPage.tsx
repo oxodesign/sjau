@@ -133,9 +133,11 @@ export const DugnadPage = () => {
                     borderWidth="1px"
                     rounded="md"
                     shadow="md"
+                    flexDirection={["column", "column", "row"]}
                     alignItems="center"
-                    justifyContent="center"
-                    p={3}
+                    justifyContent={["center", "center", "space-between"]}
+                    py={3}
+                    px={6}
                   >
                     <Box>
                       Denne sjauen er du med på!{" "}
@@ -144,9 +146,10 @@ export const DugnadPage = () => {
                       </span>
                     </Box>
                     <Button
-                      variant="ghost"
-                      variantColor="transparent"
+                      variant="solid"
+                      variantColor="green"
                       onClick={onCopy}
+                      m={[3, 3, 0]}
                     >
                       {hasCopied ? "Kopiert!" : "Del sjauen!"}
                     </Button>

@@ -12,7 +12,7 @@ export const Splash: React.FC<SplashProps> = ({
 }) => (
   <Flex
     width="100vw"
-    minHeight="80vh"
+    minHeight={["100vh", "75vh"]}
     bgImage={backgroundImage}
     bgPos="center center"
     bgSize="cover"
