@@ -86,6 +86,7 @@ export const NewDugnadPage = () => {
                       onChange={createChangeHandler("name")}
                       aria-describedby="name-description"
                       placeholder="Gateveiens dugnadssjau"
+                      autoComplete="off"
                       maxWidth="100%"
                     />
                     <FormHelperText id="name-description">
