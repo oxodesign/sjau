@@ -12,28 +12,39 @@ import {
   Flex
 } from "@chakra-ui/core";
 import { FadeIn } from "./FadeIn";
+import { useUser } from "../hooks/useUser";
 
 const WateringFlowers = React.lazy(() =>
   import("./illustrations/WateringFlowers")
 );
 
 type FillOutUserDetailsProps = {
-  name?: string;
+  children: React.ReactNode;
 };
 
 export const FillOutUserDetails: React.FC<FillOutUserDetailsProps> = ({
-  name = ""
+  children
 }) => {
-  const uid = useAuth().currentUser?.uid;
+  const auth = useAuth();
+  const uid = auth.currentUser?.uid;
+  const displayName = auth.currentUser?.displayName;
   const [formFields, createChangeHandler] = useFormFields({
-    name
+    name: displayName || ""
   });
   const firestore = useFirestore();
+
   const userRef = firestore.collection("users").doc(uid);
+  const user = useUser();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     userRef.set({ ...formFields, uid, filledOut: true }, { merge: true });
   };
+
+  if (user) {
+    return <>{children}</>;
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <Flex

@@ -2,7 +2,8 @@ import React from "react";
 import { RouteProps, Route } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AuthCheck } from "reactfire";
-import { LoginPage } from "../pages/LoginPage";
+import { Login } from "./Login";
+import { FillOutUserDetails } from "./FillOutUserDetails";
 
 type AnimatedRouteProps = RouteProps & {
   requiresAuth?: boolean;
@@ -21,7 +22,9 @@ export const AnimatedRoute: React.FC<AnimatedRouteProps> = ({
         key={rest.path as string}
       >
         {requiresAuth ? (
-          <AuthCheck fallback={<LoginPage />}>{children}</AuthCheck>
+          <AuthCheck fallback={<Login />}>
+            <FillOutUserDetails>{children}</FillOutUserDetails>
+          </AuthCheck>
         ) : (
           children
         )}
