@@ -28,6 +28,7 @@ import {
   MdExitToApp,
   MdContentCopy
 } from "react-icons/md";
+import { GiSpade } from "react-icons/gi";
 import { EditableDescription } from "../components/EditableDescription";
 import { DugnadTiming } from "../components/DugnadTiming";
 import { useUser } from "../hooks/useUser";
@@ -137,7 +138,7 @@ export const DugnadPage = () => {
                 endsAt={dugnad.endsAt}
               />
               <Box my={3}>
-                {isParticipatingInDugnad ? (
+                {isParticipatingInDugnad && !justCreatedDugnad && (
                   <Flex
                     bg="green.100"
                     borderColor="green.500"
@@ -167,15 +168,15 @@ export const DugnadPage = () => {
                       {hasCopied ? "Kopiert!" : "Inviter flere til å delta"}
                     </Button>
                   </Flex>
-                ) : (
+                )}
+                {!isParticipatingInDugnad && !ownsDugnad && (
                   <Button
-                    size="lg"
                     variant="solid"
                     variantColor="green"
-                    leftIcon={MdCheck}
+                    leftIcon={GiSpade}
                     onClick={toggleParticipation}
                   >
-                    Bli med å sjaue
+                    Bli med!
                   </Button>
                 )}
               </Box>
