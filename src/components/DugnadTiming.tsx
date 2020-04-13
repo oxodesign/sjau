@@ -13,6 +13,7 @@ import {
 import isFuture from "date-fns/isFuture";
 import isPast from "date-fns/isPast";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import formatDate from "date-fns/format";
 import nbLocale from "date-fns/locale/nb";
 import { MdEdit, MdCheck } from "react-icons/md";
 
@@ -48,10 +49,12 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
         {isFuture(startsAtDate) && (
           <Text mr={3}>
             Starter{" "}
+            {formatDate(startsAtDate, "EEEE d. MMMM", { locale: nbLocale })} (
             {formatDistanceToNow(startsAtDate, {
               addSuffix: true,
               locale: nbLocale
             })}
+            )
           </Text>
         )}
         {isPast(endsAtDate) && (
@@ -60,7 +63,8 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
             {formatDistanceToNow(endsAtDate, {
               addSuffix: true,
               locale: nbLocale
-            })}
+            })}{" "}
+            ({formatDate(endsAtDate, "EEEE d. MMMM", { locale: nbLocale })})
           </Text>
         )}
         {isPast(startsAtDate) && isFuture(endsAtDate) && (
@@ -69,8 +73,9 @@ export const DugnadTiming: React.FC<DugnadTimingProps> = ({
               <Badge variantColor="green">Aktiv!</Badge>
             </Box>
             <Text mr={3}>
-              Varer i {formatDistanceToNow(endsAtDate, { locale: nbLocale })}{" "}
-              til
+              Varer til{" "}
+              {formatDate(endsAtDate, "EEEE d. MMMM", { locale: nbLocale })} (i{" "}
+              {formatDistanceToNow(endsAtDate, { locale: nbLocale })} til)
             </Text>
           </>
         )}
