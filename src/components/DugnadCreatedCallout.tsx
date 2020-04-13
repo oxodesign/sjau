@@ -6,7 +6,8 @@ import {
   Button,
   useClipboard,
   Stack,
-  IconButton
+  IconButton,
+  ButtonGroup
 } from "@chakra-ui/core";
 import { motion } from "framer-motion";
 import { MdContentCopy, MdClose } from "react-icons/md";
@@ -63,18 +64,21 @@ export const DugnadCreatedCallout: React.FC<DugnadCreatedCalloutProps> = ({
             Nå er det bare å dele den med de du vil skal være med å ta i et tak!
           </Text>
           <Text>
-            URLen du kan dele er{" "}
+            URLen du kan dele er
+            <br />
             <strong style={{ wordBreak: "break-word" }}>{url}</strong>
           </Text>
-          <Button
-            variant="solid"
-            variantColor="green"
-            leftIcon={MdContentCopy}
-            onClick={onCopy}
-            isDisabled={hasCopied}
-          >
-            {hasCopied ? "Kopiert!" : "Klikk her for å kopiere"}
-          </Button>
+          <ButtonGroup>
+            <Button
+              variant="solid"
+              variantColor="green"
+              leftIcon={MdContentCopy}
+              onClick={onCopy}
+              isDisabled={hasCopied}
+            >
+              {hasCopied ? "Kopiert!" : "Klikk her for å kopiere"}
+            </Button>
+          </ButtonGroup>
         </Stack>
       </Box>
     </motion.div>
