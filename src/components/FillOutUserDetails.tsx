@@ -50,7 +50,9 @@ export const FillOutUserDetails: React.FC<FillOutUserDetailsProps> = ({
             <Text>Så utrolig kult at du vil være med på å ta i et tak!</Text>
             <Stack spacing={6}>
               <FormControl>
-                <FormLabel id="name">Hva heter du?</FormLabel>
+                <FormLabel id="name" fontWeight="600">
+                  Hva heter du?
+                </FormLabel>
                 <Input
                   id="name"
                   value={formFields.name}
