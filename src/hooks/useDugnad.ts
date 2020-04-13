@@ -123,10 +123,14 @@ export const useTaskComments = (dugnadId: string, taskId: string) => {
       .where("uid", "in", authors)
   );
 
-  return dbComments.map(dbComment => ({
-    ...dbComment,
-    author:
-      dbAuthors.find(dbAuthor => dbAuthor.uid === dbComment.author)?.name ??
-      "Ukjent bruker"
-  }));
+  return dbComments.map(dbComment => {
+    const author = dbAuthors.find(
+      dbAuthor => dbAuthor.uid === dbComment.author
+    );
+    return {
+      ...dbComment,
+      author: author?.name ?? "Ukjent bruker",
+      authorId: author?.uid
+    };
+  });
 };
