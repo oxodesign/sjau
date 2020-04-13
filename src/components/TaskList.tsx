@@ -12,9 +12,27 @@ import {
 } from "@chakra-ui/core";
 import { TaskStatusBadge } from "./TaskStatusBadge";
 import { useTasksForDugnad } from "../hooks/useDugnad";
-import { useUser } from "../hooks/useUser";
+import { useUser, useUsersById } from "../hooks/useUser";
 import { motion } from "framer-motion";
 import WomanWinning from "./illustrations/WomanWinning";
+
+const variants = {
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      when: "beforeChildren",
+      staggerChildren: 0.3
+    }
+  },
+  hidden: {
+    opacity: 0,
+    y: "50%",
+    transition: {
+      when: "afterChildren"
+    }
+  }
+};
 
 type TaskListProps = {
   dugnadId: string;
@@ -27,6 +45,10 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
   );
   const tasks = useTasksForDugnad(dugnadId);
   const currentUser = useUser();
+  const uniqueParticipatingUsers = Array.from(
+    new Set(tasks.flatMap(task => task.assignedUsers))
+  );
+  const participatingUsers = useUsersById(uniqueParticipatingUsers);
   const filteredTasks = React.useMemo(
     () =>
       tasks
@@ -61,23 +83,6 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
     );
   }
 
-  const variants = {
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.3
-      }
-    },
-    hidden: {
-      opacity: 0,
-      y: "50%",
-      transition: {
-        when: "afterChildren"
-      }
-    }
-  };
   return (
     <Stack spacing={6}>
       {tasks.every(task => task.status === "done") && (
@@ -137,7 +142,6 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
               key={task.id}
               shadow="md"
               rounded={3}
-              p={6}
               borderLeftWidth="8px"
               borderColor={
                 task.assignedUsers.includes(currentUser!.uid)
@@ -146,10 +150,15 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
               }
             >
               <Link to={`/dugnad/${dugnadId}/${task.id}`}>
-                <Box>
+                <Box p={6}>
                   <strong>{task.title}</strong>
                   <br />
-                  <TaskStatusBadge status={task.status} />
+                  <TaskStatusBadge
+                    status={task.status}
+                    assignedUsers={participatingUsers.filter(participant =>
+                      task.assignedUsers.includes(participant.uid)
+                    )}
+                  />
                 </Box>
               </Link>
             </Box>

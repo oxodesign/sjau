@@ -21,7 +21,10 @@ export const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
   onSubmit,
   isLoading
 }) => {
-  const [phoneNumber, setPhoneNumber] = usePersistedState("phone-number", "");
+  const [phoneNumber, setPhoneNumber] = usePersistedState<string>(
+    "phone-number",
+    ""
+  );
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (phoneNumber) {

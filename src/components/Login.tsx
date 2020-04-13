@@ -14,6 +14,7 @@ import * as firebase from "firebase";
 import { FadeIn } from "./FadeIn";
 import { Container } from "./Container";
 import { Layout } from "./Layout";
+import { useLastUsedProvider } from "../hooks/useLastUsedProvider";
 
 const ManGardening = React.lazy(() => import("./illustrations/ManGardening"));
 
@@ -29,9 +30,11 @@ const getErrorText = (loginState: LoginState) => {
 
 export const Login: React.FC = () => {
   const [loginState, setLoginState] = React.useState<LoginState>("initial");
+  const [lastUsedProvider, setLastUsedProvider] = useLastUsedProvider();
   const auth = useAuth();
   auth.languageCode = "nb";
   const handleGoogleLogin = () => {
+    setLastUsedProvider("google");
     setLoginState("logging in");
     const GoogleProvider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithRedirect(GoogleProvider);
@@ -39,6 +42,7 @@ export const Login: React.FC = () => {
 
   const handleFacebookLogin = () => {
     setLoginState("logging in");
+    setLastUsedProvider("facebook");
     const FacebookProvider = new firebase.auth.FacebookAuthProvider();
     auth.signInWithRedirect(FacebookProvider);
   };
@@ -46,8 +50,10 @@ export const Login: React.FC = () => {
   React.useEffect(() => {
     const handleRedirectReturn = async () => {
       try {
-        auth.getRedirectResult();
+        await auth.getRedirectResult();
       } catch (e) {
+        // TODO: Parse the error
+        // TODO: Handle existing provider case
         setLoginState("generic error");
         console.error("error while handling redirect return", e);
       }
@@ -94,29 +100,52 @@ export const Login: React.FC = () => {
                 )}
                 <ButtonGroup spacing={3}>
                   <Button
-                    variant="outline"
+                    variant={
+                      lastUsedProvider === "google" ? "solid" : "outline"
+                    }
                     variantColor="blue"
                     leftIcon={FaGoogle}
                     onClick={handleGoogleLogin}
+                    isLoading={
+                      loginState === "logging in" &&
+                      lastUsedProvider === "google"
+                    }
+                    loadingText="Logger inn med Google"
                     mb={3}
                   >
-                    Logg inn med Google
+                    <Box>
+                      Logg inn med Google
+                      {lastUsedProvider === "google" && (
+                        <Box fontSize="xs" textAlign="right">
+                          (det gjorde du sist)
+                        </Box>
+                      )}
+                    </Box>
                   </Button>
                   <Button
-                    variant="outline"
+                    variant={
+                      lastUsedProvider === "facebook" ? "solid" : "outline"
+                    }
                     variantColor="blue"
                     leftIcon={FaFacebookF}
                     onClick={handleFacebookLogin}
+                    isLoading={
+                      loginState === "logging in" &&
+                      lastUsedProvider === "facebook"
+                    }
+                    loadingText="Logger inn med Facebook"
                     mb={3}
                   >
-                    Logg inn med Facebook
+                    <Box>
+                      Logg inn med Facebook
+                      {lastUsedProvider === "facebook" && (
+                        <Box fontSize="xs" textAlign="right">
+                          (det gjorde du sist)
+                        </Box>
+                      )}
+                    </Box>
                   </Button>
                 </ButtonGroup>
-                <Text fontSize="sm" color="gray">
-                  Enn så lenge støtter vi kun innlogging med Google og Facebook.
-                  Vi jobber med å legge til støtte for flere måter å logge inn
-                  på.
-                </Text>
               </Stack>
             </Box>
           </Box>
