@@ -12,10 +12,12 @@ import {
 } from "@chakra-ui/core";
 
 type PhoneNumberFormProps = {
+  onChange: () => void;
   onSubmit: (phoneNumber: string) => void;
   isLoading: boolean;
 };
 export const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
+  onChange,
   onSubmit,
   isLoading
 }) => {
@@ -40,9 +42,10 @@ export const PhoneNumberForm: React.FC<PhoneNumberFormProps> = ({
           <Input
             type="tel"
             value={phoneNumber}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPhoneNumber(e.target.value)
-            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setPhoneNumber(e.target.value);
+              onChange();
+            }}
             placeholder="F.eks. 926 73 134"
             aria-describedby="phone-number-helper-text"
           />

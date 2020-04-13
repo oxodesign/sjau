@@ -49,9 +49,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
   const [loginState, setLoginState] = React.useState<LoginState>("initial");
   const auth = useAuth();
   auth.languageCode = "nb";
-  const confirmationResultRef = React.useRef<
-    firebase.auth.ConfirmationResult
-  >();
+
   const handlePhoneNumberSubmitted = async (phoneNumber: string) => {
     // first, add +47 if not specified
     let normalizedPhoneNumber = phoneNumber.startsWith("+")
@@ -61,13 +59,12 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     normalizedPhoneNumber = normalizedPhoneNumber.replace(/[\s\-()]/g, "");
     try {
       setLoginState("verification code requested");
-      confirmationResultRef.current = await auth.signInWithPhoneNumber(
+      window.confirmationResult = await auth.signInWithPhoneNumber(
         normalizedPhoneNumber,
-        window.recaptchaVerifier
+        window.recaptchaVerifier!!
       );
       setLoginState("verification code sent");
     } catch (e) {
-      window.recaptchaVerifier?.reset();
       switch (e.code) {
         case "auth/captcha-check-failed": {
           setLoginState("captcha check failed");
@@ -91,7 +88,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
   const handleVerificationCodeSubmitted = async (verificationCode: string) => {
     try {
       setLoginState("verifying code");
-      await confirmationResultRef.current?.confirm(verificationCode);
+      await window.confirmationResult?.confirm(verificationCode);
       setLoginState("success");
     } catch (e) {
       switch (e.code) {
@@ -111,13 +108,21 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     }
   };
 
+  const handlePhoneNumberChange = () => {
+    if (loginState !== "initial") {
+      setLoginState("initial");
+    }
+  };
+
   React.useEffect(() => {
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
       "login-button",
       { size: "invisible" }
     );
     return () => {
+      window.recaptchaVerifier?.clear();
       delete window.recaptchaVerifier;
+      delete window.confirmationResult;
     };
   }, []);
 
@@ -181,6 +186,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                 ) : (
                   <PhoneNumberForm
                     onSubmit={handlePhoneNumberSubmitted}
+                    onChange={handlePhoneNumberChange}
                     isLoading={loginState === "verification code requested"}
                     key="phone-number-form"
                   />

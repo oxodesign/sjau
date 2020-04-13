@@ -42,6 +42,7 @@ export const VerificationCodeForm: React.FC<VerificationCodeFormProps> = ({
             variantColor="green"
             loadingText="Logger deg inn…"
             isLoading={isLoading}
+            id="login-button"
           >
             Logg inn
           </Button>
