@@ -2,6 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
+import { useLocation } from "react-router-dom";
 type LayoutProps = {
   children: React.ReactNode;
   title: string;
@@ -12,6 +13,10 @@ export const Layout: React.FC<LayoutProps> = ({
   description,
   children
 }) => {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return (
     <div>
       <Helmet>

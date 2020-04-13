@@ -58,20 +58,22 @@ export const LandingPage = () => {
               </>
             )}
           </Text>
-          <Button
-            as={props => <InternalLink to="/oversikt" {...props} />}
-            variant="solid"
-            variantColor="green"
-            size="lg"
-          >
-            <AuthCheck
-              fallback={
-                justLoggedOut ? "Logg meg inn igjen!!!" : "Kom i gang nå"
-              }
+          <ButtonGroup>
+            <Button
+              as={props => <InternalLink to="/oversikt" {...props} />}
+              variant="solid"
+              variantColor="green"
+              size="lg"
             >
-              Gå til din oversikt
-            </AuthCheck>
-          </Button>
+              <AuthCheck
+                fallback={
+                  justLoggedOut ? "Logg meg inn igjen!!!" : "Kom i gang nå"
+                }
+              >
+                Gå til din oversikt
+              </AuthCheck>
+            </Button>
+          </ButtonGroup>
           {justLoggedOut && (
             <Text
               color="white"

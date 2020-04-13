@@ -3,10 +3,25 @@ import { Link as ChakraLink, LinkProps as ChakraProps } from "@chakra-ui/core";
 import { Link as InternalLink } from "react-router-dom";
 
 type TextLinkProps = ChakraProps & {
-  href: string;
+  href?: string;
+  onClick?: () => void;
 };
-export const TextLink: React.FC<TextLinkProps> = ({ href, ...rest }) => {
-  if (href.startsWith("https://") || href.startsWith("http://")) {
+export const TextLink: React.FC<TextLinkProps> = ({
+  href,
+  onClick,
+  ...rest
+}) => {
+  if (onClick) {
+    return (
+      <ChakraLink
+        as="button"
+        textDecoration="underline"
+        onClick={onClick}
+        {...rest}
+      />
+    );
+  }
+  if (href?.startsWith("https://") || href?.startsWith("http://")) {
     return (
       <ChakraLink
         textDecoration="underline"

@@ -29,7 +29,7 @@ export const Datepicker: React.FC<DatepickerProps> = ({
       <ReactDatepicker
         customInput={<Input size={size} width="xs" />}
         onChange={handleChange}
-        locale="nb"
+        locale={nbLocale}
         {...rest}
       />
     </Box>
