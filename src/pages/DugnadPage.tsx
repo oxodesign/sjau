@@ -27,6 +27,7 @@ import { DugnadTiming } from "../components/DugnadTiming";
 import { useUser } from "../hooks/useUser";
 import { useParticipation } from "../hooks/useParticipation";
 import { Layout } from "../components/Layout";
+import { usePersistedState } from "../hooks/usePersistedState";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -43,7 +44,12 @@ export const DugnadPage = () => {
   const { search, pathname } = useLocation();
   const { replace } = useHistory();
   const dugnadsForUser = useUserDugnads(user?.uid);
-  const [isDescriptionVisible, setDescriptionVisible] = React.useState(true);
+
+  const hasLongDescription = (dugnad?.description?.length ?? 0) > 300;
+  const [isDescriptionVisible, setDescriptionVisible] = usePersistedState(
+    "sjau-description-expanded",
+    !hasLongDescription
+  );
   const [isEditingDescription, setEditingDescription] = React.useState(false);
   const { isParticipatingInDugnad, toggleParticipation } = useParticipation(
     dugnadId!
@@ -55,7 +61,6 @@ export const DugnadPage = () => {
   }
 
   const justCreatedDugnad = search === "?created";
-  const hasLongDescription = (dugnad!.description?.length ?? 0) > 300;
   const ownsDugnad = dugnad!.author === user?.uid;
 
   const handleNameSubmit = (value: string) => {
