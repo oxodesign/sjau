@@ -21,7 +21,7 @@ import { useDugnad, useUserDugnads, useDugnadRef } from "../hooks/useDugnad";
 import { BackLink } from "../components/BackLink";
 import { FadeIn } from "../components/FadeIn";
 import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
-import { MdEdit, MdCheck, MdArrowBack, MdDeleteForever } from "react-icons/md";
+import { MdEdit, MdCheck, MdDeleteForever, MdExitToApp } from "react-icons/md";
 import { EditableDescription } from "../components/EditableDescription";
 import { DugnadTiming } from "../components/DugnadTiming";
 import { useUser } from "../hooks/useUser";
@@ -264,7 +264,7 @@ export const DugnadPage = () => {
                 size="md"
                 variant="outline"
                 variantColor="red"
-                leftIcon={MdArrowBack}
+                leftIcon={MdExitToApp}
                 onClick={toggleParticipation}
               >
                 Forlat sjauen
@@ -277,7 +277,7 @@ export const DugnadPage = () => {
                   leftIcon={MdDeleteForever}
                   onClick={handleDeleteDugnad}
                 >
-                  Slett sjauen
+                  Slett og avslutt sjauen
                 </Button>
               )}
             </ButtonGroup>
