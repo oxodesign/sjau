@@ -9,9 +9,9 @@ export const SiteFooter: React.FC = () => {
         <circle r="650" fill="#4c6b27" cx="400" cy="685" />
         <circle r="650" fill="#76a73d" cx="100" cy="655" />
       </svg>
-      <Box bg="green.500" color="black">
+      <Box bg="green.500" color="white">
         <Box maxWidth={800} mx="auto" textAlign="center" px={6} pb={6}>
-          <Text>
+          <Text fontSize="lg">
             Laget i Oslo{" "}
             <span role="img" aria-label="Norsk flagg">
               🇳🇴
