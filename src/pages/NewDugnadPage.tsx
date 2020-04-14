@@ -43,6 +43,11 @@ export const NewDugnadPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Ghetto validation
+    if (new Date(formState.startsAt) > new Date(formState.endsAt)) {
+      alert("Sjauen må starte før den er over, da!");
+      return;
+    }
     try {
       const result = await dugnadsRef.add({
         ...formState,
@@ -128,9 +133,8 @@ export const NewDugnadPage = () => {
                     </FormLabel>
                     <Datepicker
                       id="startsAt"
-                      value={formState.startsAt}
+                      selected={new Date(formState.startsAt)}
                       onChange={createChangeHandler("startsAt")}
-                      minDate={new Date()}
                     />
                   </FormControl>
                 </Box>
@@ -141,7 +145,7 @@ export const NewDugnadPage = () => {
                     </FormLabel>
                     <Datepicker
                       id="endsAt"
-                      value={formState.endsAt}
+                      selected={new Date(formState.endsAt)}
                       onChange={createChangeHandler("endsAt")}
                       minDate={new Date(formState.startsAt)}
                       aria-describedby="slutter-beskrivelse"
