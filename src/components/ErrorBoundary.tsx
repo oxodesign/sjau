@@ -2,8 +2,20 @@ import React from "react";
 import { Text, Box, Heading, ButtonGroup, Button } from "@chakra-ui/core";
 import { MdRefresh } from "react-icons/md";
 import { FaExclamationTriangle } from "react-icons/fa";
+import { useAnalytics } from "reactfire";
+import * as firebase from "firebase/app";
 
-export class ErrorBoundary extends React.Component {
+type ErrorBoundaryProps = {
+  analytics: firebase.analytics.Analytics;
+};
+type ErrorBoundaryState = {
+  hasError: boolean;
+  error: null | Error;
+};
+class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   state = {
     hasError: false,
     error: null
@@ -11,7 +23,12 @@ export class ErrorBoundary extends React.Component {
   static getDerivedStateFromError(error: any) {
     return { hasError: true, error };
   }
-  componentDidCatch(error: Error) {}
+  componentDidCatch(error: Error) {
+    this.props.analytics.logEvent("error_occurred", {
+      name: error.name,
+      message: error.message
+    });
+  }
   render() {
     if (!this.state.hasError) {
       return this.props.children;
@@ -46,3 +63,10 @@ export class ErrorBoundary extends React.Component {
     );
   }
 }
+
+const withAnalytics = (Component: any) => (props: any) => {
+  const analytics = useAnalytics();
+  return <Component {...props} analytics={analytics} />;
+};
+
+export default withAnalytics(ErrorBoundary);

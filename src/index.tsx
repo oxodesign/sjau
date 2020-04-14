@@ -7,8 +7,8 @@ import { ThemeProvider, CSSReset } from "@chakra-ui/core";
 import * as Sentry from "@sentry/browser";
 import { theme } from "./utils/theme";
 import App from "./App";
+import ErrorBoundary from "./components/ErrorBoundary";
 import { StandaloneSpinner } from "./components/StandaloneSpinner";
-import { ErrorBoundary } from "./components/ErrorBoundary";
 
 Sentry.init({
   dsn:
