@@ -43,7 +43,7 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: ghetto validation
+    // Ghetto validation
     if (new Date(formState.startsAt) > new Date(formState.endsAt)) {
       alert("Sjauen må starte før den er over, da!");
       return;
