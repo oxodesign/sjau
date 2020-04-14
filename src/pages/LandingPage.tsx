@@ -10,7 +10,8 @@ import {
   Flex,
   List,
   ListItem,
-  ButtonGroup
+  ButtonGroup,
+  BoxProps
 } from "@chakra-ui/core";
 import { Link as InternalLink } from "react-router-dom";
 import { AuthCheck } from "reactfire";
@@ -22,6 +23,10 @@ import step3Src from "../images/steg-3.png";
 import { SiteFooter } from "../components/SiteFooter";
 import WomanWinning from "../components/illustrations/WomanWinning";
 import { TextLink } from "../components/TextLink";
+
+const StrongText = (props: BoxProps) => (
+  <Text {...props} as="strong" fontWeight={600} letterSpacing={0.1} />
+);
 
 const splashImages = [
   "https://images.unsplash.com/photo-1549448046-b89e7214060d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1800&q=80",
@@ -106,15 +111,15 @@ export const LandingPage = () => {
             </Heading>
             <Text fontSize="xl">
               Sjau lar deg gjennomføre dugnader over en{" "}
-              <strong>litt lenger periode</strong>, uten å miste dugnadsånden.
-              Det gir <strong>flere folk</strong> muligheten til å{" "}
-              <strong>bli med</strong>, samtidig som man kan holde god avstand
-              til basiluskene!
+              <StrongText>litt lenger periode</StrongText>, uten å miste
+              dugnadsånden. Det gir <StrongText>flere folk</StrongText>{" "}
+              muligheten til å <StrongText>bli med</StrongText>, samtidig som
+              man kan holde god avstand til basiluskene!
             </Text>
             <Text fontSize="xl">
               Dette er perfekt for borettslag, idrettslag og hyttelag, og
               sikkert andre slags lag.{" "}
-              <strong>Og helt gratis denne våren!</strong>
+              <StrongText>Og helt gratis denne våren!</StrongText>
             </Text>
             <Box width="100%" maxWidth="300px" mx="auto">
               <PotPlants />
@@ -262,9 +267,9 @@ export const LandingPage = () => {
               <Box flex="0 0 60%">
                 <Stack spacing={6}>
                   <Text fontSize="lg">
-                    Sjau ble laget for å løse et <strong>reelt problem</strong>{" "}
-                    - hvordan kunne gjennomføre dugnad i bygården under en
-                    pandemi?
+                    Sjau ble laget for å løse et{" "}
+                    <StrongText>reelt problem</StrongText> - hvordan kunne
+                    gjennomføre dugnad i bygården under en pandemi?
                   </Text>
 
                   <Text fontSize="lg">
