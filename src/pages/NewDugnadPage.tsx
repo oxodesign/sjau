@@ -130,7 +130,7 @@ export const NewDugnadPage = () => {
                       id="startsAt"
                       value={formState.startsAt}
                       onChange={createChangeHandler("startsAt")}
-                      minDate={addWeeks(new Date(), 1)}
+                      minDate={new Date()}
                     />
                   </FormControl>
                 </Box>
