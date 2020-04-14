@@ -10,8 +10,7 @@ import {
   Flex,
   List,
   ListItem,
-  ButtonGroup,
-  BoxProps
+  ButtonGroup
 } from "@chakra-ui/core";
 import { Link as InternalLink } from "react-router-dom";
 import { AuthCheck } from "reactfire";
