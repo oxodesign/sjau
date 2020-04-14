@@ -30,22 +30,19 @@ const rootEl = document.getElementById("root") as HTMLElement;
 
 ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <HelmetProvider>
-        <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-          <ThemeProvider theme={theme}>
-            <CSSReset />
-            <SuspenseWithPerf
-              fallback={<StandaloneSpinner />}
-              traceId="root-app"
-            >
+    <HelmetProvider>
+      <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+        <ThemeProvider theme={theme}>
+          <CSSReset />
+          <SuspenseWithPerf fallback={<StandaloneSpinner />} traceId="root-app">
+            <ErrorBoundary>
               <Router>
                 <App />
               </Router>
-            </SuspenseWithPerf>
-          </ThemeProvider>
-        </FirebaseAppProvider>
-      </HelmetProvider>
-    </ErrorBoundary>
+            </ErrorBoundary>
+          </SuspenseWithPerf>
+        </ThemeProvider>
+      </FirebaseAppProvider>
+    </HelmetProvider>
   </React.StrictMode>
 );
