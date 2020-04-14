@@ -204,7 +204,6 @@ export const TaskPage: React.FC = () => {
                   </Button>
                 )}
               </ButtonGroup>
-
               <React.Suspense
                 fallback={
                   <Text textAlign="center" my={6}>
@@ -212,13 +211,15 @@ export const TaskPage: React.FC = () => {
                   </Text>
                 }
               >
-                <EditableDescription
-                  isEditing={isEditingDescription}
-                  onSubmit={handleEditDescription}
-                  defaultValue={task.description}
-                >
-                  <SanitizedMarkdown>{task.description}</SanitizedMarkdown>
-                </EditableDescription>
+                <Box mb={12}>
+                  <EditableDescription
+                    isEditing={isEditingDescription}
+                    onSubmit={handleEditDescription}
+                    defaultValue={task.description}
+                  >
+                    <SanitizedMarkdown>{task.description}</SanitizedMarkdown>
+                  </EditableDescription>
+                </Box>
               </React.Suspense>
             </Stack>
           </FadeIn>
