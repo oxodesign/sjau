@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/core";
 import { motion } from "framer-motion";
 import { MdContentCopy, MdClose } from "react-icons/md";
+import { useAnalytics } from "reactfire";
 
 type DugnadCreatedCalloutProps = {
   dugnadId: string;
@@ -28,10 +29,12 @@ export const DugnadCreatedCallout: React.FC<DugnadCreatedCalloutProps> = ({
 }) => {
   const url = `https://sjau.no/sjau/${dugnadId}`;
   const { onCopy, hasCopied } = useClipboard(url);
+  const { logEvent } = useAnalytics();
   const [isClosed, setClosed] = React.useState(false);
   if (isClosed) {
     return null;
   }
+
   return (
     <motion.div variants={variants} initial="hidden" animate="visible">
       <Box
@@ -73,7 +76,12 @@ export const DugnadCreatedCallout: React.FC<DugnadCreatedCalloutProps> = ({
               variant="solid"
               variantColor="green"
               leftIcon={MdContentCopy}
-              onClick={onCopy}
+              onClick={() => {
+                if (onCopy) {
+                  onCopy();
+                }
+                logEvent("copy_url_button_click");
+              }}
               isDisabled={hasCopied}
             >
               {hasCopied ? "Kopiert!" : "Klikk her for å kopiere"}

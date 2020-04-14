@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { MdSettings } from "react-icons/md";
 import { SiteSettings } from "./SiteSettings";
 import { FadeIn } from "./FadeIn";
-import { useAuth } from "reactfire";
+import { useAuth, useAnalytics } from "reactfire";
 
 export const SiteHeader: React.FC = () => {
   const [isSettingsDrawerOpen, setSettingsDrawerOpen] = React.useState(false);
+  const { logEvent } = useAnalytics();
   const isLoggedIn = !!useAuth().currentUser;
   return (
     <FadeIn initial="hiddenFromTop" exit="hiddenFromTop">
@@ -32,7 +33,10 @@ export const SiteHeader: React.FC = () => {
               position="absolute"
               right={[3, 3, 6]}
               size="lg"
-              onClick={() => setSettingsDrawerOpen(prev => !prev)}
+              onClick={() => {
+                setSettingsDrawerOpen(prev => !prev);
+                logEvent("toggle-settings");
+              }}
             />
             <SiteSettings
               isOpen={isSettingsDrawerOpen}

@@ -17,6 +17,7 @@ import Datepicker from "./Datepicker";
 import { useFormFields } from "../hooks/useFormFields";
 import { MdCheck, MdDeleteForever } from "react-icons/md";
 import { useHistory } from "react-router-dom";
+import { useAnalytics } from "reactfire";
 
 type EditDugnadProps = DugnadType & {
   onSubmit: () => void;
@@ -39,6 +40,7 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
     endsAt
   });
   const { replace } = useHistory();
+  const { logEvent } = useAnalytics();
   const dugnadRef = useDugnadRef(id);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,6 +50,7 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
       alert("Sjauen må starte før den er over, da!");
       return;
     }
+    logEvent("edit_sjau");
     dugnadRef.update(formState);
     onSubmit();
   };
@@ -58,6 +61,7 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
       )
     ) {
       dugnadRef.delete();
+      logEvent("delete_sjau");
       replace("/oversikt");
     }
   };

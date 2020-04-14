@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useFirestore, useAuth } from "reactfire";
+import { useFirestore, useAuth, useAnalytics } from "reactfire";
 import {
   Box,
   FormControl,
@@ -17,6 +17,7 @@ export const CommentForm: React.FC<BoxProps> = props => {
   const [comment, setComment] = React.useState("");
   const firestore = useFirestore();
   const auth = useAuth();
+  const { logEvent } = useAnalytics();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!comment) {
@@ -28,6 +29,7 @@ export const CommentForm: React.FC<BoxProps> = props => {
       timestamp: Date.now()
     } as TaskComment);
     setComment("");
+    logEvent("write_comment", { taskId, dugnadId });
   };
   return (
     <Box {...props} as="form" onSubmit={handleSubmit}>

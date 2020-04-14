@@ -34,8 +34,9 @@ const PrivacyPage: React.FC = () => {
           </Heading>
           <Text>
             Som skrevet innledningsvis vil vi ikke ha så mye med dataen din å
-            gjøre. Vi bruker telefonnummeret ditt for å logge deg inn, og vi ber
-            deg skrive inn navnet ditt når du først oppretter en bruker.
+            gjøre. Vi får navn og epost av enten Facebook eller Google når du
+            logger deg inn, og vi ber deg skrive inn navnet ditt når du først
+            oppretter en bruker.
           </Text>
           <Text>
             I tillegg til dette, så samler vi inn all dataen vi trenger for å
@@ -43,17 +44,12 @@ const PrivacyPage: React.FC = () => {
             igjen.
           </Text>
           <Text>
-            Det skal også nevnes at Google lagrer telefonnummeret ditt, og
-            bruker det i arbeidet sitt mot anti-spam. Det er et vilkår du må
-            godta for å bruke tjenesten vår.
-          </Text>
-          <Text>
             Du kan få utlevert all dataen vi har på deg om du vil, bare send oss
             en mail på{" "}
             <TextLink href="mailto:kristofer@selbekk.io">
               kristofer@selbekk.io
             </TextLink>
-            .
+            , så skal vi grave det frem.
           </Text>
 
           <Heading fontSize="xl" mt={12}>

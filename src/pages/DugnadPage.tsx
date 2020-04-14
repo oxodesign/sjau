@@ -26,6 +26,7 @@ import { useParticipation } from "../hooks/useParticipation";
 import { Layout } from "../components/Layout";
 import { usePersistedState } from "../hooks/usePersistedState";
 import { EditDugnad } from "../components/EditDugnad";
+import { useAnalytics } from "reactfire";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -35,6 +36,7 @@ const ManCleaning = React.lazy(() =>
 );
 
 export const DugnadPage = () => {
+  const { logEvent } = useAnalytics();
   const { dugnadId } = useParams();
   const dugnad = useDugnad(dugnadId);
   const user = useUser();
@@ -152,10 +154,15 @@ export const DugnadPage = () => {
                       variantColor="green"
                       size="sm"
                       rightIcon={hasCopied ? MdCheck : MdContentCopy}
-                      onClick={onCopy}
+                      onClick={() => {
+                        if (onCopy) {
+                          onCopy();
+                          logEvent("copy_url_button_click");
+                        }
+                      }}
                       m={[3, 3, 0]}
                     >
-                      {hasCopied ? "Kopiert!" : "Inviter flere til å delta"}
+                      {hasCopied ? "Kopiert URL!" : "Inviter flere til å delta"}
                     </Button>
                   </Flex>
                 )}
@@ -248,7 +255,10 @@ export const DugnadPage = () => {
                 variant="outline"
                 variantColor="red"
                 leftIcon={MdExitToApp}
-                onClick={toggleParticipation}
+                onClick={() => {
+                  toggleParticipation();
+                  logEvent("leave_sjau", { dugnadId, userId: user?.uid });
+                }}
               >
                 Forlat sjauen
               </Button>

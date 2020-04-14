@@ -17,7 +17,7 @@ import {
   IconButton,
   Flex
 } from "@chakra-ui/core";
-import { useAuth, useFirestore } from "reactfire";
+import { useAuth, useFirestore, useAnalytics } from "reactfire";
 import { useFormFields } from "../hooks/useFormFields";
 import { useUser } from "../hooks/useUser";
 import { useHistory } from "react-router-dom";
@@ -34,6 +34,7 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
 }) => {
   const auth = useAuth();
   const { push } = useHistory();
+  const { logEvent } = useAnalytics();
   const user = useUser();
   const userRef = useFirestore()
     .collection("users")
@@ -43,6 +44,7 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
   });
   const updateUser = () => {
     userRef.update(formFields);
+    logEvent("user_change_name");
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,15 +53,18 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
   };
   const handleLogout = async () => {
     await auth.signOut();
+    logEvent("user_logout");
     push("/?kthx=bye");
   };
   const handleDeleteUser = async () => {
+    logEvent("user_delete_click");
     if (
       window.confirm(
         'Er du helt sikker på at du vil slette brukeren din?\n\nSjauene du har opprettet blir ikke slettet, men du vil bli fjernet som "eier".'
       )
     ) {
       try {
+        logEvent("user_delete_click_conform");
         await userRef.delete();
         await auth.currentUser?.delete();
       } finally {

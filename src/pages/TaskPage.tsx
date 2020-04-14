@@ -30,6 +30,7 @@ import { CommentSection } from "../components/CommentSection";
 import { EditableDescription } from "../components/EditableDescription";
 import { useParticipation } from "../hooks/useParticipation";
 import { Layout } from "../components/Layout";
+import { useAnalytics } from "reactfire";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -39,6 +40,7 @@ const WomanWinning = React.lazy(() =>
 );
 
 export const TaskPage: React.FC = () => {
+  const { logEvent } = useAnalytics();
   const { dugnadId, taskId } = useParams();
   const task = useTask(dugnadId, taskId);
   const taskRef = useTaskRef(dugnadId, taskId);
@@ -49,42 +51,50 @@ export const TaskPage: React.FC = () => {
   const [isEditingDescription, setEditingDescription] = React.useState(false);
   const { participate } = useParticipation(dugnadId!);
 
-  const isAssignedToSelf = assignedUsers.some(user => user.uid === user!.uid);
+  const isAssignedToSelf = assignedUsers.some(
+    assignedUser => assignedUser?.uid === user?.uid
+  );
   const isCreatedBySelf = user?.uid === author?.uid;
 
   const handleDone = () => {
     taskRef.update({
       status: "done"
     });
+    logEvent("task_status_done");
   };
   const handleReset = () => {
     taskRef.update({
       status: "idle",
       assignedUsers: []
     });
+    logEvent("task_status_reset");
   };
   const handleDelete = async () => {
+    logEvent("task_delete_click");
     if (
       window.confirm(
         "Er du sikker på at du vil slette denne oppgaven?\n\nVi har ikke noen angrefunksjonalitet enda, så du vil ikke kunne gjenopprette hverken oppgaven eller kommentarene."
       )
     ) {
       taskRef.delete();
+      logEvent("task_delete_click_confirm");
       replace(`/sjau/${dugnadId}`);
     }
   };
   const handleEditDescription = (description: string) => {
     setEditingDescription(false);
     taskRef.update({ description });
+    logEvent("edit_task_description");
   };
   const handleEditTitle = (title: string) => {
     taskRef.update({ title });
+    logEvent("edit_task_title");
   };
   const handleJoinOrLeave = () => {
     const assignedUsers = isAssignedToSelf
       ? task.assignedUsers.filter(assignedUser => assignedUser !== user!.uid)
       : [...task.assignedUsers, user!.uid];
-
+    logEvent(isAssignedToSelf ? "leave_task" : "join_task");
     taskRef.update({
       assignedUsers,
       status: assignedUsers.length === 0 ? "idle" : "in progress"

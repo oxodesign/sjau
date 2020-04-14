@@ -42,7 +42,7 @@ export const OverviewPage: React.FC = () => {
             <FadeIn initial="hiddenFromLeft">
               <Stack spacing={6}>
                 <Heading as="h1" wordBreak="break-all" maxWidth="100%">
-                  Velkommen, {user?.name.split(" ")[0]}!
+                  Velkommen, {user?.name.split(" ")[0] || "sjef"}!
                 </Heading>
                 <Text>Det er flott at du er med å ta i et tak!</Text>
                 {hasMadeOrParticipatedInDugnad ? (

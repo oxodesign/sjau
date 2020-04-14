@@ -16,6 +16,7 @@ import { useUser, useUsersById } from "../hooks/useUser";
 import { motion } from "framer-motion";
 import WomanWinning from "./illustrations/WomanWinning";
 import { StrongText } from "./StrongText";
+import { useAnalytics } from "reactfire";
 
 const variants = {
   visible: {
@@ -41,6 +42,7 @@ type TaskListProps = {
 
 type CurrentFilterType = "all" | "available" | "your own";
 export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
+  const { logEvent } = useAnalytics();
   const [currentFilter, setCurrentFilter] = React.useState<CurrentFilterType>(
     "all"
   );
@@ -116,7 +118,11 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
         value={currentFilter}
         px={6}
         isInline
-        onChange={e => setCurrentFilter(e.target.value as CurrentFilterType)}
+        onChange={e => {
+          const currentFilter = e.target.value as CurrentFilterType;
+          setCurrentFilter(currentFilter);
+          logEvent("change_task_filter", { currentFilter });
+        }}
       >
         <Radio value="all">Alle oppgaver</Radio>
         <Radio value="available">Bare ledige oppgaver</Radio>

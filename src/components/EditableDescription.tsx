@@ -9,6 +9,7 @@ import {
   FormLabel,
   BoxProps
 } from "@chakra-ui/core";
+import { useAnalytics } from "reactfire";
 type EditableDescriptionProps = Overwrite<
   BoxProps,
   {
@@ -26,16 +27,19 @@ export const EditableDescription: React.FC<EditableDescriptionProps> = ({
   ...rest
 }) => {
   const [value, setValue] = React.useState(defaultValue);
+  const { logEvent } = useAnalytics();
   React.useEffect(() => {
     setValue(defaultValue);
   }, [defaultValue]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    logEvent("edit_task_description");
     onSubmit(value);
   };
   const handleBlur = () => {
     onSubmit(value);
+    logEvent("edit_task_description");
   };
   if (isEditing) {
     return (

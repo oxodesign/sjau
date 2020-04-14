@@ -75,22 +75,6 @@ export const LandingPage = () => {
               </AuthCheck>
             </Button>
           </ButtonGroup>
-          {justLoggedOut && (
-            <Text
-              color="white"
-              bg="rgba(0,0,0,0.5)"
-              shadow="md"
-              p={6}
-              rounded="md"
-              width="fit-content"
-              mx="auto"
-            >
-              Hilsen Sjau-gjengen{" "}
-              <span role="img" aria-label="vink">
-                👋
-              </span>
-            </Text>
-          )}
         </Stack>
       </Splash>
       <Flex
