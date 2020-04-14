@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { MdSettings } from "react-icons/md";
 import { SiteSettings } from "./SiteSettings";
 import { FadeIn } from "./FadeIn";
-import { AuthCheck } from "reactfire";
+import { useAuth } from "reactfire";
 
 export const SiteHeader: React.FC = () => {
   const [isSettingsDrawerOpen, setSettingsDrawerOpen] = React.useState(false);
+  const isLoggedIn = !!useAuth().currentUser;
   return (
     <FadeIn initial="hiddenFromTop" exit="hiddenFromTop">
       <Flex
@@ -20,23 +21,25 @@ export const SiteHeader: React.FC = () => {
         position="relative"
       >
         <Heading as="h1">
-          <Link to="/oversikt">Sjau</Link>
+          <Link to={isLoggedIn ? "/oversikt" : "/"}>Sjau</Link>
         </Heading>
-        <AuthCheck fallback={null}>
-          <IconButton
-            icon={MdSettings}
-            aria-label="Flere valg"
-            variant="ghost"
-            position="absolute"
-            right={[3, 3, 6]}
-            size="lg"
-            onClick={() => setSettingsDrawerOpen(prev => !prev)}
-          />
-          <SiteSettings
-            isOpen={isSettingsDrawerOpen}
-            onClose={() => setSettingsDrawerOpen(false)}
-          />
-        </AuthCheck>
+        {isLoggedIn && (
+          <>
+            <IconButton
+              icon={MdSettings}
+              aria-label="Flere valg"
+              variant="ghost"
+              position="absolute"
+              right={[3, 3, 6]}
+              size="lg"
+              onClick={() => setSettingsDrawerOpen(prev => !prev)}
+            />
+            <SiteSettings
+              isOpen={isSettingsDrawerOpen}
+              onClose={() => setSettingsDrawerOpen(false)}
+            />
+          </>
+        )}
       </Flex>
     </FadeIn>
   );
