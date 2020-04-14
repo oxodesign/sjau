@@ -23,10 +23,7 @@ import step3Src from "../images/steg-3.png";
 import { SiteFooter } from "../components/SiteFooter";
 import WomanWinning from "../components/illustrations/WomanWinning";
 import { TextLink } from "../components/TextLink";
-
-const StrongText = (props: BoxProps) => (
-  <Text {...props} as="strong" fontWeight={600} letterSpacing={0.1} />
-);
+import { StrongText } from "../components/StrongText";
 
 const splashImages = [
   "https://images.unsplash.com/photo-1549448046-b89e7214060d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1800&q=80",

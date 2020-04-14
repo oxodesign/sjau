@@ -15,6 +15,7 @@ import { useTasksForDugnad } from "../hooks/useDugnad";
 import { useUser, useUsersById } from "../hooks/useUser";
 import { motion } from "framer-motion";
 import WomanWinning from "./illustrations/WomanWinning";
+import { StrongText } from "./StrongText";
 
 const variants = {
   visible: {
@@ -151,7 +152,14 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
             >
               <Link to={`/dugnad/${dugnadId}/${task.id}`}>
                 <Box p={6}>
-                  <strong>{task.title}</strong>
+                  <StrongText
+                    display="inline-block"
+                    maxHeight="200px"
+                    wordBreak="break-word"
+                    overflowY="hidden"
+                  >
+                    {task.title}
+                  </StrongText>
                   <br />
                   <TaskStatusBadge
                     status={task.status}
