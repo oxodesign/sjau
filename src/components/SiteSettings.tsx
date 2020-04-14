@@ -13,12 +13,15 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Box
+  Box,
+  IconButton,
+  Flex
 } from "@chakra-ui/core";
 import { useAuth, useFirestore } from "reactfire";
 import { useFormFields } from "../hooks/useFormFields";
 import { useUser } from "../hooks/useUser";
 import { useHistory } from "react-router-dom";
+import { MdCheck } from "react-icons/md";
 
 type SiteSettingsProps = {
   isOpen: boolean;
@@ -71,17 +74,26 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
         <DrawerCloseButton />
         <DrawerHeader>Innstillinger</DrawerHeader>
         <DrawerBody>
-          <Stack spacing={6}>
+          <Stack spacing={12}>
             <Box as="form" onSubmit={handleSubmit}>
-              <FormControl>
-                <FormLabel id="name">Hva heter du?</FormLabel>
-                <Input
-                  id="name"
-                  value={formFields.name}
-                  onChange={createChangeHandler("name")}
-                  onBlur={updateUser}
+              <Flex justifyContent="space-between" alignItems="flex-end">
+                <FormControl>
+                  <FormLabel id="name">Hva heter du?</FormLabel>
+                  <Input
+                    id="name"
+                    value={formFields.name}
+                    onChange={createChangeHandler("name")}
+                    onBlur={updateUser}
+                  />
+                </FormControl>
+                <IconButton
+                  icon={MdCheck}
+                  aria-label="Lagre"
+                  variant="solid"
+                  variantColor="green"
+                  type="submit"
                 />
-              </FormControl>
+              </Flex>
             </Box>
             <ButtonGroup>
               <Button
