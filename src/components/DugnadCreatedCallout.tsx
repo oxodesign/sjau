@@ -6,11 +6,10 @@ import {
   Button,
   useClipboard,
   Stack,
-  IconButton,
-  ButtonGroup
+  ButtonGroup,
 } from "@chakra-ui/core";
 import { motion } from "framer-motion";
-import { MdContentCopy, MdClose } from "react-icons/md";
+import { MdContentCopy } from "react-icons/md";
 import { useAnalytics } from "reactfire";
 
 type DugnadCreatedCalloutProps = {
@@ -20,20 +19,16 @@ type DugnadCreatedCalloutProps = {
 
 const variants = {
   hidden: { scale: 0.5, opacity: 0 },
-  visible: { scale: 1, opacity: 1, transition: { type: "spring" } }
+  visible: { scale: 1, opacity: 1, transition: { type: "spring" } },
 };
 
 export const DugnadCreatedCallout: React.FC<DugnadCreatedCalloutProps> = ({
   dugnadId,
-  isFirstTime
+  isFirstTime,
 }) => {
   const url = `https://sjau.no/sjau/${dugnadId}`;
   const { onCopy, hasCopied } = useClipboard(url);
   const { logEvent } = useAnalytics();
-  const [isClosed, setClosed] = React.useState(false);
-  if (isClosed) {
-    return null;
-  }
 
   return (
     <motion.div variants={variants} initial="hidden" animate="visible">
@@ -46,16 +41,6 @@ export const DugnadCreatedCallout: React.FC<DugnadCreatedCalloutProps> = ({
         my={6}
         p={6}
       >
-        <IconButton
-          icon={MdClose}
-          position="absolute"
-          variant="ghost"
-          bg="transparent"
-          top={4}
-          right={3}
-          aria-label="Lukk boksen"
-          onClick={() => setClosed(true)}
-        />
         <Stack spacing={6}>
           <Heading fontSize="xl">
             Gratulerer med {isFirstTime ? "din aller første" : "nok en"} sjau!{" "}
