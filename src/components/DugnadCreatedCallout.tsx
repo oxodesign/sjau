@@ -4,13 +4,13 @@ import {
   Heading,
   Text,
   Button,
-  useClipboard,
   Stack,
   ButtonGroup,
 } from "@chakra-ui/core";
 import { motion } from "framer-motion";
 import { MdContentCopy } from "react-icons/md";
 import { useAnalytics } from "reactfire";
+import useShare from "use-share";
 
 type DugnadCreatedCalloutProps = {
   dugnadId: string;
@@ -27,7 +27,11 @@ export const DugnadCreatedCallout: React.FC<DugnadCreatedCalloutProps> = ({
   isFirstTime,
 }) => {
   const url = `https://sjau.no/sjau/${dugnadId}`;
-  const { onCopy, hasCopied } = useClipboard(url);
+  const { share, hasShared } = useShare({
+    title: "Sjekk ut sjauen vår",
+    text: "Jeg har laget en sjau for oss!",
+    url,
+  });
   const { logEvent } = useAnalytics();
 
   return (
@@ -62,14 +66,12 @@ export const DugnadCreatedCallout: React.FC<DugnadCreatedCalloutProps> = ({
               variantColor="green"
               leftIcon={MdContentCopy}
               onClick={() => {
-                if (onCopy) {
-                  onCopy();
-                }
+                share();
                 logEvent("copy_url_button_click");
               }}
-              isDisabled={hasCopied}
+              isDisabled={hasShared}
             >
-              {hasCopied ? "Kopiert!" : "Klikk her for å kopiere"}
+              {hasShared ? "Kopiert!" : "Klikk her for å kopiere"}
             </Button>
           </ButtonGroup>
         </Stack>

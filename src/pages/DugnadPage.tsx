@@ -9,7 +9,6 @@ import {
   Collapse,
   Button,
   ButtonGroup,
-  useClipboard
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
 import { AddTask } from "../components/AddTask";
@@ -18,7 +17,7 @@ import { useDugnad, useUserDugnads } from "../hooks/useDugnad";
 import { BackLink } from "../components/BackLink";
 import { FadeIn } from "../components/FadeIn";
 import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
-import { MdCheck, MdExitToApp, MdContentCopy } from "react-icons/md";
+import { MdExitToApp } from "react-icons/md";
 import { GiSpade } from "react-icons/gi";
 import { DugnadTiming } from "../components/DugnadTiming";
 import { useUser } from "../hooks/useUser";
@@ -27,6 +26,7 @@ import { Layout } from "../components/Layout";
 import { usePersistedState } from "../hooks/usePersistedState";
 import { EditDugnad } from "../components/EditDugnad";
 import { useAnalytics } from "reactfire";
+import { YoureParticipating } from "../components/YoureParticipating";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -40,7 +40,7 @@ export const DugnadPage = () => {
   const { dugnadId } = useParams();
   const dugnad = useDugnad(dugnadId);
   const user = useUser();
-  const { search, pathname } = useLocation();
+  const { search } = useLocation();
   const dugnadsForUser = useUserDugnads(user?.uid);
   const [isEditing, setEditing] = React.useState(false);
 
@@ -52,7 +52,6 @@ export const DugnadPage = () => {
   const { isParticipatingInDugnad, toggleParticipation } = useParticipation(
     dugnadId!
   );
-  const { onCopy, hasCopied } = useClipboard(`https://sjau.no${pathname}`);
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -89,6 +88,10 @@ export const DugnadPage = () => {
       </Layout>
     );
   }
+
+  const showJoinButton = !isParticipatingInDugnad && !ownsDugnad;
+  const showYoureParticipatingButton = isParticipatingInDugnad && !ownsDugnad;
+  const showLeaveButton = isParticipatingInDugnad && !ownsDugnad;
 
   return (
     <Layout
@@ -130,43 +133,8 @@ export const DugnadPage = () => {
                 ownsDugnad={ownsDugnad}
               />
               <Box my={3}>
-                {isParticipatingInDugnad && !justCreatedDugnad && (
-                  <Flex
-                    bg="green.100"
-                    borderColor="green.500"
-                    borderWidth="1px"
-                    rounded="md"
-                    shadow="md"
-                    flexDirection={["column", "column", "row"]}
-                    alignItems="center"
-                    justifyContent={["center", "center", "space-between"]}
-                    py={3}
-                    px={6}
-                  >
-                    <Box>
-                      Du er med på denne sjauen!{" "}
-                      <span role="img" aria-label="Hurra for deg">
-                        🎉
-                      </span>
-                    </Box>
-                    <Button
-                      variant="solid"
-                      variantColor="green"
-                      size="sm"
-                      rightIcon={hasCopied ? MdCheck : MdContentCopy}
-                      onClick={() => {
-                        if (onCopy) {
-                          onCopy();
-                          logEvent("copy_url_button_click");
-                        }
-                      }}
-                      m={[3, 3, 0]}
-                    >
-                      {hasCopied ? "Kopiert URL!" : "Inviter flere til å delta"}
-                    </Button>
-                  </Flex>
-                )}
-                {!isParticipatingInDugnad && !ownsDugnad && (
+                {showYoureParticipatingButton && <YoureParticipating />}
+                {showJoinButton && (
                   <Button
                     variant="solid"
                     variantColor="green"
@@ -202,13 +170,13 @@ export const DugnadPage = () => {
                   )}
                   <SanitizedMarkdown>{dugnad.description}</SanitizedMarkdown>
                 </Collapse>
-                <ButtonGroup my={3} spacing={3}>
+                <ButtonGroup my={3}>
                   {hasLongDescription && (
                     <Button
                       variant="solid"
                       variantColor="gray"
                       size="xs"
-                      onClick={() => setDescriptionVisible(prev => !prev)}
+                      onClick={() => setDescriptionVisible((prev) => !prev)}
                     >
                       {isDescriptionVisible ? "Skjul detaljer" : "Vis mer"}
                     </Button>
@@ -248,7 +216,7 @@ export const DugnadPage = () => {
               <TaskList dugnadId={dugnadId!!} />
             </FadeIn>
           </Box>
-          {isParticipatingInDugnad && (
+          {showLeaveButton && (
             <ButtonGroup>
               <Button
                 size="md"
