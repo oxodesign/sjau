@@ -6,12 +6,8 @@ export const useFormFields = <T>(initialValues: T) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const value = e.target.value;
-    setFormFields(prev => ({ ...prev, [fieldName]: value }));
+    setFormFields((prev) => ({ ...prev, [fieldName]: value }));
   };
-  const reset = () => setFormFields(initialValues);
-  return [formFields, createChangeHandler, reset] as [
-    typeof formFields,
-    typeof createChangeHandler,
-    typeof reset
-  ];
+  const resetFormFields = () => setFormFields(initialValues);
+  return { formFields, createChangeHandler, resetFormFields, setFormFields };
 };

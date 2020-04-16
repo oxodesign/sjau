@@ -9,7 +9,7 @@ import {
   Stack,
   Heading,
   Text,
-  Flex
+  Flex,
 } from "@chakra-ui/core";
 import { FadeIn } from "./FadeIn";
 import { useUser } from "../hooks/useUser";
@@ -23,13 +23,13 @@ type FillOutUserDetailsProps = {
 };
 
 export const FillOutUserDetails: React.FC<FillOutUserDetailsProps> = ({
-  children
+  children,
 }) => {
   const auth = useAuth();
   const uid = auth.currentUser?.uid;
   const displayName = auth.currentUser?.displayName;
-  const [formFields, createChangeHandler] = useFormFields({
-    name: displayName || ""
+  const { formFields, createChangeHandler } = useFormFields({
+    name: displayName || "",
   });
   const firestore = useFirestore();
 

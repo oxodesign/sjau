@@ -1,7 +1,7 @@
 import {
   useFirestore,
   useFirestoreDocData,
-  useFirestoreCollectionData
+  useFirestoreCollectionData,
 } from "reactfire";
 import { UserType } from "./useUser";
 
@@ -12,6 +12,7 @@ export type DugnadType = {
   description?: string;
   startsAt: string;
   endsAt: string;
+  slug?: string;
   participants?: string[];
   tasks: TaskType[];
 };
@@ -29,9 +30,7 @@ export type TaskType = {
 };
 
 export const useDugnadRef = (id?: string) =>
-  useFirestore()
-    .collection("dugnads")
-    .doc(id);
+  useFirestore().collection("dugnads").doc(id);
 
 export const useDugnad = (id?: string): DugnadType =>
   useFirestoreDocData(useDugnadRef(id), { idField: "id" });
@@ -45,15 +44,13 @@ const mapOldTaskToNewTask = ({
   return {
     ...task,
     assignedUser: undefined,
-    assignedUsers: assignedUsers ?? [assignedUser].filter(Boolean)
+    assignedUsers: assignedUsers ?? [assignedUser].filter(Boolean),
   };
 };
 
 export const useTasksForDugnad = (dugnadId?: string) =>
   useFirestoreCollectionData<TaskType>(
-    useDugnadRef(dugnadId)
-      .collection("tasks")
-      .orderBy("status"),
+    useDugnadRef(dugnadId).collection("tasks").orderBy("status"),
     { idField: "id" }
   ).map(mapOldTaskToNewTask);
 
@@ -64,9 +61,7 @@ export const useTask = (dugnadId?: string, taskId?: string) =>
   );
 
 export const useTaskRef = (dugnadId?: string, taskId?: string) =>
-  useDugnadRef(dugnadId)
-    .collection("tasks")
-    .doc(taskId);
+  useDugnadRef(dugnadId).collection("tasks").doc(taskId);
 
 export const useUserDugnads = (userId: string = "") => {
   const dugnadsRef = useFirestore().collection("dugnads");
@@ -78,15 +73,15 @@ export const useUserDugnads = (userId: string = "") => {
     dugnadsRef.where("participants", "array-contains", userId),
     { idField: "id" }
   ).filter(
-    participatedDugnad =>
+    (participatedDugnad) =>
       !ownedDugnads.some(
-        ownedDugnad => ownedDugnad.id === participatedDugnad.id
+        (ownedDugnad) => ownedDugnad.id === participatedDugnad.id
       )
   );
 
   return {
     ownedDugnads,
-    participatedDugnads
+    participatedDugnads,
   };
 };
 
@@ -105,7 +100,7 @@ export const useTaskComments = (dugnadId: string, taskId: string) => {
   );
   // get all unique authors
   let authors = Array.from(
-    new Set(dbComments.map(dbComment => dbComment.author))
+    new Set(dbComments.map((dbComment) => dbComment.author))
   );
   if (authors.length > 10) {
     console.warn(
@@ -118,20 +113,18 @@ export const useTaskComments = (dugnadId: string, taskId: string) => {
     authors = ["non-existent id"];
   }
   const dbAuthors = useFirestoreCollectionData<UserType>(
-    useFirestore()
-      .collection("users")
-      .where("uid", "in", authors)
+    useFirestore().collection("users").where("uid", "in", authors)
   );
 
   return dbComments
-    .map(dbComment => {
+    .map((dbComment) => {
       const author = dbAuthors.find(
-        dbAuthor => dbAuthor.uid === dbComment.author
+        (dbAuthor) => dbAuthor.uid === dbComment.author
       );
       return {
         ...dbComment,
         author: author?.name ?? "Ukjent bruker",
-        authorId: author?.uid
+        authorId: author?.uid,
       };
     })
     .sort((a, b) => {

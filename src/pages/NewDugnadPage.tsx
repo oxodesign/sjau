@@ -16,43 +16,58 @@ import {
   Button,
   ButtonGroup,
   Text,
-  Box
+  Box,
+  FormErrorMessage,
+  InputGroup,
+  InputLeftAddon,
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
 import { FadeIn } from "../components/FadeIn";
 import { Layout } from "../components/Layout";
+import { slugify } from "../utils/slugify";
+import { useSlugAvailability } from "../hooks/useSlugAvailability";
 
 const WomanWinning = React.lazy(() =>
   import("../components/illustrations/WomanWinning")
 );
-
 const Datepicker = React.lazy(() => import("../components/Datepicker"));
 
 export const NewDugnadPage = () => {
-  const [formState, createChangeHandler] = useFormFields({
+  const { formFields, createChangeHandler, setFormFields } = useFormFields({
     name: "",
     description: "",
     startsAt: new Date().toLocaleDateString("fr-CA"),
-    endsAt: addWeeks(new Date(), 1).toLocaleDateString("fr-CA")
+    endsAt: addWeeks(new Date(), 1).toLocaleDateString("fr-CA"),
+    slug: "",
   });
   const dugnadsRef = useFirestore().collection("dugnads");
   const user = useUser();
   const analytics = useAnalytics();
-
   const { push } = useHistory();
+  const [hasTouchedSlug, setTouchedSlug] = React.useState(false);
+  const isSlugAvailable = useSlugAvailability(formFields.slug);
+
+  React.useEffect(() => {
+    // If we haven't changed the slug yet,
+    // update the default slug to a slug version of the name
+    if (!hasTouchedSlug) {
+      setFormFields((prev) => ({ ...prev, slug: slugify(formFields.name) }));
+    }
+  }, [setFormFields, formFields.slug, formFields.name, hasTouchedSlug]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Ghetto validation
-    if (new Date(formState.startsAt) > new Date(formState.endsAt)) {
+    if (new Date(formFields.startsAt) > new Date(formFields.endsAt)) {
       alert("Sjauen må starte før den er over, da!");
       return;
     }
     try {
       const result = await dugnadsRef.add({
-        ...formState,
+        ...formFields,
         author: user!.uid,
-        participants: [user!.uid]
+        participants: [user!.uid],
+        slug: isSlugAvailable ? formFields.slug : null,
       });
       analytics.logEvent("create_sjau");
       push(`/sjau/${result.id}?created`);
@@ -86,7 +101,7 @@ export const NewDugnadPage = () => {
                       Hva vil du kalle sjauen din?
                     </FormLabel>
                     <Input
-                      value={formState.name}
+                      value={formFields.name}
                       id="name"
                       onChange={createChangeHandler("name")}
                       aria-describedby="name-description"
@@ -112,7 +127,7 @@ export const NewDugnadPage = () => {
                     <Textarea
                       id="description"
                       aria-describedby="description-description"
-                      value={formState.description}
+                      value={formFields.description}
                       onChange={createChangeHandler("description")}
                       resize="vertical"
                       placeholder="Velkommen til sjauen vår!"
@@ -133,7 +148,7 @@ export const NewDugnadPage = () => {
                     </FormLabel>
                     <Datepicker
                       id="startsAt"
-                      selected={new Date(formState.startsAt)}
+                      selected={new Date(formFields.startsAt)}
                       onChange={createChangeHandler("startsAt")}
                     />
                   </FormControl>
@@ -145,14 +160,44 @@ export const NewDugnadPage = () => {
                     </FormLabel>
                     <Datepicker
                       id="endsAt"
-                      selected={new Date(formState.endsAt)}
+                      selected={new Date(formFields.endsAt)}
                       onChange={createChangeHandler("endsAt")}
-                      minDate={new Date(formState.startsAt)}
-                      aria-describedby="slutter-beskrivelse"
+                      minDate={new Date(formFields.startsAt)}
+                      aria-describedby="endsAt-description"
                     />
-                    <FormHelperText id="slutter-beskrivelse">
+                    <FormHelperText id="endsAt-description">
                       Sjauer fungerer som regel best når man gir folk en litt
                       lengre periode å bidra på. En uke, for eksempel? Eller to?
+                    </FormHelperText>
+                  </FormControl>
+                </Box>
+                <Box>
+                  <FormControl isInvalid={hasTouchedSlug && !isSlugAvailable}>
+                    <FormLabel htmlFor="endsAt" fontWeight="600">
+                      Hva vil du URL-adressen skal være?
+                    </FormLabel>
+                    <InputGroup>
+                      <InputLeftAddon>sjau.no/</InputLeftAddon>
+                      <Input
+                        id="slug"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          createChangeHandler("slug")(e);
+                          setTouchedSlug(true);
+                        }}
+                        value={formFields.slug}
+                        aria-describedby="slug-description"
+                        roundedLeft={0}
+                      />
+                    </InputGroup>
+                    <FormErrorMessage>
+                      Den URLen er ikke tilgjengelig. Prøv en annen!
+                      <br />
+                      Om du vil så kan du også bare la det stå og gå videre for
+                      å hoppe over egen URL.
+                    </FormErrorMessage>
+                    <FormHelperText id="slug-description">
+                      Du kan gi sjauen din en egen adresse, så det er lettere å
+                      dele den med de du vil dele den med.
                     </FormHelperText>
                   </FormControl>
                 </Box>

@@ -15,7 +15,7 @@ import {
   Input,
   Box,
   IconButton,
-  Flex
+  Flex,
 } from "@chakra-ui/core";
 import { useAuth, useFirestore, useAnalytics } from "reactfire";
 import { useFormFields } from "../hooks/useFormFields";
@@ -30,7 +30,7 @@ type SiteSettingsProps = {
 
 export const SiteSettings: React.FC<SiteSettingsProps> = ({
   isOpen,
-  onClose
+  onClose,
 }) => {
   const auth = useAuth();
   const { push } = useHistory();
@@ -39,8 +39,8 @@ export const SiteSettings: React.FC<SiteSettingsProps> = ({
   const userRef = useFirestore()
     .collection("users")
     .doc(auth.currentUser?.uid ?? "");
-  const [formFields, createChangeHandler] = useFormFields({
-    name: user?.name ?? ""
+  const { formFields, createChangeHandler } = useFormFields({
+    name: user?.name ?? "",
   });
   const updateUser = () => {
     userRef.update(formFields);

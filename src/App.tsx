@@ -1,8 +1,9 @@
 import React from "react";
-import { Switch, Redirect, useLocation } from "react-router-dom";
+import { Switch, Redirect, useLocation, useParams } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { AnimatedRoute } from "./components/AnimatedRoute";
 import { useAnalytics } from "reactfire";
+import { useDugnadFromSlug } from "./hooks/useDugnadFromSlug";
 
 const NewDugnadPage = React.lazy(() => import("./pages/NewDugnadPage"));
 const DugnadPage = React.lazy(() => import("./pages/DugnadPage"));
@@ -10,6 +11,16 @@ const OverviewPage = React.lazy(() => import("./pages/OverviewPage"));
 const TaskPage = React.lazy(() => import("./pages/TaskPage"));
 const LandingPage = React.lazy(() => import("./pages/LandingPage"));
 const PrivacyPage = React.lazy(() => import("./pages/PrivacyPage"));
+const NotFoundPage = React.lazy(() => import("./pages/NotFoundPage"));
+
+const RedirectFromSlugToDugnadId = () => {
+  const { dugnadSlug } = useParams();
+  const dugnad = useDugnadFromSlug(dugnadSlug!);
+  if (dugnad) {
+    return <Redirect to={`/sjau/${dugnad.id}`} />;
+  }
+  return <NotFoundPage />;
+};
 
 export const App: React.FC = () => {
   useAnalytics();
@@ -40,6 +51,9 @@ export const App: React.FC = () => {
             <LandingPage />
           </AnimatedRoute>
           <Redirect from="/dugnad/*" to="/sjau/*" />
+          <AnimatedRoute path="/:dugnadSlug">
+            <RedirectFromSlugToDugnadId />
+          </AnimatedRoute>
           <Redirect to="/" />
         </Switch>
       </AnimatePresence>

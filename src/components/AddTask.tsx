@@ -8,7 +8,7 @@ import {
   Input,
   Textarea,
   Button,
-  Stack
+  Stack,
 } from "@chakra-ui/core";
 import { useAnalytics } from "reactfire";
 import { useParticipation } from "../hooks/useParticipation";
@@ -18,9 +18,9 @@ type AddTaskProps = {
 };
 
 export const AddTask: React.FC<AddTaskProps> = ({ dugnadId }) => {
-  const [formState, createChangeHandler, resetFormFields] = useFormFields({
+  const { formFields, createChangeHandler, resetFormFields } = useFormFields({
     title: "",
-    description: ""
+    description: "",
   });
 
   const dugnadRef = useDugnadRef(dugnadId);
@@ -33,7 +33,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ dugnadId }) => {
     e.preventDefault();
     await dugnadRef
       .collection("tasks")
-      .add({ ...formState, author: user!.uid, status: "idle" });
+      .add({ ...formFields, author: user!.uid, status: "idle" });
     analytics.logEvent("add_task", { dugnadId });
     resetFormFields();
     titleRef.current?.focus();
@@ -47,7 +47,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ dugnadId }) => {
           <FormLabel htmlFor="title">Hva skal gjøres?</FormLabel>
           <Input
             id="title"
-            value={formState.title}
+            value={formFields.title}
             onChange={createChangeHandler("title")}
             placeholder="Rydde opp i kjelleren"
             ref={titleRef}
@@ -58,7 +58,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ dugnadId }) => {
           <FormLabel htmlFor="description">Flere detaljer?</FormLabel>
           <Textarea
             id="description"
-            value={formState.description}
+            value={formFields.description}
             onChange={createChangeHandler("description")}
             placeholder="Alt som ikke er innelåst kan kastes i containeren"
           />

@@ -11,13 +11,18 @@ import {
   ButtonGroup,
   Button,
   Heading,
-  Text
+  Text,
+  InputGroup,
+  InputLeftAddon,
+  FormErrorMessage,
 } from "@chakra-ui/core";
 import Datepicker from "./Datepicker";
 import { useFormFields } from "../hooks/useFormFields";
 import { MdCheck, MdDeleteForever } from "react-icons/md";
 import { useHistory } from "react-router-dom";
 import { useAnalytics } from "reactfire";
+import { useSlugAvailability } from "../hooks/useSlugAvailability";
+import { slugify } from "../utils/slugify";
 
 type EditDugnadProps = DugnadType & {
   onSubmit: () => void;
@@ -31,27 +36,35 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
   startsAt,
   endsAt,
   onSubmit,
-  ownsDugnad
+  ownsDugnad,
+  slug,
 }) => {
-  const [formState, createChangeHandler] = useFormFields({
+  const { formFields, createChangeHandler } = useFormFields({
     name,
     description,
     startsAt,
-    endsAt
+    endsAt,
+    slug: slug || slugify(name),
   });
   const { replace } = useHistory();
   const { logEvent } = useAnalytics();
   const dugnadRef = useDugnadRef(id);
+  const [hasTouchedSlug, setTouchedSlug] = React.useState(false);
+
+  const isSlugAvailable = useSlugAvailability(formFields.slug, [slug]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Ghetto validation
-    if (new Date(formState.startsAt) > new Date(formState.endsAt)) {
+    if (new Date(formFields.startsAt) > new Date(formFields.endsAt)) {
       alert("Sjauen må starte før den er over, da!");
       return;
     }
     logEvent("edit_sjau");
-    dugnadRef.update(formState);
+    dugnadRef.update({
+      ...formFields,
+      slug: isSlugAvailable ? formFields.slug : null,
+    });
     onSubmit();
   };
   const handleDeleteDugnad = () => {
@@ -75,7 +88,7 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
             Navn
           </FormLabel>
           <Input
-            value={formState.name}
+            value={formFields.name}
             id="name"
             onChange={createChangeHandler("name")}
             aria-describedby="name-description"
@@ -94,7 +107,7 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
           <Textarea
             id="description"
             aria-describedby="description-description"
-            value={formState.description}
+            value={formFields.description}
             onChange={createChangeHandler("description")}
             resize="vertical"
             placeholder="Velkommen til sjauen vår!"
@@ -112,7 +125,7 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
           </FormLabel>
           <Datepicker
             id="startsAt"
-            selected={new Date(formState.startsAt)}
+            selected={new Date(formFields.startsAt)}
             onChange={createChangeHandler("startsAt")}
           />
         </FormControl>
@@ -123,9 +136,9 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
           </FormLabel>
           <Datepicker
             id="endsAt"
-            selected={new Date(formState.endsAt)}
+            selected={new Date(formFields.endsAt)}
             onChange={createChangeHandler("endsAt")}
-            minDate={new Date(formState.startsAt)}
+            minDate={new Date(formFields.startsAt)}
             aria-describedby="slutter-beskrivelse"
           />
           <FormHelperText id="slutter-beskrivelse">
@@ -133,6 +146,39 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
             periode å bidra på. En uke, for eksempel? Eller to?
           </FormHelperText>
         </FormControl>
+        <Box>
+          <FormControl>
+            <FormLabel htmlFor="endsAt" fontWeight="600">
+              Hva vil du URL-adressen skal være?
+            </FormLabel>
+            <InputGroup>
+              <InputLeftAddon>sjau.no/</InputLeftAddon>
+              <Input
+                id="slug"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  createChangeHandler("slug")(e);
+                  setTouchedSlug(true);
+                }}
+                isInvalid={hasTouchedSlug && !isSlugAvailable}
+                value={formFields.slug}
+                aria-describedby="slug-description"
+                roundedLeft={0}
+              />
+            </InputGroup>
+            {!isSlugAvailable && (
+              <FormErrorMessage>
+                Den URLen er ikke tilgjengelig. Prøv en annen!
+                <br />
+                Om du vil så kan du også bare la det stå og gå videre for å
+                hoppe over egen URL.
+              </FormErrorMessage>
+            )}
+            <FormHelperText id="slug-description">
+              Du kan gi sjauen din en egen adresse, så det er lettere å dele den
+              med de du vil dele den med.
+            </FormHelperText>
+          </FormControl>
+        </Box>
         <ButtonGroup>
           <Button
             type="submit"
