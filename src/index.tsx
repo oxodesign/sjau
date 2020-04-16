@@ -10,10 +10,12 @@ import App from "./App";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { StandaloneSpinner } from "./components/StandaloneSpinner";
 
-Sentry.init({
-  dsn:
-    "https://a8059afe0d95413c845cfeeb6209b0a3@o377848.ingest.sentry.io/5200511"
-});
+if (process.env.NODE_ENV === "production") {
+  Sentry.init({
+    dsn:
+      "https://a8059afe0d95413c845cfeeb6209b0a3@o377848.ingest.sentry.io/5200511",
+  });
+}
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -23,7 +25,7 @@ const firebaseConfig = {
   storageBucket: "distribuert-dugnad.appspot.com",
   messagingSenderId: "194120926162",
   appId: "1:194120926162:web:3288095c3a2ea5e9967e0b",
-  measurementId: "G-6VEEVQ5K8F"
+  measurementId: "G-6VEEVQ5K8F",
 };
 
 const rootEl = document.getElementById("root") as HTMLElement;
