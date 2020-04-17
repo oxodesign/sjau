@@ -4,6 +4,7 @@ import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { useLocation } from "react-router-dom";
 import ogImageSrc from "../images/og-image.jpg";
+import { Flex, Box } from "@chakra-ui/core";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ type LayoutProps = {
 export const Layout: React.FC<LayoutProps> = ({
   title,
   description = "Gjennomfør dugnader over tid med en sjau",
-  children
+  children,
 }) => {
   const { pathname } = useLocation();
   React.useEffect(() => {
@@ -35,9 +36,13 @@ export const Layout: React.FC<LayoutProps> = ({
         <meta name="twitter:image" content={ogImageSrc} />
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
-      <SiteHeader />
-      <main>{children}</main>
-      <SiteFooter />
+      <Flex flexDirection="column" minHeight="100vh">
+        <SiteHeader />
+        <Box as="main" flex="1">
+          {children}
+        </Box>
+        <SiteFooter />
+      </Flex>
     </div>
   );
 };
