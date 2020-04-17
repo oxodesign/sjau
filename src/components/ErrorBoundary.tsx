@@ -4,6 +4,7 @@ import { MdRefresh } from "react-icons/md";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { useAnalytics } from "reactfire";
 import * as firebase from "firebase/app";
+import { Container } from "./Container";
 
 type ErrorBoundaryProps = {
   analytics: firebase.analytics.Analytics;
@@ -18,7 +19,7 @@ class ErrorBoundary extends React.Component<
 > {
   state = {
     hasError: false,
-    error: null
+    error: null,
   };
   static getDerivedStateFromError(error: any) {
     return { hasError: true, error };
@@ -26,7 +27,7 @@ class ErrorBoundary extends React.Component<
   componentDidCatch(error: Error) {
     this.props.analytics.logEvent("error_occurred", {
       name: error.name,
-      message: error.message
+      message: error.message,
     });
   }
   render() {
@@ -34,32 +35,38 @@ class ErrorBoundary extends React.Component<
       return this.props.children;
     }
     return (
-      <Box>
-        <Heading>Ojsann..</Heading>
-        <Text>
-          Nå var det noe uventa som skjedde. Vi har sagt ifra automatisk, så om
-          ting ikke skulle fungere etter du har lastet siden på nytt, så prøv
-          igjen litt senere.
-        </Text>
-        <ButtonGroup spacing={3}>
-          <Button
-            variant="outline"
-            variantColor="red"
-            leftIcon={FaExclamationTriangle}
-            onClick={() => this.setState({ hasError: false, error: null })}
-          >
-            Prøv en gang til
-          </Button>
-          <Button
-            variant="solid"
-            variantColor="red"
-            leftIcon={MdRefresh}
-            onClick={() => window.location.reload()}
-          >
-            Last siden på nytt
-          </Button>
-        </ButtonGroup>
-      </Box>
+      <Container>
+        <Box>
+          <Heading>Ojsann..</Heading>
+          <Text>
+            Nå var det noe uventa som skjedde. Vi har sagt ifra automatisk, så
+            om ting ikke skulle fungere etter du har lastet siden på nytt, så
+            prøv igjen litt senere.
+          </Text>
+          <Text>
+            Det kan hende at det har kommet en ny versjon av appen siden du gikk
+            inn på appen - og da pleier det å fikse seg med en refresh!
+          </Text>
+          <ButtonGroup spacing={3}>
+            <Button
+              variant="outline"
+              variantColor="red"
+              leftIcon={FaExclamationTriangle}
+              onClick={() => this.setState({ hasError: false, error: null })}
+            >
+              Prøv en gang til
+            </Button>
+            <Button
+              variant="solid"
+              variantColor="red"
+              leftIcon={MdRefresh}
+              onClick={() => window.location.reload()}
+            >
+              Last siden på nytt
+            </Button>
+          </ButtonGroup>
+        </Box>
+      </Container>
     );
   }
 }
