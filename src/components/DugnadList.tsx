@@ -4,6 +4,8 @@ import { Stack, Heading, SimpleGrid, Box, Text } from "@chakra-ui/core";
 import { Link } from "react-router-dom";
 import isPast from "date-fns/isPast";
 import isFuture from "date-fns/isFuture";
+import formatDate from "date-fns/format";
+import nbLocale from "date-fns/locale/nb";
 
 type DugnadListProps = {
   title: string;
@@ -33,12 +35,21 @@ export const DugnadList: React.FC<DugnadListProps> = ({ title, dugnads }) => {
             borderLeftColor={isActive(dugnad) ? "#76a73d" : "transparent"}
           >
             {dugnad.name}
-            {isActive && (
+            {isActive(dugnad) && (
               <Text fontSize="sm" color="gray.700">
                 Foregår nå!{" "}
                 <span role="img" aria-label="Muskelarm">
                   💪
                 </span>
+              </Text>
+            )}
+            {isFuture(new Date(dugnad.startsAt)) && (
+              <Text fontSize="sm" color="gray.700">
+                Starter{" "}
+                {formatDate(new Date(dugnad.startsAt), "EEEE d. MMMM", {
+                  locale: nbLocale,
+                })}
+                !
               </Text>
             )}
           </Box>
