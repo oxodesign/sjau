@@ -18,7 +18,6 @@ import { BackLink } from "../components/BackLink";
 import { FadeIn } from "../components/FadeIn";
 import { DugnadCreatedCallout } from "../components/DugnadCreatedCallout";
 import { MdExitToApp } from "react-icons/md";
-import { GiSpade } from "react-icons/gi";
 import { DugnadTiming } from "../components/DugnadTiming";
 import { useUser } from "../hooks/useUser";
 import { useParticipation } from "../hooks/useParticipation";
@@ -26,7 +25,7 @@ import { Layout } from "../components/Layout";
 import { usePersistedState } from "../hooks/usePersistedState";
 import { EditDugnad } from "../components/EditDugnad";
 import { useAnalytics } from "reactfire";
-import { YoureParticipating } from "../components/YoureParticipating";
+import { Participation } from "../components/Participation";
 
 const SanitizedMarkdown = React.lazy(() =>
   import("../components/SanitizedMarkdown")
@@ -89,8 +88,7 @@ export const DugnadPage = () => {
     );
   }
 
-  const showJoinButton = !isParticipatingInDugnad && !ownsDugnad;
-  const showYoureParticipatingButton = isParticipatingInDugnad && !ownsDugnad;
+  const showYoureParticipatingButton = true;
   const showLeaveButton = isParticipatingInDugnad && !ownsDugnad;
 
   return (
@@ -135,17 +133,11 @@ export const DugnadPage = () => {
               />
               <Box my={3}>
                 {showYoureParticipatingButton && (
-                  <YoureParticipating dugnadId={dugnadId!} slug={dugnad.slug} />
-                )}
-                {showJoinButton && (
-                  <Button
-                    variant="solid"
-                    variantColor="green"
-                    leftIcon={GiSpade}
-                    onClick={toggleParticipation}
-                  >
-                    Bli med!
-                  </Button>
+                  <Participation
+                    dugnadId={dugnadId!}
+                    slug={dugnad.slug}
+                    participants={dugnad.participants}
+                  />
                 )}
               </Box>
               <React.Suspense

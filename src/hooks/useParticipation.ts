@@ -10,13 +10,17 @@ export const useParticipation = (dugnadId: string) => {
 
   const participate = () =>
     currentDugnadRef.update({
-      participants: [...(currentDugnad.participants || []), userId]
+      participants: Array.from(
+        new Set([...(currentDugnad.participants || []), userId])
+      ),
     });
 
   const toggleParticipation = () => {
     if (isParticipatingInDugnad) {
       currentDugnadRef.update({
-        participants: currentDugnad?.participants?.filter(id => id !== userId)
+        participants: currentDugnad?.participants?.filter(
+          (id) => id !== userId
+        ),
       });
     } else {
       participate();
@@ -25,6 +29,6 @@ export const useParticipation = (dugnadId: string) => {
   return {
     isParticipatingInDugnad,
     toggleParticipation,
-    participate
+    participate,
   };
 };
