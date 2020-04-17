@@ -14,6 +14,7 @@ import useShare from "use-share";
 
 type DugnadCreatedCalloutProps = {
   dugnadId: string;
+  slug?: string;
   isFirstTime: boolean;
 };
 
@@ -25,8 +26,9 @@ const variants = {
 export const DugnadCreatedCallout: React.FC<DugnadCreatedCalloutProps> = ({
   dugnadId,
   isFirstTime,
+  slug,
 }) => {
-  const url = `https://sjau.no/sjau/${dugnadId}`;
+  const url = `https://sjau.no/${slug ? slug : `sjau/${dugnadId}`}`;
   const { share, hasShared } = useShare({
     title: "Sjekk ut sjauen vår",
     text: "Jeg har laget en sjau for oss!",

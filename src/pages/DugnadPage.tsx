@@ -123,6 +123,7 @@ export const DugnadPage = () => {
                 <DugnadCreatedCallout
                   isFirstTime={dugnadsForUser.ownedDugnads.length === 1}
                   dugnadId={dugnadId!}
+                  slug={dugnad.slug}
                 />
               )}
               <Heading as="h1">{dugnad.name}</Heading>
