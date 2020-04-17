@@ -1,16 +1,22 @@
 import React from "react";
 import { useAnalytics } from "reactfire";
 import { Flex, Box, Button } from "@chakra-ui/core";
-import { useLocation } from "react-router-dom";
 import { MdCheck, MdContentCopy } from "react-icons/md";
 import useShare from "use-share";
 
-export const YoureParticipating: React.FC = () => {
-  const { pathname } = useLocation();
+type YoureParticipatingProps = {
+  dugnadId: string;
+  slug?: string;
+};
+
+export const YoureParticipating: React.FC<YoureParticipatingProps> = ({
+  dugnadId,
+  slug,
+}) => {
   const { share, hasShared } = useShare({
     title: "Bli med å sjau!",
     text: "Sjekk ut denne sjauen jeg er med på!",
-    url: `https://sjau.no${pathname}`,
+    url: `https://sjau.no/${slug ?? `sjau/${dugnadId}`}`,
   });
   const { logEvent } = useAnalytics();
   return (

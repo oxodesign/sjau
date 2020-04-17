@@ -28,7 +28,7 @@ export const DugnadCreatedCallout: React.FC<DugnadCreatedCalloutProps> = ({
   isFirstTime,
   slug,
 }) => {
-  const url = `https://sjau.no/${slug ? slug : `sjau/${dugnadId}`}`;
+  const url = `https://sjau.no/${slug ?? `sjau/${dugnadId}`}`;
   const { share, hasShared } = useShare({
     title: "Sjekk ut sjauen vår",
     text: "Jeg har laget en sjau for oss!",

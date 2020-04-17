@@ -134,7 +134,9 @@ export const DugnadPage = () => {
                 ownsDugnad={ownsDugnad}
               />
               <Box my={3}>
-                {showYoureParticipatingButton && <YoureParticipating />}
+                {showYoureParticipatingButton && (
+                  <YoureParticipating dugnadId={dugnadId!} slug={dugnad.slug} />
+                )}
                 {showJoinButton && (
                   <Button
                     variant="solid"
