@@ -10,7 +10,7 @@ import {
   Flex,
   List,
   ListItem,
-  ButtonGroup
+  ButtonGroup,
 } from "@chakra-ui/core";
 import { Link as InternalLink } from "react-router-dom";
 import { AuthCheck } from "reactfire";
@@ -28,7 +28,7 @@ const splashImages = [
   "https://images.unsplash.com/photo-1549448046-b89e7214060d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1800&q=80",
   "https://images.unsplash.com/photo-1523301551780-cd17359a95d0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1800&q=80",
   "https://images.unsplash.com/photo-1528092744838-b91de0a10615?ixlib=rb-1.2.1&auto=format&fit=crop&w=1800&q=80",
-  "https://images.unsplash.com/photo-1438109382753-8368e7e1e7cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1800&q=80"
+  "https://images.unsplash.com/photo-1438109382753-8368e7e1e7cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1800&q=80",
 ];
 
 export const LandingPage = () => {
@@ -61,7 +61,7 @@ export const LandingPage = () => {
           </Text>
           <ButtonGroup>
             <Button
-              as={props => <InternalLink to="/oversikt" {...props} />}
+              as={(props) => <InternalLink to="/oversikt" {...props} />}
               variant="solid"
               variantColor="green"
               size="lg"
@@ -100,6 +100,20 @@ export const LandingPage = () => {
               Dette er perfekt for borettslag, idrettslag og hyttelag, og
               sikkert andre slags lag.{" "}
               <StrongText>Og helt gratis denne våren!</StrongText>
+            </Text>
+            <Text fontSize="lg">
+              Omtalt av både{" "}
+              <TextLink href="https://www.digi.no/artikler/bekks-react-guru-bygget-dugnads-app-pa-fritiden-jeg-er-kjempestolt/489892">
+                Digi
+              </TextLink>{" "}
+              og{" "}
+              <TextLink href="https://www.huseierne.no/nyheter/hvordan-gjennomfore-dugnad-na/">
+                Huseierne
+              </TextLink>
+              !{" "}
+              <span role="img" aria-label="Tada">
+                🎉
+              </span>
             </Text>
             <Box width="100%" maxWidth="300px" mx="auto">
               <PotPlants />
@@ -218,7 +232,7 @@ export const LandingPage = () => {
             <Button
               variant="solid"
               variantColor="blue"
-              as={props => <InternalLink to="/ny" {...props} />}
+              as={(props) => <InternalLink to="/ny" {...props} />}
             >
               Lag en sjau!
             </Button>
