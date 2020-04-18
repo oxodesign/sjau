@@ -31,7 +31,7 @@ export const TaskStatusBadge: React.FC<TaskStatusBadgeType> = ({
         >
           Jobbes med
           {assignedUsers && (
-            <>av {concatenate(assignedUsers.map((u) => u.name))}</>
+            <> av {concatenate(assignedUsers.map((u) => u.name))}</>
           )}
         </Badge>
       );
