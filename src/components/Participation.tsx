@@ -6,9 +6,7 @@ import useShare from "use-share";
 import { useUsersById, UserType } from "../hooks/useUser";
 import { GiSpade } from "react-icons/gi";
 import { useParticipation } from "../hooks/useParticipation";
-
-const concatenate = (values: string[]) =>
-  values.join(", ").replace(/(.*),/, "$1 og");
+import { concatenate } from "../utils/concatenate";
 
 const getFirstName = (participatingUser: UserType) =>
   participatingUser.name.split(" ")[0];

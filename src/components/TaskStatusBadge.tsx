@@ -2,21 +2,7 @@ import React from "react";
 import { Badge } from "@chakra-ui/core";
 import { TaskStatusType } from "../hooks/useDugnad";
 import { UserType } from "../hooks/useUser";
-
-const getConcatenatedUsersString = (assignedUsers: UserType[]) => {
-  let assignedUsersString = "";
-  assignedUsers.forEach((user, index) => {
-    const isNextLast = index === assignedUsers.length - 2;
-    const isLast = index === assignedUsers.length - 1;
-    assignedUsersString += user.name;
-    if (isNextLast) {
-      assignedUsersString += " og ";
-    } else if (!isLast) {
-      assignedUsersString += ", ";
-    }
-  });
-  return assignedUsersString;
-};
+import { concatenate } from "../utils/concatenate";
 
 type TaskStatusBadgeType = {
   status?: TaskStatusType;
@@ -44,13 +30,18 @@ export const TaskStatusBadge: React.FC<TaskStatusBadgeType> = ({
           {...rest}
         >
           Jobbes med
-          {assignedUsers && ` av ${getConcatenatedUsersString(assignedUsers)}`}
+          {assignedUsers && (
+            <>av {concatenate(assignedUsers.map((u) => u.name))}</>
+          )}
         </Badge>
       );
     case "done":
       return (
         <Badge variantColor="green" {...rest}>
-          Ferdigstilt
+          Gjort{" "}
+          {assignedUsers && (
+            <>av {concatenate(assignedUsers.map((u) => u.name))}</>
+          )}
         </Badge>
       );
     default:
