@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormFields } from "../hooks/useFormFields";
-import { useFirestore, useAuth } from "reactfire";
+import { useFirestore, useAuth, useAnalytics } from "reactfire";
 import {
   Button,
   FormControl,
@@ -35,10 +35,12 @@ export const FillOutUserDetails: React.FC<FillOutUserDetailsProps> = ({
 
   const userRef = firestore.collection("users").doc(uid);
   const user = useUser();
+  const { logEvent } = useAnalytics();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     userRef.set({ ...formFields, uid, filledOut: true }, { merge: true });
+    logEvent("user_created");
   };
 
   if (user) {
