@@ -8,16 +8,16 @@ import {
   FormHelperText,
   Textarea,
   BoxProps,
-  Button
+  Button,
 } from "@chakra-ui/core";
-import { TaskComment } from "../hooks/useDugnad";
 
-export const CommentForm: React.FC<BoxProps> = props => {
+export const CommentForm: React.FC<BoxProps> = (props) => {
   const { taskId, dugnadId } = useParams();
   const [comment, setComment] = React.useState("");
   const firestore = useFirestore();
   const auth = useAuth();
   const { logEvent } = useAnalytics();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!comment) {
@@ -26,8 +26,9 @@ export const CommentForm: React.FC<BoxProps> = props => {
     firestore.collection(`dugnads/${dugnadId}/tasks/${taskId}/comments`).add({
       author: auth.currentUser?.uid,
       content: comment,
-      timestamp: Date.now()
-    } as TaskComment);
+      timestamp: Date.now(),
+      type: "comment",
+    });
     setComment("");
     logEvent("write_comment", { taskId, dugnadId });
   };

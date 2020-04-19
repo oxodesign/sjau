@@ -91,6 +91,7 @@ export type TaskComment = {
   content: string;
   parent?: string;
   timestamp: number;
+  type?: "comment" | "event";
 };
 
 export const useTaskComments = (dugnadId: string, taskId: string) => {

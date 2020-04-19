@@ -11,14 +11,14 @@ import {
   Editable,
   EditableInput,
   EditablePreview,
-  Box
+  Box,
 } from "@chakra-ui/core";
 import {
   MdCheck,
   MdArrowBack,
   MdThumbUp,
   MdDelete,
-  MdEdit
+  MdEdit,
 } from "react-icons/md";
 import { useTask, useTaskRef } from "../hooks/useDugnad";
 import { useUser, useUserById, useUsersById } from "../hooks/useUser";
@@ -52,22 +52,34 @@ export const TaskPage: React.FC = () => {
   const { participate } = useParticipation(dugnadId!);
 
   const isAssignedToSelf = assignedUsers.some(
-    assignedUser => assignedUser?.uid === user?.uid
+    (assignedUser) => assignedUser?.uid === user?.uid
   );
   const isCreatedBySelf = user?.uid === author?.uid;
 
   const handleDone = () => {
     taskRef.update({
-      status: "done"
+      status: "done",
     });
     logEvent("task_status_done");
+    taskRef.collection("comments").add({
+      author: user?.uid,
+      content: `${user?.name} satt denne oppgaven som ferdig`,
+      timestamp: Date.now(),
+      type: "event",
+    });
   };
   const handleReset = () => {
     taskRef.update({
       status: "idle",
-      assignedUsers: []
+      assignedUsers: [],
     });
     logEvent("task_status_reset");
+    taskRef.collection("comments").add({
+      author: user?.uid,
+      content: `${user?.name} satt oppgaven tilbake til start`,
+      timestamp: Date.now(),
+      type: "event",
+    });
   };
   const handleDelete = async () => {
     logEvent("task_delete_click");
@@ -92,12 +104,20 @@ export const TaskPage: React.FC = () => {
   };
   const handleJoinOrLeave = () => {
     const assignedUsers = isAssignedToSelf
-      ? task.assignedUsers.filter(assignedUser => assignedUser !== user!.uid)
+      ? task.assignedUsers.filter((assignedUser) => assignedUser !== user!.uid)
       : [...task.assignedUsers, user!.uid];
     logEvent(isAssignedToSelf ? "leave_task" : "join_task");
     taskRef.update({
       assignedUsers,
-      status: assignedUsers.length === 0 ? "idle" : "in progress"
+      status: assignedUsers.length === 0 ? "idle" : "in progress",
+    });
+    taskRef.collection("comments").add({
+      author: user?.uid,
+      content: isAssignedToSelf
+        ? `${user?.name} ga fra seg oppgaven`
+        : `${user?.name} ble med på denne oppgaven`,
+      timestamp: Date.now(),
+      type: "event",
     });
     participate();
   };

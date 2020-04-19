@@ -26,8 +26,9 @@ export const CommentSection: React.FC<CommentSectionProps> = () => {
         </Text>
         <Flex flexDirection="column">
           {!comments.length && <Text>Ingen kommentarer enda</Text>}
-          {comments.map((comment, index) => {
+          {comments.map((comment) => {
             const isAuthor = comment.authorId === currentUser?.uid;
+            const isEvent = comment.type === "event";
             return (
               <React.Fragment key={comment.id}>
                 <Box
@@ -36,28 +37,36 @@ export const CommentSection: React.FC<CommentSectionProps> = () => {
                   rounded="1.5em"
                   borderWidth="1px"
                   borderColor="gray.100"
-                  bg={isAuthor ? "blue.600" : "gray.100"}
-                  color={isAuthor ? "white" : "black"}
+                  bg={isAuthor && !isEvent ? "blue.600" : "gray.100"}
+                  color={isAuthor && !isEvent ? "white" : "black"}
                   width="fit-content"
-                  alignSelf={isAuthor ? "flex-end" : "flex-start"}
+                  alignSelf={isAuthor && !isEvent ? "flex-end" : "flex-start"}
                   key={comment.id}
                 >
-                  {isOnlyEmojis(comment.content) ? (
+                  {isOnlyEmojis(comment.content) && (
                     <Text fontSize="5xl">{comment.content}</Text>
+                  )}
+                  {isEvent ? (
+                    <Text>
+                      <span role="img" aria-label="Robot">
+                        🤖
+                      </span>{" "}
+                      {comment.content}
+                    </Text>
                   ) : (
                     <SanitizedMarkdown>{comment.content}</SanitizedMarkdown>
                   )}
                 </Box>
                 <Text
                   mb={3}
-                  textAlign={isAuthor ? "right" : "left"}
+                  textAlign={isAuthor && !isEvent ? "right" : "left"}
                   fontSize="sm"
                   color="gray.500"
                 >
-                  {isAuthor ? "Deg" : comment.author} for{" "}
+                  {!isEvent && <>{isAuthor ? "Deg" : comment.author} for </>}
                   {formatDistanceToNow(new Date(comment.timestamp), {
                     addSuffix: true,
-                    locale: nbLocale
+                    locale: nbLocale,
                   })}
                 </Text>
               </React.Fragment>
