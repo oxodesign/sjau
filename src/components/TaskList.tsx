@@ -1,14 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  Box,
-  Text,
-  Stack,
-  RadioGroup,
-  Radio,
-  SimpleGrid,
-  Heading,
-} from "@chakra-ui/core";
+import { Box, Text, Stack, SimpleGrid, Heading } from "@chakra-ui/core";
 import { TaskStatusBadge } from "./TaskStatusBadge";
 import { useTasksForDugnad, TaskType } from "../hooks/useDugnad";
 import { useUser, useUsersById, UserType } from "../hooks/useUser";
