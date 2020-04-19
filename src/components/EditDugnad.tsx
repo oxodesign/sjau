@@ -112,6 +112,8 @@ export const EditDugnad: React.FC<EditDugnadProps> = ({
             resize="vertical"
             placeholder="Velkommen til sjauen vår!"
             maxWidth="100%"
+            height="50vh"
+            maxHeight="300px"
           />
           <FormHelperText id="description-description">
             Her kan det være fint å gi en velkomsthilsen, og en beskrivelse av
