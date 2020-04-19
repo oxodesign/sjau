@@ -7,16 +7,14 @@ import {
   RadioGroup,
   Radio,
   SimpleGrid,
-  Heading,
-  Flex
 } from "@chakra-ui/core";
 import { TaskStatusBadge } from "./TaskStatusBadge";
 import { useTasksForDugnad } from "../hooks/useDugnad";
 import { useUser, useUsersById } from "../hooks/useUser";
 import { motion } from "framer-motion";
-import WomanWinning from "./illustrations/WomanWinning";
 import { StrongText } from "./StrongText";
 import { useAnalytics } from "reactfire";
+import { DugnadProgress } from "./DugnadProgress";
 
 const variants = {
   visible: {
@@ -24,16 +22,16 @@ const variants = {
     y: 0,
     transition: {
       when: "beforeChildren",
-      staggerChildren: 0.3
-    }
+      staggerChildren: 0.3,
+    },
   },
   hidden: {
     opacity: 0,
     y: "50%",
     transition: {
-      when: "afterChildren"
-    }
-  }
+      when: "afterChildren",
+    },
+  },
 };
 
 type TaskListProps = {
@@ -49,13 +47,13 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
   const tasks = useTasksForDugnad(dugnadId);
   const currentUser = useUser();
   const uniqueParticipatingUsers = Array.from(
-    new Set(tasks.flatMap(task => task.assignedUsers))
+    new Set(tasks.flatMap((task) => task.assignedUsers))
   );
   const participatingUsers = useUsersById(uniqueParticipatingUsers);
   const filteredTasks = React.useMemo(
     () =>
       tasks
-        .filter(task => {
+        .filter((task) => {
           switch (currentFilter) {
             case "all":
               return true;
@@ -88,37 +86,12 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
 
   return (
     <Stack spacing={6}>
-      {tasks.every(task => task.status === "done") && (
-        <Box bg="green.100" shadow="md" rounded="md" my={6} p={6}>
-          <Flex
-            flexDirection={["column-reverse", "column-reverse", "row"]}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Box
-              flexGrow={0}
-              flexBasis={["60%", "60%", "20%"]}
-              width={["60%", "60%", "100%"]}
-              mt={[6, 6, 0]}
-            >
-              <WomanWinning />
-            </Box>
-            <Box flexGrow={0} flexBasis={["100%", "100%", "70%"]}>
-              <Heading mb={6}>Helt ferdig!</Heading>
-              <Text>
-                Grattis! Dere har gjennomført en perfekt sjau! Alt som skulle
-                gjøres har blitt gjort. Alle som skulle bidra har bidratt. Og
-                verden er et fredfullt sted. Sees igjen neste sjau!
-              </Text>
-            </Box>
-          </Flex>
-        </Box>
-      )}
+      <DugnadProgress tasks={tasks} />
       <RadioGroup
         value={currentFilter}
         px={6}
         isInline
-        onChange={e => {
+        onChange={(e) => {
           const currentFilter = e.target.value as CurrentFilterType;
           setCurrentFilter(currentFilter);
           logEvent("change_task_filter", { currentFilter });
@@ -144,7 +117,7 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
       )}
       <motion.div initial="hidden" animate="visible" variants={variants}>
         <SimpleGrid columns={[1, 2, 3]} gridGap={3}>
-          {filteredTasks.map(task => (
+          {filteredTasks.map((task) => (
             <Box
               key={task.id}
               shadow="md"
@@ -169,7 +142,7 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
                   <br />
                   <TaskStatusBadge
                     status={task.status}
-                    assignedUsers={participatingUsers.filter(participant =>
+                    assignedUsers={participatingUsers.filter((participant) =>
                       task.assignedUsers.includes(participant.uid)
                     )}
                   />
