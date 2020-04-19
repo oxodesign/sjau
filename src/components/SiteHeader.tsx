@@ -1,14 +1,11 @@
 import React from "react";
 import { Heading, IconButton, Flex } from "@chakra-ui/core";
 import { Link } from "react-router-dom";
-import { MdSettings } from "react-icons/md";
-import { SiteSettings } from "./SiteSettings";
+import { MdPerson } from "react-icons/md";
 import { FadeIn } from "./FadeIn";
-import { useAuth, useAnalytics } from "reactfire";
+import { useAuth } from "reactfire";
 
 export const SiteHeader: React.FC = () => {
-  const [isSettingsDrawerOpen, setSettingsDrawerOpen] = React.useState(false);
-  const { logEvent } = useAnalytics();
   const isLoggedIn = !!useAuth().currentUser;
   return (
     <FadeIn initial="hiddenFromTop" exit="hiddenFromTop">
@@ -25,24 +22,15 @@ export const SiteHeader: React.FC = () => {
           <Link to={isLoggedIn ? "/oversikt" : "/"}>Sjau</Link>
         </Heading>
         {isLoggedIn && (
-          <>
-            <IconButton
-              icon={MdSettings}
-              aria-label="Flere valg"
-              variant="ghost"
-              position="absolute"
-              right={[3, 3, 6]}
-              size="lg"
-              onClick={() => {
-                setSettingsDrawerOpen(prev => !prev);
-                logEvent("toggle-settings");
-              }}
-            />
-            <SiteSettings
-              isOpen={isSettingsDrawerOpen}
-              onClose={() => setSettingsDrawerOpen(false)}
-            />
-          </>
+          <IconButton
+            icon={MdPerson}
+            aria-label="Brukervalg"
+            variant="ghost"
+            position="absolute"
+            right={[3, 3, 6]}
+            size="lg"
+            as={(props) => <Link to="/bruker" {...props} />}
+          />
         )}
       </Flex>
     </FadeIn>

@@ -12,6 +12,7 @@ const TaskPage = React.lazy(() => import("./pages/TaskPage"));
 const LandingPage = React.lazy(() => import("./pages/LandingPage"));
 const PrivacyPage = React.lazy(() => import("./pages/PrivacyPage"));
 const NotFoundPage = React.lazy(() => import("./pages/NotFoundPage"));
+const UserPage = React.lazy(() => import("./pages/UserPage"));
 
 const RedirectFromSlugToDugnadId = () => {
   const { dugnadSlug } = useParams();
@@ -43,6 +44,9 @@ export const App: React.FC = () => {
           </AnimatedRoute>
           <AnimatedRoute exact path="/oversikt" requiresAuth>
             <OverviewPage />
+          </AnimatedRoute>
+          <AnimatedRoute exact path="/bruker" requiresAuth>
+            <UserPage />
           </AnimatedRoute>
           <AnimatedRoute exact path="/personvern">
             <PrivacyPage />
