@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
 import { AddTask } from "../components/AddTask";
-import { TaskList } from "../components/TaskList";
+import { TasksSection } from "../components/TasksSection";
 import { useDugnad, useUserDugnads } from "../hooks/useDugnad";
 import { BackLink } from "../components/BackLink";
 import { FadeIn } from "../components/FadeIn";
@@ -208,7 +208,7 @@ export const DugnadPage = () => {
               <Heading mt={12} mb={3}>
                 Oppgaver
               </Heading>
-              <TaskList dugnadId={dugnadId!!} />
+              <TasksSection dugnadId={dugnadId!!} />
             </FadeIn>
           </Box>
           {showLeaveButton && (
