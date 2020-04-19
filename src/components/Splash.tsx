@@ -8,11 +8,11 @@ type SplashProps = {
 
 export const Splash: React.FC<SplashProps> = ({
   backgroundImage,
-  children
+  children,
 }) => (
   <Flex
     width="100%"
-    minHeight={["100vh", "75vh"]}
+    minHeight={"100vh"}
     bgImage={backgroundImage}
     bgPos="center center"
     bgSize="cover"

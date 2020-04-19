@@ -2,7 +2,7 @@ import React from "react";
 import nbLocale from "date-fns/locale/nb";
 import ReactDatepicker, {
   registerLocale,
-  ReactDatePickerProps
+  ReactDatePickerProps,
 } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Input, Box } from "@chakra-ui/core";
