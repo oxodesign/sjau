@@ -7,7 +7,7 @@ import {
   ButtonGroup,
   FormControl,
   FormLabel,
-  BoxProps
+  BoxProps,
 } from "@chakra-ui/core";
 import { useAnalytics } from "reactfire";
 type EditableDescriptionProps = Overwrite<
@@ -55,6 +55,8 @@ export const EditableDescription: React.FC<EditableDescriptionProps> = ({
               }
               onBlur={handleBlur}
               autoFocus
+              height="50vh"
+              maxHeight="300px"
             />
           </FormControl>
           <ButtonGroup>
