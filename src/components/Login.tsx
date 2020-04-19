@@ -6,10 +6,10 @@ import {
   Box,
   Flex,
   Button,
-  ButtonGroup
+  ButtonGroup,
 } from "@chakra-ui/core";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
-import * as firebase from "firebase";
+import * as firebase from "firebase/app";
 import { FadeIn } from "./FadeIn";
 import { Container } from "./Container";
 import { Layout } from "./Layout";

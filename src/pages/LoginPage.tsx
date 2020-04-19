@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "reactfire";
-import * as firebase from "firebase";
+import * as firebase from "firebase/app";
 import { VerificationCodeForm } from "../components/VerificationCodeForm";
 import { PhoneNumberForm } from "../components/PhoneNumberForm";
 import { Heading, Stack, Box, Flex } from "@chakra-ui/core";
@@ -131,13 +131,13 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     "success",
     "verification code requested",
     "verification code sent",
-    "verifying code"
+    "verifying code",
   ].includes(loginState);
   const showVerificationForm = [
     "success",
     "verification code sent",
     "verifying code",
-    "invalid code"
+    "invalid code",
   ].includes(loginState);
 
   return (
