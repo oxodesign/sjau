@@ -1,10 +1,11 @@
 import React from "react";
-import { Text, Box, Heading, ButtonGroup, Button } from "@chakra-ui/core";
+import { Text, Heading, ButtonGroup, Button, Stack } from "@chakra-ui/core";
 import { MdRefresh } from "react-icons/md";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { useAnalytics } from "reactfire";
 import * as firebase from "firebase/app";
 import { Container } from "./Container";
+import * as Sentry from "@sentry/browser";
 
 type ErrorBoundaryProps = {
   analytics: firebase.analytics.Analytics;
@@ -24,11 +25,17 @@ class ErrorBoundary extends React.Component<
   static getDerivedStateFromError(error: any) {
     return { hasError: true, error };
   }
-  componentDidCatch(error: Error) {
+  componentDidCatch(error: Error, errorInfo: any) {
     this.props.analytics.logEvent("error_occurred", {
       name: error.name,
       message: error.message,
     });
+    if (process.env.NODE_ENV === "production") {
+      Sentry.withScope((scope) => {
+        scope.setExtras(errorInfo);
+        Sentry.captureException(error);
+      });
+    }
   }
   render() {
     if (!this.state.hasError) {
@@ -36,7 +43,7 @@ class ErrorBoundary extends React.Component<
     }
     return (
       <Container>
-        <Box>
+        <Stack spacing={6}>
           <Heading>Ojsann..</Heading>
           <Text>
             Nå var det noe uventa som skjedde. Vi har sagt ifra automatisk, så
@@ -65,7 +72,7 @@ class ErrorBoundary extends React.Component<
               Last siden på nytt
             </Button>
           </ButtonGroup>
-        </Box>
+        </Stack>
       </Container>
     );
   }
