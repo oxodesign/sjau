@@ -9,12 +9,13 @@ import {
   Stack,
   Text,
   Flex,
-  Box
+  Box,
 } from "@chakra-ui/core";
 import { Container } from "../components/Container";
 import { FadeIn } from "../components/FadeIn";
 import { DugnadList } from "../components/DugnadList";
 import { Layout } from "../components/Layout";
+import { YourTasks } from "../components/YourTasks";
 
 const WomanBrooming = React.lazy(() =>
   import("../components/illustrations/WomanBrooming")
@@ -25,11 +26,7 @@ export const OverviewPage: React.FC = () => {
   const { ownedDugnads, participatedDugnads } = useUserDugnads(user?.uid);
   const hasMadeOrParticipatedInDugnad =
     ownedDugnads.length > 0 || participatedDugnads.length > 0;
-  const linkProps = {
-    // TODO: Remove this and use a regular link when chakra supports passing
-    // as-props
-    to: "/ny"
-  };
+
   return (
     <Layout title="Dine sjauer">
       <Container>
@@ -61,8 +58,7 @@ export const OverviewPage: React.FC = () => {
                         variantColor="green"
                         variant="solid"
                         size="lg"
-                        as={Link}
-                        {...linkProps}
+                        as={(props) => <Link to="/ny" {...props} />}
                       >
                         Lag din første sjau!
                       </Button>
@@ -88,8 +84,7 @@ export const OverviewPage: React.FC = () => {
                   variantColor="green"
                   variant="solid"
                   size="lg"
-                  as={Link}
-                  {...linkProps}
+                  as={(props) => <Link to="/ny" {...props} />}
                 >
                   Lag en ny sjau
                 </Button>
@@ -106,6 +101,7 @@ export const OverviewPage: React.FC = () => {
                   dugnads={participatedDugnads}
                 />
               )}
+              <YourTasks />
             </FadeIn>
           )}
         </Stack>

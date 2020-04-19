@@ -55,7 +55,6 @@ export const useTasksForDugnad = (dugnadId?: string) =>
   ).map(mapOldTaskToNewTask);
 
 export const useTask = (dugnadId?: string, taskId?: string) =>
-  // todo map to new format
   mapOldTaskToNewTask(
     useFirestoreDocData<TaskType>(useTaskRef(dugnadId, taskId))
   );
