@@ -7,13 +7,13 @@ import {
   RadioGroup,
   Radio,
   SimpleGrid,
+  Heading,
 } from "@chakra-ui/core";
 import { TaskStatusBadge } from "./TaskStatusBadge";
-import { useTasksForDugnad } from "../hooks/useDugnad";
-import { useUser, useUsersById } from "../hooks/useUser";
+import { useTasksForDugnad, TaskType } from "../hooks/useDugnad";
+import { useUser, useUsersById, UserType } from "../hooks/useUser";
 import { motion } from "framer-motion";
 import { StrongText } from "./StrongText";
-import { useAnalytics } from "reactfire";
 import { DugnadProgress } from "./DugnadProgress";
 
 const variants = {
@@ -34,44 +34,88 @@ const variants = {
   },
 };
 
+type TaskListSectionProps = {
+  tasks: TaskType[];
+  title: string;
+  dugnadId: string;
+  participatingUsers: UserType[];
+};
+const TaskListSection: React.FC<TaskListSectionProps> = ({
+  tasks,
+  dugnadId,
+  title,
+  participatingUsers,
+}) => {
+  return (
+    <motion.div initial="hidden" animate="visible" variants={variants}>
+      <Heading as="h3" fontSize="2xl" mt={12} mb={6}>
+        {title}
+      </Heading>
+      <SimpleGrid columns={[1, 2, 3]} gridGap={3}>
+        {tasks.map((task) => (
+          <Box key={task.id} shadow="md" rounded={3}>
+            <Link to={`/dugnad/${dugnadId}/${task.id}`}>
+              <Box p={6}>
+                <StrongText
+                  display="inline-block"
+                  maxHeight="200px"
+                  wordBreak="break-word"
+                  overflowY="hidden"
+                >
+                  {task.title}
+                </StrongText>
+                <br />
+                <TaskStatusBadge
+                  status={task.status}
+                  assignedUsers={participatingUsers.filter((participant) =>
+                    task.assignedUsers.includes(participant.uid)
+                  )}
+                />
+              </Box>
+            </Link>
+          </Box>
+        ))}
+      </SimpleGrid>
+    </motion.div>
+  );
+};
+
 type TaskListProps = {
   dugnadId: string;
 };
 
-type CurrentFilterType = "all" | "available" | "your own";
 export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
-  const { logEvent } = useAnalytics();
-  const [currentFilter, setCurrentFilter] = React.useState<CurrentFilterType>(
-    "all"
-  );
   const tasks = useTasksForDugnad(dugnadId);
   const currentUser = useUser();
   const uniqueParticipatingUsers = Array.from(
     new Set(tasks.flatMap((task) => task.assignedUsers))
   );
   const participatingUsers = useUsersById(uniqueParticipatingUsers);
-  const filteredTasks = React.useMemo(
+  const availableTasks = React.useMemo(
+    () => tasks.filter((task) => task.status === "idle"),
+    [tasks]
+  );
+  const tasksAssignedToYou = React.useMemo(
     () =>
-      tasks
-        .filter((task) => {
-          switch (currentFilter) {
-            case "all":
-              return true;
-            case "available":
-              return task.status === "idle";
-            case "your own":
-              return task.assignedUsers.includes(currentUser!.uid);
-            default:
-              return true;
-          }
-        })
-        .sort((a, b) => {
-          const sortOrder = { idle: 0, "in progress": 1, done: 2 };
-          if (sortOrder[a.status] < sortOrder[b.status]) return -1;
-          if (sortOrder[a.status] > sortOrder[b.status]) return 1;
-          return a.title.localeCompare(b.title);
-        }),
-    [currentUser, tasks, currentFilter]
+      tasks.filter(
+        (task) =>
+          task.status === "in progress" &&
+          task.assignedUsers.includes(currentUser!.uid)
+      ),
+    [tasks, currentUser]
+  );
+  const tasksAssignedToOtherPeople = React.useMemo(
+    () =>
+      tasks.filter(
+        (task) =>
+          task.status === "in progress" &&
+          !task.assignedUsers.includes(currentUser!.uid)
+      ),
+    [tasks, currentUser]
+  );
+  const completedTasks = React.useMemo(
+    () => tasks.filter((task) => task.status === "done"),
+    [tasks]
   );
   if (!tasks.length) {
     return (
@@ -87,71 +131,44 @@ export const TaskList: React.FC<TaskListProps> = ({ dugnadId }) => {
   return (
     <Stack spacing={6}>
       <DugnadProgress tasks={tasks} />
-      <RadioGroup
-        value={currentFilter}
-        px={6}
-        isInline
-        onChange={(e) => {
-          const currentFilter = e.target.value as CurrentFilterType;
-          setCurrentFilter(currentFilter);
-          logEvent("change_task_filter", { currentFilter });
-        }}
-      >
-        <Radio value="all">Alle oppgaver</Radio>
-        <Radio value="available">Bare ledige oppgaver</Radio>
-        <Radio value="your own">Bare dine oppgaver</Radio>
-      </RadioGroup>
-      {!filteredTasks.length && currentFilter === "available" && (
+
+      {availableTasks.length > 0 ? (
+        <TaskListSection
+          title="Ledige oppgaver"
+          dugnadId={dugnadId}
+          participatingUsers={participatingUsers}
+          tasks={availableTasks}
+        />
+      ) : (
         <Text>
           Det er ingen oppgaver igjen å plukke! Sjekk om det er noe du kan
           hjelpe andre med kanskje?
         </Text>
       )}
-      {!filteredTasks.length && currentFilter === "your own" && (
-        <Text>
-          Du har ikke tatt noen oppgaver enda. På tide å brette opp erma!{" "}
-          <span role="img" aria-label="Stram musklene">
-            💪
-          </span>
-        </Text>
+      {tasksAssignedToYou.length > 0 && (
+        <TaskListSection
+          title="Dine oppgaver"
+          dugnadId={dugnadId}
+          participatingUsers={participatingUsers}
+          tasks={tasksAssignedToYou}
+        />
       )}
-      <motion.div initial="hidden" animate="visible" variants={variants}>
-        <SimpleGrid columns={[1, 2, 3]} gridGap={3}>
-          {filteredTasks.map((task) => (
-            <Box
-              key={task.id}
-              shadow="md"
-              rounded={3}
-              borderLeftWidth="8px"
-              borderColor={
-                task.assignedUsers.includes(currentUser!.uid)
-                  ? "#76a73d"
-                  : "white"
-              }
-            >
-              <Link to={`/dugnad/${dugnadId}/${task.id}`}>
-                <Box p={6}>
-                  <StrongText
-                    display="inline-block"
-                    maxHeight="200px"
-                    wordBreak="break-word"
-                    overflowY="hidden"
-                  >
-                    {task.title}
-                  </StrongText>
-                  <br />
-                  <TaskStatusBadge
-                    status={task.status}
-                    assignedUsers={participatingUsers.filter((participant) =>
-                      task.assignedUsers.includes(participant.uid)
-                    )}
-                  />
-                </Box>
-              </Link>
-            </Box>
-          ))}
-        </SimpleGrid>
-      </motion.div>
+      {tasksAssignedToOtherPeople.length > 0 && (
+        <TaskListSection
+          title="Oppgaver andre jobber med"
+          dugnadId={dugnadId}
+          participatingUsers={participatingUsers}
+          tasks={tasksAssignedToOtherPeople}
+        />
+      )}
+      {completedTasks.length > 0 && (
+        <TaskListSection
+          title="Ferdigstilte oppgaver"
+          dugnadId={dugnadId}
+          participatingUsers={participatingUsers}
+          tasks={completedTasks}
+        />
+      )}
     </Stack>
   );
 };
