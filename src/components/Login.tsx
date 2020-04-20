@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/core";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import * as firebase from "firebase/app";
+import * as Sentry from "@sentry/browser";
 import { FadeIn } from "./FadeIn";
 import { Container } from "./Container";
 import { Layout } from "./Layout";
@@ -54,6 +55,7 @@ export const Login: React.FC = () => {
         // TODO: Parse the error
         // TODO: Handle existing provider case
         setLoginState("generic error");
+        Sentry.captureException(e);
         console.error("error while handling redirect return", e);
       }
     };
