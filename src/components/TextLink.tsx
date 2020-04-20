@@ -21,7 +21,7 @@ export const TextLink: React.FC<TextLinkProps> = ({
       />
     );
   }
-  if (href?.startsWith("https://") || href?.startsWith("http://")) {
+  if (!href?.startsWith("/")) {
     return (
       <ChakraLink
         textDecoration="underline"

@@ -38,7 +38,7 @@ export const LandingPage = () => {
     React.useMemo(() => splashImages.sort(() => Math.random() - 0.5)[0], []) ||
     "";
   return (
-    <Box>
+    <Box as="main">
       <Splash
         backgroundImage={`radial-gradient(circle at center, rgba(0,0,0,0.4), transparent), url(${randomSplashImage}), url(${randomSplashImage.replace(
           "1800",
